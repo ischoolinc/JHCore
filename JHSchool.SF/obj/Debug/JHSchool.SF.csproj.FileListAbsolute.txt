@@ -1,0 +1,5 @@
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\FiscaRuntime\addmodules\JHCore\JHSchool.SF.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\FiscaRuntime\addmodules\JHCore\JHSchool.SF.pdb
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\JHSchool.SF\obj\Debug\ResolveAssemblyReference.cache
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\JHSchool.SF\obj\Debug\JHSchool.SF.dll
+D:\TFS2010\ischoolteam\ischool_Junior with FISCA\JHSchool.SF\obj\Debug\JHSchool.SF.pdb
