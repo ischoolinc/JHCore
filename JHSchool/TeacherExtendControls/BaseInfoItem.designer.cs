@@ -179,7 +179,7 @@
             // 
             this.txtCategory.Border.Class = "TextBoxBorder";
             this.txtCategory.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtCategory.Location = new System.Drawing.Point(363, 195);
+            this.txtCategory.Location = new System.Drawing.Point(106, 163);
             this.txtCategory.Name = "txtCategory";
             this.txtCategory.Size = new System.Drawing.Size(140, 25);
             this.txtCategory.TabIndex = 7;
@@ -187,7 +187,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(285, 199);
+            this.label6.Location = new System.Drawing.Point(28, 168);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(60, 17);
             this.label6.TabIndex = 11;
@@ -226,6 +226,7 @@
             this.txtSTLoginPwd.PasswordChar = '*';
             this.txtSTLoginPwd.Size = new System.Drawing.Size(140, 25);
             this.txtSTLoginPwd.TabIndex = 9;
+            this.txtSTLoginPwd.Visible = false;
             // 
             // label8
             // 
@@ -235,6 +236,7 @@
             this.label8.Size = new System.Drawing.Size(60, 17);
             this.label8.TabIndex = 15;
             this.label8.Text = "登入密碼";
+            this.label8.Visible = false;
             // 
             // label9
             // 
@@ -244,6 +246,7 @@
             this.label9.Size = new System.Drawing.Size(60, 17);
             this.label9.TabIndex = 17;
             this.label9.Text = "帳號類型";
+            this.label9.Visible = false;
             // 
             // cboGender
             // 
@@ -305,6 +308,7 @@
             this.cboAccountType.Name = "cboAccountType";
             this.cboAccountType.Size = new System.Drawing.Size(140, 26);
             this.cboAccountType.TabIndex = 10;
+            this.cboAccountType.Visible = false;
             // 
             // comboItem3
             // 
@@ -383,7 +387,7 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.txtNickname);
             this.Name = "BaseInfoItem";
-            this.Size = new System.Drawing.Size(550, 225);
+            this.Size = new System.Drawing.Size(550, 205);
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).EndInit();

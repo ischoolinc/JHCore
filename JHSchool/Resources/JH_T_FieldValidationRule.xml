@@ -1,0 +1,100 @@
+﻿<ValidateRule>
+  <FieldList>
+    <Field DataType="Integer" Name="教師系統編號">
+      <Validate AutoCorrect="False" Description="「教師系統編號」必須是數字。 " ErrorType="Error" Validator="Integer極限" When=""/>
+    </Field>
+    <Field DataType="String" Name="教師姓名">
+      <Validate AutoCorrect="False" Description="「教師姓名」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+      <Validate AutoCorrect="False" Description="「教師姓名」長度必須小於20個文字。" ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="暱稱">
+      <Validate AutoCorrect="False" Description="「暱稱」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="性別">
+      <Validate AutoCorrect="True" Description="「性別」只允許「男」或「女」。 " ErrorType="Error" Validator="性別" When=""/>
+    </Field>
+    <Field DataType="String" Name="身分證號">
+      <Validate AutoCorrect="False" Description="「身分證號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="身分證號非空白"/>
+      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="聯絡電話">
+      <Validate AutoCorrect="False" Description="「聯絡電話」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+    </Field>
+    <Field DataType="String" Name="電子郵件"/>
+    <Field DataType="String" Name="教師類別">
+      <Validate AutoCorrect="False" Description="「教師類別」長度必須小於50個文字。 " ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="登入帳號">
+      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="登入密碼">
+      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="帳號類型">
+      <Validate AutoCorrect="False" Description="「帳號類型」只允許「Greening、自定帳號」。" ErrorType="Error" Validator="帳號類型列舉" When=""/>
+    </Field>
+  </FieldList>
+  <ValidatorList>
+    <FieldValidator Name="不可空白" Type="Null"/>
+    <FieldValidator Name="Integer極限" Type="Integer">
+      <MinValue>1</MinValue>
+      <MaxValue>2000000000</MaxValue>
+    </FieldValidator>
+    <FieldValidator Name="文字20" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>20</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字30" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>30</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字50" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="Uniq" Type="UNIQUEKEY"/>
+    <FieldValidator Name="帳號類型列舉" Type="Enumeration">
+      <Item Value="Greening"/>
+      <Item Value="greening"/>
+      <Item Value="Google"/>
+      <Item Value="google"/>
+      <Item Value="自定帳號"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="性別" Type="Enumeration">
+      <!--  Value 是正確的值，一般 Code 是不用的。 -->
+      <Item Value="男">
+        <Variation>1</Variation>
+        <Variation>-1</Variation>
+        <Variation>t</Variation>
+        <Variation>true</Variation>
+        <Variation>M</Variation>
+        <Variation>m</Variation>
+      </Item>
+      <Item Value="女">
+        <Variation>0</Variation>
+        <Variation>f</Variation>
+        <Variation>F</Variation>
+        <Variation>false</Variation>
+      </Item>
+      <Item Value=""/>
+    </FieldValidator>
+    <RowValidator Name="新增匯入唯一性欄位檢查" Type="InsertDBUnique"/>
+    <RowValidator Name="新增匯入工作表唯一性欄位檢查" Type="InsertSheetUnique"/>
+    <RowValidator Name="更新匯入ShiftCheck" Type="ShiftCheck"/>
+    <RowValidator Name="更新匯入識別欄檢查" Type="UpdateIdentify"/>
+    <RowValidator Name="更新匯入唯一性欄位檢查" Type="UpdateUnique"/>
+  </ValidatorList>
+  <RowValidate>
+    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入唯一性欄位檢查" When=""/>
+    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入工作表唯一性欄位檢查" When=""/>
+    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入ShiftCheck" When=""/>
+    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入識別欄檢查" When=""/>
+    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入唯一性欄位檢查" When=""/>
+  </RowValidate>
+  <ConditionList>
+    <Condition Name="身分證號非空白">
+      <Match Field="身分證號" Operator="!=" Value=""/>
+    </Condition>
+  </ConditionList>
+</ValidateRule>

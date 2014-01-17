@@ -1,0 +1,15 @@
+﻿<FieldDescription>
+  <Field DisplayText="教師系統編號" Name="TeacherID"/>
+  <Field DisplayText="教師姓名" Name="Name"/>
+  <Field DisplayText="暱稱" Name="Nickname"/>
+  <Field DisplayText="性別" Name="Gender"/>
+  <Field DisplayText="身分證號" Name="IDNumber"/>
+  <Field DisplayText="聯絡電話" Name="ContactPhone"/>
+  <Field DisplayText="電子信箱" Name="Email"/>
+  <Field DisplayText="教師類別" Name="Category"/>
+  <Field DisplayText="登入帳號" Name="SmartTeacherLoginName"/>
+  <Field DisplayText="帳號類型" Name="AccountType"/>
+  <!--
+<Field DisplayText="密碼" Name="SmartTeacherPassword" />
+-->
+</FieldDescription>

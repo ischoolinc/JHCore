@@ -66,9 +66,9 @@
             this.cboGender = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.cboNationality = new DevComponents.DotNetBar.Controls.ComboBoxEx();
             this.cboAccountType = new DevComponents.DotNetBar.Controls.ComboBoxEx();
+            this.comboItem6 = new DevComponents.Editors.ComboItem();
             this.comboItem4 = new DevComponents.Editors.ComboItem();
             this.comboItem5 = new DevComponents.Editors.ComboItem();
-            this.comboItem6 = new DevComponents.Editors.ComboItem();
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).BeginInit();
@@ -90,7 +90,7 @@
             // 
             this.label76.AutoSize = true;
             this.label76.BackColor = System.Drawing.Color.Transparent;
-            this.label76.Location = new System.Drawing.Point(293, 202);
+            this.label76.Location = new System.Drawing.Point(36, 171);
             this.label76.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(60, 17);
@@ -103,6 +103,7 @@
             // 
             // 
             this.txtSSN.Border.Class = "TextBoxBorder";
+            this.txtSSN.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtSSN.Location = new System.Drawing.Point(366, 48);
             this.txtSSN.Margin = new System.Windows.Forms.Padding(4);
             this.txtSSN.MaxLength = 20;
@@ -141,6 +142,7 @@
             // 
             // 
             this.txtName.Border.Class = "TextBoxBorder";
+            this.txtName.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtName.Location = new System.Drawing.Point(366, 17);
             this.txtName.Margin = new System.Windows.Forms.Padding(4);
             this.txtName.MaxLength = 10;
@@ -166,7 +168,8 @@
             // 
             // 
             this.txtEngName.Border.Class = "TextBoxBorder";
-            this.txtEngName.Location = new System.Drawing.Point(366, 200);
+            this.txtEngName.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEngName.Location = new System.Drawing.Point(108, 168);
             this.txtEngName.Margin = new System.Windows.Forms.Padding(4);
             this.txtEngName.MaxLength = 30;
             this.txtEngName.Name = "txtEngName";
@@ -217,7 +220,7 @@
             this.contextMenuBar1.Location = new System.Drawing.Point(65, 69);
             this.contextMenuBar1.Margin = new System.Windows.Forms.Padding(4);
             this.contextMenuBar1.Name = "contextMenuBar1";
-            this.contextMenuBar1.Size = new System.Drawing.Size(239, 27);
+            this.contextMenuBar1.Size = new System.Drawing.Size(239, 26);
             this.contextMenuBar1.Stretch = true;
             this.contextMenuBar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.Office2003;
             this.contextMenuBar1.TabIndex = 210;
@@ -298,6 +301,7 @@
             // 
             // 
             this.txtBirthPlace.Border.Class = "TextBoxBorder";
+            this.txtBirthPlace.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtBirthPlace.Location = new System.Drawing.Point(366, 168);
             this.txtBirthPlace.Margin = new System.Windows.Forms.Padding(4);
             this.txtBirthPlace.MaxLength = 30;
@@ -327,15 +331,14 @@
             // 
             // 
             // 
-            this.txtBirthDate.Border.Class = "TextBoxBorder";
+            this.txtBirthDate.Border.Class = "";
+            this.txtBirthDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtBirthDate.EmptyString = "";
-            this.txtBirthDate.Location = new System.Drawing.Point(366, 79);
+            this.txtBirthDate.Location = new System.Drawing.Point(0, 0);
             this.txtBirthDate.Name = "txtBirthDate";
-            this.txtBirthDate.Size = new System.Drawing.Size(138, 25);
-            this.txtBirthDate.TabIndex = 3;
-            this.txtBirthDate.WatermarkText = "yyyy/mm/dd";
-            this.txtBirthDate.Validated += new System.EventHandler(this.txtBirthDate_Validated_1);
-            this.txtBirthDate.TextChanged += new System.EventHandler(this.txtBirthDate_TextChanged);
+            this.txtBirthDate.Size = new System.Drawing.Size(100, 22);
+            this.txtBirthDate.TabIndex = 0;
+            this.txtBirthDate.WatermarkText = "請輸入西元日期";
             // 
             // label1
             // 
@@ -355,6 +358,7 @@
             // 
             // 
             this.txtLoginID.Border.Class = "TextBoxBorder";
+            this.txtLoginID.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLoginID.Location = new System.Drawing.Point(108, 137);
             this.txtLoginID.Margin = new System.Windows.Forms.Padding(4);
             this.txtLoginID.MaxLength = 50;
@@ -374,6 +378,7 @@
             this.label2.TabIndex = 191;
             this.label2.Text = "登入密碼";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.Visible = false;
             // 
             // txtLoginPwd
             // 
@@ -381,6 +386,7 @@
             // 
             // 
             this.txtLoginPwd.Border.Class = "TextBoxBorder";
+            this.txtLoginPwd.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLoginPwd.Location = new System.Drawing.Point(108, 168);
             this.txtLoginPwd.Margin = new System.Windows.Forms.Padding(4);
             this.txtLoginPwd.MaxLength = 50;
@@ -388,6 +394,7 @@
             this.txtLoginPwd.PasswordChar = '●';
             this.txtLoginPwd.Size = new System.Drawing.Size(138, 25);
             this.txtLoginPwd.TabIndex = 8;
+            this.txtLoginPwd.Visible = false;
             // 
             // label3
             // 
@@ -399,6 +406,7 @@
             this.label3.Size = new System.Drawing.Size(60, 17);
             this.label3.TabIndex = 193;
             this.label3.Text = "帳號類型";
+            this.label3.Visible = false;
             // 
             // cboGender
             // 
@@ -440,6 +448,7 @@
             this.cboAccountType.Name = "cboAccountType";
             this.cboAccountType.Size = new System.Drawing.Size(138, 25);
             this.cboAccountType.TabIndex = 9;
+            this.cboAccountType.Visible = false;
             // 
             // comboItem4
             // 
@@ -455,7 +464,6 @@
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.contextMenuBar1);
             this.Controls.Add(this.label76);
-            this.Controls.Add(this.txtBirthDate);
             this.Controls.Add(this.cboAccountType);
             this.Controls.Add(this.cboGender);
             this.Controls.Add(this.txtBirthPlace);
@@ -478,7 +486,7 @@
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "BaseInfoPalmerwormItem";
-            this.Size = new System.Drawing.Size(550, 235);
+            this.Size = new System.Drawing.Size(550, 205);
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).EndInit();

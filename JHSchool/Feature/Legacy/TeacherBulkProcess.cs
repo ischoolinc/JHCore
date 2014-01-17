@@ -13,20 +13,35 @@ namespace SmartSchool.Feature.Teacher
         [AutoRetryOnWebException()]
         public static XmlElement GetExportDescription()
         {
-            return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetExportDescription");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_T_ExportDescription);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetExportDescription");
         }
 
         [AutoRetryOnWebException()]
         public static XmlElement GetBulkDescription()
         {
-            return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetBulkDescription");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_T_BulkDescription);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetBulkDescription");
         }
 
         #region 2008/04/02 教師匯入改寫，測試用，阿寶
 
         public static XmlElement GetImportFieldList()
         {
-            return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetImportFieldList");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_T_ImportFieldList);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetImportFieldList");
         }
 
         public static XmlElement GetUniqueFieldData()
@@ -66,7 +81,12 @@ namespace SmartSchool.Feature.Teacher
         [AutoRetryOnWebException()]
         public static XmlElement GetFieldValidationRule()
         {
-            return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetFieldValidationRule");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_T_FieldValidationRule);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Teacher.BulkProcessJH.GetFieldValidationRule");
         }
 
         [AutoRetryOnWebException()]

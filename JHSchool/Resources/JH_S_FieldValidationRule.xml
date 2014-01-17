@@ -1,0 +1,582 @@
+﻿<ValidateRule>
+  <FieldList>
+    <Field DataType="Integer" Name="學生系統編號">
+      <Validate AutoCorrect="False" Description="此欄位的資料不可重覆。 " ErrorType="Error" Validator="Uniq" When=""/>
+    </Field>
+    <Field DataType="String" Name="姓名">
+      <Validate AutoCorrect="False" Description="「姓名」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+      <Validate AutoCorrect="False" Description="「姓名」長度必須小於20個文字。" ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="學號">
+      <Validate AutoCorrect="False" Description="學號不可重覆。 " ErrorType="Error" Validator="UniqStudentNumber" When="學號非空白"/>
+      <Validate AutoCorrect="False" Description="「學號」長度必須小於12個文字。 " ErrorType="Error" Validator="文字12" When=""/>
+    </Field>
+    <Field DataType="String" Name="身分證號">
+      <Validate AutoCorrect="False" Description="「身分證號」不可重覆。 " ErrorType="Error" Validator="UniqIDNumber" When="身分證號非空白"/>
+      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="國籍">
+      <Validate AutoCorrect="False" Description="「國籍」長度必須小於50個文字。 " ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When="國籍非空白"/>
+    </Field>
+    <Field DataType="String" Name="出生地">
+      <Validate AutoCorrect="False" Description="「出生地」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+    </Field>
+    <Field DataType="String" Name="生日">
+      <Validate AutoCorrect="True" Description="「生日」格式不正確，例：96/8/8、960828、96-08-28、08-28-2007、20070828、2007/8/28。 " ErrorType="Error" Validator="合法日期" When="生日非空白"/>
+      <Validate AutoCorrect="False" Description="「生日」可能不正確。(系統驗證「%MinDate」到「%MaxDate」之間為較合理日期) " ErrorType="Warning" Validator="日期" When="生日非空白"/>
+    </Field>
+    <Field DataType="String" Name="性別">
+      <Validate AutoCorrect="True" Description="「性別」只允許「男」與「女」。 " ErrorType="Error" Validator="性別" When=""/>
+    </Field>
+    <Field DataType="String" Name="英文姓名">
+      <Validate AutoCorrect="False" Description="「英文姓名」長度必須小於30個文字。" ErrorType="Error" Validator="文字30" When=""/>
+    </Field>
+    <Field DataType="String" Name="班級">
+      <Validate AutoCorrect="False" Description="班級名稱必須是校內的班級。 " ErrorType="Error" Validator="合法班級" When="班級非空白"/>
+    </Field>
+    <Field DataType="Integer" Name="座號">
+      <Validate AutoCorrect="False" Description="「座號」必須是數字。 " ErrorType="Error" Validator="合法座號" When="座號非空白"/>
+      <Validate AutoCorrect="False" Description="「座號」過大，可能有錯誤，請檢查。 " ErrorType="Warning" Validator="座號範圍" When="座號非空白"/>
+      <Validate AutoCorrect="False" Description="「座號」大小超過極限。 " ErrorType="Error" Validator="Integer極限" When="座號非空白"/>
+    </Field>
+    <Field DataType="String" Name="登入帳號">
+      <Validate AutoCorrect="False" Description="此欄位的資料不可重覆。 " ErrorType="Error" Validator="UniqAccount" When="登入帳號有資料"/>
+      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="登入密碼">
+      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+    </Field>
+    <Field DataType="String" Name="帳號類型">
+      <Validate AutoCorrect="False" Description="「帳號類型」只允許「Greening、自定帳號」。" ErrorType="Error" Validator="帳號類型列舉" When=""/>
+    </Field>
+    <Field DataType="String" Name="狀態">
+      <Validate AutoCorrect="False" Description="「狀態類型」只允許「一般、休學、輟學、畢業或離校、刪除，空白將預設為一般」。" ErrorType="Error" Validator="狀態類型列舉" When=""/>
+    </Field>
+    <Field DataType="String" Name="戶籍:郵遞區號"/>
+    <Field DataType="String" Name="戶籍:縣市"/>
+    <Field DataType="String" Name="戶籍:鄉鎮市區"/>
+    <Field DataType="String" Name="戶籍:村里街號"/>
+    <Field DataType="String" Name="聯絡:郵遞區號"/>
+    <Field DataType="String" Name="聯絡:縣市"/>
+    <Field DataType="String" Name="聯絡:鄉鎮市區"/>
+    <Field DataType="String" Name="聯絡:村里街號"/>
+    <Field DataType="String" Name="戶籍電話">
+      <Validate AutoCorrect="False" Description="「戶籍電話」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
+    </Field>
+    <Field DataType="String" Name="聯絡電話">
+      <Validate AutoCorrect="False" Description="「聯絡電話」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
+    </Field>
+    <Field DataType="String" Name="行動電話">
+      <Validate AutoCorrect="False" Description="「行動電話」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
+    </Field>
+    <Field DataType="String" Name="其他電話:1"/>
+    <Field DataType="String" Name="其他電話:2"/>
+    <Field DataType="String" Name="其他電話:3"/>
+    <Field DataType="String" Name="監護人姓名">
+      <Validate AutoCorrect="False" Description="「監護人姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="監護人身分證號">
+      <Validate AutoCorrect="False" Description="「監護人身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="監護人國籍">
+      <Validate AutoCorrect="False" Description="「監護人國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
+    </Field>
+    <Field DataType="String" Name="監護人稱謂">
+      <Validate AutoCorrect="False" Description="「監護人稱謂」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人稱謂」資料可能不正確。 " ErrorType="Warning" Validator="合法稱謂" When=""/>
+    </Field>
+    <Field DataType="String" Name="監護人:學歷">
+      <Validate AutoCorrect="False" Description="「監護人:學歷」資料可能不正確。 " ErrorType="Warning" Validator="合法學歷" When=""/>
+    </Field>
+    <Field DataType="String" Name="監護人:職業"/>
+    <Field DataType="String" Name="監護人:電話"/>
+    <Field DataType="String" Name="父親姓名">
+      <Validate AutoCorrect="False" Description="「父親姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="父親身分證號">
+      <Validate AutoCorrect="False" Description="「父親身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="父親國籍">
+      <Validate AutoCorrect="False" Description="「父親國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「父親國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
+    </Field>
+    <Field DataType="String" Name="父親存歿">
+      <Validate AutoCorrect="False" Description="「父親存歿」只允許「存」或「歿」。 " ErrorType="Error" Validator="存歿" When=""/>
+    </Field>
+    <Field DataType="String" Name="父親:學歷">
+      <Validate AutoCorrect="False" Description="「父親:學歷」資料可能不正確。 " ErrorType="Warning" Validator="合法學歷" When=""/>
+    </Field>
+    <Field DataType="String" Name="父親:職業"/>
+    <Field DataType="String" Name="父親:電話"/>
+    <Field DataType="String" Name="母親姓名">
+      <Validate AutoCorrect="False" Description="「母親姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="母親身分證號">
+      <Validate AutoCorrect="False" Description="「母親身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+    </Field>
+    <Field DataType="String" Name="母親國籍">
+      <Validate AutoCorrect="False" Description="「母親國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「母親國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
+    </Field>
+    <Field DataType="String" Name="母親存歿">
+      <Validate AutoCorrect="False" Description="「母親存歿」只允許「存」或「歿」。 " ErrorType="Error" Validator="存歿" When=""/>
+    </Field>
+    <Field DataType="String" Name="母親:學歷">
+      <Validate AutoCorrect="False" Description="「母親:學歷」資料可能不正確。 " ErrorType="Warning" Validator="合法學歷" When=""/>
+    </Field>
+    <Field DataType="String" Name="母親:職業"/>
+    <Field DataType="String" Name="母親:電話"/>
+    <Field DataType="String" Name="新生:國中校名"/>
+    <Field DataType="String" Name="新生:國中縣市">
+      <Validate AutoCorrect="False" Description="「新生:國中縣市」不正確。 " ErrorType="Error" Validator="合法所在地縣市" When=""/>
+    </Field>
+    <Field DataType="String" Name="新生:異動代號">
+      <Validate AutoCorrect="False" Description="「新生:異動代號」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+      <Validate AutoCorrect="False" Description="「新生:異動代號」不正確。 " ErrorType="Error" Validator="合法新生異動代號" When=""/>
+    </Field>
+    <Field DataType="String" Name="新生:異動日期">
+      <Validate AutoCorrect="False" Description="「新生:異動日期」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
+      <Validate AutoCorrect="True" Description="「新生:異動日期」格式不正確，例：96/8/8、960828、96-08-28、08-28-2007、20070828、2007/8/28。 " ErrorType="Error" Validator="合法日期" When="新生:異動日期非空白"/>
+    </Field>
+    <Field DataType="String" Name="前級:學校名稱"/>
+    <Field DataType="String" Name="前級:學校所在地"/>
+    <Field DataType="String" Name="前級:班級"/>
+    <Field DataType="String" Name="前級:座號"/>
+    <Field DataType="String" Name="前級:備註"/>
+  </FieldList>
+  <!--
+
+					<RowValidate>
+						<Valildate Validator="入學資訊列驗證" ErrorType="Error" Description="此學生的新生資訊已有核準文號" AutoCorrect="False" When="" />
+					</RowValidate>
+					
+-->
+  <ValidatorList>
+    <!-- 此 Validator 的資料由 Service 產生，所以名稱不可以改變。 -->
+    <FieldValidator Name="合法班級" Type="Enumeration">
+      <Item Value="廣二甲"/>
+      <Item Value="老校友集中營"/>
+      <Item Value="實驗五甲"/>
+      <Item Value="資一a"/>
+      <Item Value="複製測試班級"/>
+      <Item Value="表演一丁"/>
+      <Item Value="汽一甲"/>
+      <Item Value="實驗四乙"/>
+      <Item Value="廣一甲"/>
+      <Item Value="資一甲"/>
+      <Item Value="綜訊一乙"/>
+      <Item Value="綜一幼"/>
+      <Item Value="普一甲"/>
+      <Item Value="mmm班"/>
+      <Item Value="hhhhi"/>
+      <Item Value="ggggg"/>
+      <Item Value="綜英一甲"/>
+      <Item Value="綜觀三甲"/>
+      <Item Value="普一乙"/>
+      <Item Value="資一乙"/>
+      <Item Value="觀三甲"/>
+      <Item Value="表演一乙"/>
+      <Item Value="汽一乙"/>
+      <Item Value="資三忠"/>
+      <Item Value="汽一丙"/>
+      <Item Value="綜觀一乙"/>
+      <Item Value="澔學三忠"/>
+      <Item Value="301"/>
+      <Item Value="綜電一甲"/>
+      <Item Value="綜電一乙"/>
+      <Item Value="幼一甲"/>
+      <Item Value="綜廣三甲"/>
+      <Item Value="汽二丙"/>
+      <Item Value="綜觀二甲"/>
+      <Item Value="廣三甲"/>
+      <Item Value="綜三仁"/>
+      <Item Value="資二甲"/>
+      <Item Value="綜三日"/>
+      <Item Value="綜廣三乙"/>
+      <Item Value="綜三幼"/>
+      <Item Value="綜三資_y"/>
+      <Item Value="綜三英B"/>
+      <Item Value="綜訊三乙"/>
+      <Item Value="實驗四甲"/>
+      <Item Value="訊三忠"/>
+      <Item Value="幼二甲"/>
+      <Item Value="實驗八甲"/>
+      <Item Value="汽二忠"/>
+      <Item Value="綜訊二乙"/>
+      <Item Value="觀二甲"/>
+      <Item Value="綜一亞"/>
+      <Item Value="綜廣一乙"/>
+      <Item Value="綜二義"/>
+      <Item Value="日一甲a"/>
+      <Item Value="綜二甲"/>
+      <Item Value="綜訊二甲"/>
+      <Item Value="綜廣一甲"/>
+      <Item Value="汽二乙"/>
+      <Item Value="綜英二甲"/>
+      <Item Value="綜二仁"/>
+      <Item Value="實驗五乙"/>
+      <Item Value="訊二甲"/>
+      <Item Value="綜一甲"/>
+      <Item Value="綜廣二甲"/>
+      <Item Value="綜觀一甲"/>
+      <Item Value="綜廣二乙"/>
+      <Item Value="電一甲"/>
+      <Item Value="綜英一乙"/>
+      <Item Value="綜英二乙"/>
+      <Item Value="日二甲"/>
+      <Item Value="綜電二乙"/>
+      <Item Value="綜訊一甲"/>
+      <Item Value="綜二乙"/>
+      <Item Value="綜觀二乙"/>
+      <Item Value="觀二丙"/>
+      <Item Value="觀二乙"/>
+      <Item Value="電二甲"/>
+      <Item Value="綜訊三甲"/>
+      <Item Value="綜三甲"/>
+      <Item Value="綜電二甲"/>
+      <Item Value="綜觀一丙"/>
+      <Item Value="LIP四忠"/>
+      <Item Value="綜三電A"/>
+      <Item Value="綜二日"/>
+      <Item Value="觀一甲"/>
+      <Item Value="訊一甲"/>
+      <Item Value="綜二資"/>
+      <Item Value="綜一資"/>
+      <Item Value="綜二幼"/>
+      <Item Value="日一甲"/>
+      <Item Value="綜電三乙"/>
+      <Item Value="綜觀三乙"/>
+      <Item Value="綜英三甲"/>
+      <Item Value="LIP四信"/>
+    </FieldValidator>
+    <!-- 資料來自「List」資料表的「國家列表」 -->
+    <FieldValidator Name="合法國籍" Type="Enumeration">
+      <Item Value="中華民國"/>
+      <Item Value="中華人民共合國"/>
+      <Item Value="孟加拉"/>
+      <Item Value="緬甸"/>
+      <Item Value="印尼"/>
+      <Item Value="日本"/>
+      <Item Value="韓國"/>
+      <Item Value="馬來西亞"/>
+      <Item Value="菲律賓"/>
+      <Item Value="新加坡"/>
+      <Item Value="泰國"/>
+      <Item Value="越南"/>
+      <Item Value="汶萊"/>
+      <Item Value="澳大利亞"/>
+      <Item Value="紐西蘭"/>
+      <Item Value="埃及"/>
+      <Item Value="南非"/>
+      <Item Value="法國"/>
+      <Item Value="義大利"/>
+      <Item Value="瑞典"/>
+      <Item Value="英國"/>
+      <Item Value="德國"/>
+      <Item Value="加拿大"/>
+      <Item Value="哥斯大黎加"/>
+      <Item Value="瓜地馬拉"/>
+      <Item Value="美國"/>
+      <Item Value="阿根廷"/>
+      <Item Value="巴西"/>
+      <Item Value="哥倫比亞"/>
+      <Item Value="巴拉圭"/>
+      <Item Value="烏拉圭"/>
+      <Item Value="其他"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <!-- 資料來自「List」資料表的「稱謂列表」 -->
+    <FieldValidator Name="合法稱謂" Type="Enumeration">
+      <Item Value="父"/>
+      <Item Value="母"/>
+      <Item Value="祖父"/>
+      <Item Value="祖母"/>
+      <Item Value="外公"/>
+      <Item Value="外婆"/>
+      <Item Value="伯"/>
+      <Item Value="叔"/>
+      <Item Value="舅"/>
+      <Item Value="姑"/>
+      <Item Value="姨"/>
+      <Item Value="伯母"/>
+      <Item Value="嬸"/>
+      <Item Value="舅媽"/>
+      <Item Value="姑丈"/>
+      <Item Value="姨丈"/>
+      <Item Value="兄"/>
+      <Item Value="姊"/>
+      <Item Value="弟"/>
+      <Item Value="妹"/>
+      <Item Value="堂兄"/>
+      <Item Value="堂姊"/>
+      <Item Value="堂弟"/>
+      <Item Value="堂妹"/>
+      <Item Value="表兄"/>
+      <Item Value="表姊"/>
+      <Item Value="表弟"/>
+      <Item Value="表妹"/>
+      <Item Value="養父"/>
+      <Item Value="養母"/>
+      <Item Value="院長"/>
+      <Item Value="本人"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <!-- 資料來自「List」資料表的「最高學歷列表」 -->
+    <FieldValidator Name="合法學歷" Type="Enumeration">
+      <Item Value="無"/>
+      <Item Value="國小"/>
+      <Item Value="國中"/>
+      <Item Value="高中"/>
+      <Item Value="專科"/>
+      <Item Value="大學"/>
+      <Item Value="碩士"/>
+      <Item Value="博士"/>
+      <Item Value="其它"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="合法所在地縣市" Type="Enumeration">
+      <Item Value="臺北縣"/>
+      <Item Value="宜蘭縣"/>
+      <Item Value="桃園縣"/>
+      <Item Value="新竹縣"/>
+      <Item Value="苗栗縣"/>
+      <Item Value="臺中縣"/>
+      <Item Value="彰化縣"/>
+      <Item Value="南投縣"/>
+      <Item Value="雲林縣"/>
+      <Item Value="嘉義縣"/>
+      <Item Value="臺南縣"/>
+      <Item Value="高雄縣"/>
+      <Item Value="屏東縣"/>
+      <Item Value="臺東縣"/>
+      <Item Value="花蓮縣"/>
+      <Item Value="澎湖縣"/>
+      <Item Value="基隆市"/>
+      <Item Value="新竹市"/>
+      <Item Value="臺中市"/>
+      <Item Value="嘉義市"/>
+      <Item Value="臺南市"/>
+      <Item Value="松山區"/>
+      <Item Value="信義區"/>
+      <Item Value="大安區"/>
+      <Item Value="中山區"/>
+      <Item Value="中正區"/>
+      <Item Value="大同區"/>
+      <Item Value="萬華區"/>
+      <Item Value="文山區"/>
+      <Item Value="南港區"/>
+      <Item Value="內湖區"/>
+      <Item Value="士林區"/>
+      <Item Value="北投區"/>
+      <Item Value="鹽埕區"/>
+      <Item Value="鼓山區"/>
+      <Item Value="左營區"/>
+      <Item Value="楠梓區"/>
+      <Item Value="三民區"/>
+      <Item Value="新興區"/>
+      <Item Value="前金區"/>
+      <Item Value="苓雅區"/>
+      <Item Value="前鎮區"/>
+      <Item Value="旗津區"/>
+      <Item Value="小港區"/>
+      <Item Value="金門縣"/>
+      <Item Value="連江縣"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="合法新生異動代號" Type="Enumeration">
+      <Item Value="001"/>
+      <Item Value="002"/>
+      <Item Value="003"/>
+      <Item Value="004"/>
+      <Item Value="005"/>
+      <Item Value="006"/>
+      <Item Value="007"/>
+      <Item Value="008"/>
+      <Item Value="009"/>
+      <Item Value="010"/>
+      <Item Value="011"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <!--  以下為固定內容的 Validator  -->
+    <FieldValidator Name="不可空白" Type="Null"/>
+    <FieldValidator Name="合法座號" Type="Type">
+      <Type>Integer</Type>
+    </FieldValidator>
+    <FieldValidator Name="合法日期" Type="MixDateCSharp">
+      <!--  Gregorian | Taiwan -->
+      <!--  Pattern 中需要 Year,Month,Day 三個 Group。 -->
+      <Matchs CorrectTo="yyyy/MM/dd">
+        <!--  96/8/8 (年/月/日) -->
+        <Match DateType="Taiwan">
+          <![CDATA[
+^(?<Year>[0-9]{2})/(?<Month>[0-9]{1,2})/(?<Day>[0-9]{1,2})$
+]]>
+        </Match>
+        <!--  96-8-8 (年-月-日) -->
+        <Match DateType="Taiwan">
+          <![CDATA[
+^(?<Year>[0-9]{2})-(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})$
+]]>
+        </Match>
+        <!--  960808 (年月日) -->
+        <Match DateType="Taiwan">
+          <![CDATA[
+^(?<Year>[0-9]{2})(?<Month>[0-9]{2})(?<Day>[0-9]{2})$
+]]>
+        </Match>
+        <!--  2007-8-8 (年/月/日) -->
+        <Match DateType="Gregorian">
+          <![CDATA[
+^(?<Year>[0-9]{4})-(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})$
+]]>
+        </Match>
+        <!--  8-8-2007 (月/日/年) -->
+        <Match DateType="Gregorian">
+          <![CDATA[
+^(?<Month>[0-9]{1,2})-(?<Day>[0-9]{1,2})-(?<Year>[0-9]{4})$
+]]>
+        </Match>
+        <!--  20070812 (年月日) -->
+        <Match DateType="Gregorian">
+          <![CDATA[
+^(?<Year>[0-9]{4})(?<Month>[0-9]{2})(?<Day>[0-9]{2})$
+]]>
+        </Match>
+      </Matchs>
+      <!--  2007/8/8 (年/月/日)  -->
+      <ValidPattern DateType="Gregorian">
+        <![CDATA[
+^(?<Year>[0-9]{4})/(?<Month>[0-9]{1,2})/(?<Day>[0-9]{1,2})$
+]]>
+      </ValidPattern>
+    </FieldValidator>
+    <FieldValidator Name="座號範圍" Type="Integer">
+      <MinValue>1</MinValue>
+      <MaxValue>70</MaxValue>
+    </FieldValidator>
+    <FieldValidator Name="Integer極限" Type="Integer">
+      <MinValue>1</MinValue>
+      <MaxValue>2000000000</MaxValue>
+    </FieldValidator>
+    <FieldValidator Name="文字12" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>12</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字20" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>20</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字30" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>30</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字40" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>40</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字50" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字100" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>100</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="Uniq" Type="UNIQUEKEY"/>
+    <FieldValidator Name="UniqIDNumber" Type="UNIQUEKEY"/>
+    <FieldValidator Name="UniqStudentNumber" Type="UNIQUEKEY"/>
+    <FieldValidator Name="UniqAccount" Type="UNIQUEKEY"/>
+    <FieldValidator Name="帳號類型列舉" Type="Enumeration">
+      <Item Value="Greening"/>
+      <Item Value="greening"/>
+      <Item Value="Google"/>
+      <Item Value="google"/>
+      <Item Value="自定帳號"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="狀態類型列舉" Type="Enumeration">
+      <Item Value="一般"/>
+      <Item Value="休學"/>
+      <Item Value="輟學"/>
+      <Item Value="畢業或離校"/>
+      <Item Value="刪除"/>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="性別" Type="Enumeration">
+      <!--  Value 是正確的值，一般 Code 是不用的。 -->
+      <Item Value="男">
+        <Variation>1</Variation>
+        <Variation>-1</Variation>
+        <Variation>t</Variation>
+        <Variation>true</Variation>
+        <Variation>M</Variation>
+        <Variation>m</Variation>
+      </Item>
+      <Item Value="女">
+        <Variation>0</Variation>
+        <Variation>f</Variation>
+        <Variation>F</Variation>
+        <Variation>false</Variation>
+      </Item>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="存歿" Type="Enumeration">
+      <!--  Value 是正確的值，一般 Code 是不用的。 -->
+      <Item Value="存">
+        <Variation>1</Variation>
+        <Variation>t</Variation>
+        <Variation>true</Variation>
+      </Item>
+      <Item Value="歿">
+        <Variation>0</Variation>
+        <Variation>f</Variation>
+        <Variation>false</Variation>
+      </Item>
+      <Item Value=""/>
+    </FieldValidator>
+    <FieldValidator Name="日期" Type="DATE">
+      <!--  Inclusive：指示是否包含該值，預設值為true。 -->
+      <!-- 最小日期 -->
+      <MinDate>1970/1/1</MinDate>
+      <!-- 最大日期 -->
+      <MaxDate>2020/1/1</MaxDate>
+    </FieldValidator>
+    <!--
+
+						<RowValidator Name="入學資訊列驗證" Type="EnrollmentRowValidator">
+							<CheckList>
+								<Student ID="" />
+							</CheckList>
+						</RowValidator>
+						
+-->
+  </ValidatorList>
+  <ConditionList>
+    <Condition Name="登入帳號有資料">
+      <Match Field="登入帳號" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="身分證號非空白">
+      <Match Field="身分證號" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="生日非空白">
+      <Match Field="生日" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="新生:異動日期非空白">
+      <Match Field="新生:異動日期" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="班級非空白">
+      <Match Field="班級" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="座號非空白">
+      <Match Field="座號" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="學號非空白">
+      <Match Field="學號" Operator="!=" Value=""/>
+    </Condition>
+    <Condition Name="國籍非空白">
+      <Match Field="國籍" Operator="!=" Value=""/>
+    </Condition>
+  </ConditionList>
+</ValidateRule>

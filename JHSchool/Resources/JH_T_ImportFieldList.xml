@@ -1,0 +1,19 @@
+﻿<FieldDescription>
+  <Field InternalName="TeacherID" Name="教師系統編號" PrimaryKey="True" UniqueGroup="PrimaryKey"/>
+  <Field InsertRequired="True" InternalName="Name" Name="教師姓名" ShiftCheckable="True" UniqueGroup="TeacherName"/>
+  <Field InsertRequired="True" InternalName="Nickname" Name="暱稱" ShiftCheckable="True" UniqueGroup="TeacherName"/>
+  <Field InternalName="Gender" Name="性別"/>
+  <Field InternalName="IDNumber" Name="身分證號" ShiftCheckable="True" UniqueGroup="IDNumber"/>
+  <Field InternalName="ContactPhone" Name="聯絡電話" ShiftCheckable="True"/>
+  <Field InternalName="Email" Name="電子信箱" ShiftCheckable="True"/>
+  <Field InternalName="Category" Name="教師類別"/>
+  <Field InternalName="LoginName" Name="登入帳號" ShiftCheckable="True" UniqueGroup="LoginName"/>
+  <Field InternalName="Password" Name="登入密碼"/>
+  <Field InternalName="AccountType" Name="帳號類型" ShiftCheckable="True"/>
+  <UpdateCondition>
+    <Condition Name="教師系統編號" UniqueGroup="PrimaryKey"/>
+    <Condition Name="教師姓名+暱稱" UniqueGroup="TeacherName"/>
+    <Condition EmptySkipValidate="True" Name="身分證號" UniqueGroup="IDNumber"/>
+    <Condition EmptySkipValidate="True" Name="登入帳號" UniqueGroup="LoginName"/>
+  </UpdateCondition>
+</FieldDescription>

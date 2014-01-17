@@ -160,8 +160,15 @@ namespace JHSchool.StudentExtendControls.Ribbon
             //fld1.FieldName = "StudentStatus";
             //collection.Add(fld1);
             List<string> list = new List<string>(new string[] { "學生系統編號", "姓名", "學號", "身分證號", "狀態" });
+            
+            //需遮蔽的欄位
+            List<string> avoids = new List<string>(new string[] { "帳號類型" });
+
             foreach (Field field in collection)
             {
+                //遮蔽欄位
+                if (avoids.Contains(field.DisplayText)) continue;
+
                 ListViewItem item = listView.Items.Add(field.DisplayText);
                 if (list.Contains(field.DisplayText))
                 {

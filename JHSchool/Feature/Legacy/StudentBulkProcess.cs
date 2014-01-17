@@ -12,12 +12,22 @@ namespace JHSchool.Feature.Legacy
     {
         public static XmlElement GetBulkDescription()
         {
-            return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetBulkDescription");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_S_BulkDescription);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetBulkDescription");
         }
 
         public static XmlElement GetFieldValidationRule()
         {
-            return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetFieldValidationRule");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_S_FieldValidationRule);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetFieldValidationRule");
         }
 
         public static XmlElement GetPrimaryKeyList()
@@ -75,7 +85,12 @@ namespace JHSchool.Feature.Legacy
 
         public static XmlElement GetExportDescription()
         {
-            return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetExportDescription");
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_S_ExportDescription);
+
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetExportDescription");
         }
     }
 }

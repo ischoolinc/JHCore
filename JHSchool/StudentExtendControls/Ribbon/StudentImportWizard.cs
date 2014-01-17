@@ -285,8 +285,15 @@ namespace JHSchool.StudentExtendControls.Ribbon
         private void DisplayColumns(Dictionary<string, ImportItem> fields, Dictionary<string, BulkColumnCollection> bfields)
         {
             lvSourceFieldList.Items.Clear();
+
+            //需遮蔽的欄位
+            List<string> avoids = new List<string>(new string[] { "帳號類型", "登入密碼" });
+
             foreach (ImportItem each in fields.Values)
             {
+                //遮蔽欄位
+                if (avoids.Contains(each.Text)) continue;
+
                 bool hide_column = false;
 
                 if (each.IsGroupColumn)

@@ -1,0 +1,13 @@
+﻿<FieldDescription>
+  <Field DisplayText="教師系統編號" Identifiable="True" Name="TeacherID" ReadOnly="True"/>
+  <Field DisplayText="教師姓名" Name="Name" ShiftCheckable="True"/>
+  <Field DisplayText="暱稱" Name="Nickname" ShiftCheckable="True"/>
+  <Field DisplayText="性別" Name="Gender"/>
+  <Field DisplayText="身分證號" Identifiable="False" Name="IDNumber" ShiftCheckable="True"/>
+  <Field DisplayText="聯絡電話" Name="ContactPhone" ShiftCheckable="True"/>
+  <Field DisplayText="電子信箱" Name="Email" ShiftCheckable="True"/>
+  <Field DisplayText="教師類別" Name="Category" ShiftCheckable="True"/>
+  <Field DisplayText="登入帳號" Identifiable="True" Name="LoginName" ShiftCheckable="True"/>
+  <Field DisplayText="登入密碼" Name="Password" ShiftCheckable="True"/>
+  <Field DisplayText="帳號類型" Name="AccountType" ShiftCheckable="True"/>
+</FieldDescription>

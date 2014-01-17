@@ -474,8 +474,15 @@ namespace JHSchool.TeacherExtendControls.Ribbon
         {
             _block_behavior = true;
             lvSourceFieldList.Items.Clear();
+
+            //需遮蔽的欄位
+            List<string> avoids = new List<string>(new string[] { "帳號類型", "登入密碼" });
+
             foreach (SheetField each in _sheet_fields)
             {
+                //遮蔽欄位
+                if (avoids.Contains(each.Text)) continue;
+
                 if (chkHideSome.Checked)
                 {
                     if (each.BindField == null)

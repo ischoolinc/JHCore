@@ -1,0 +1,114 @@
+﻿<FieldDescription>
+  <Field DataType="integer" DisplayText="學生系統編號" Identifiable="True" Name="StudentID" ReadOnly="True"/>
+  <Field DisplayText="姓名" Name="Name" ShiftCheckable="True"/>
+  <Field DisplayText="學號" Identifiable="True" Name="StudentNumber" ShiftCheckable="True"/>
+  <Field DisplayText="身分證號" Identifiable="True" Name="IDNumber" ShiftCheckable="True"/>
+  <Field DisplayText="國籍" Name="Nationality" ShiftCheckable="True"/>
+  <Field DisplayText="出生地" Name="BirthPlace" ShiftCheckable="True"/>
+  <Field DataType="DateTime" DisplayText="生日" Name="Birthdate" ShiftCheckable="True"/>
+  <Field DisplayText="性別" Name="Gender"/>
+  <Field DisplayText="英文姓名" Name="EnglishName" ShiftCheckable="True"/>
+  <Field DisplayText="班級" Name="ClassName" ShiftCheckable="True"/>
+  <!--
+<Field DisplayText="科別" Name="DeptName" ShiftCheckable="True" />
+-->
+  <Field DisplayText="年級" Name="GradeYear" ShiftCheckable="True"/>
+  <Field DisplayText="座號" Name="SeatNo" ShiftCheckable="True"/>
+  <Field DisplayText="登入帳號" Name="LoginName" ShiftCheckable="True"/>
+  <Field DisplayText="帳號類型" Name="AccountType" ShiftCheckable="True"/>
+  <Field DisplayText="狀態" Name="Status" ShiftCheckable="True"/>
+  <!--
+<Field DisplayText="密碼" Name="Password" ShiftCheckable="True" />
+-->
+  <XmlField DisplayText="戶籍地址" Name="PermanentAddress">
+    <Element DisplayText="戶籍" Name="AddressList">
+      <Element DisplayText="" Name="Address">
+        <Field DisplayText="郵遞區號" Name="ZipCode"/>
+        <Field DisplayText="縣市" Name="County"/>
+        <Field DisplayText="鄉鎮市區" Name="Town"/>
+        <Field DisplayText="村里" Name="District"/>
+        <Field DisplayText="鄰" Name="Area"/>
+        <Field DisplayText="其他" Name="DetailAddress"/>
+      </Element>
+    </Element>
+  </XmlField>
+  <XmlField DisplayText="聯絡地址" Name="MailingAddress">
+    <Element DisplayText="聯絡" Name="AddressList">
+      <Element DisplayText="" Name="Address">
+        <Field DisplayText="郵遞區號" Name="ZipCode"/>
+        <Field DisplayText="縣市" Name="County"/>
+        <Field DisplayText="鄉鎮市區" Name="Town"/>
+        <Field DisplayText="村里" Name="District"/>
+        <Field DisplayText="鄰" Name="Area"/>
+        <Field DisplayText="其他" Name="DetailAddress"/>
+      </Element>
+    </Element>
+  </XmlField>
+  <Field DisplayText="戶籍電話" Name="PermanentPhone" ShiftCheckable="True"/>
+  <Field DisplayText="聯絡電話" Name="ContactPhone" ShiftCheckable="True"/>
+  <Field DisplayText="行動電話" Name="SMSPhone" ShiftCheckable="True"/>
+  <XmlField DisplayText="其它電話" Name="OtherPhone">
+    <Element DisplayText="其它電話" Name="PhoneList">
+      <Field DisplayText="1" Name="PhoneNumber"/>
+      <Field DisplayText="2" Name="PhoneNumber"/>
+      <Field DisplayText="3" Name="PhoneNumber"/>
+    </Element>
+  </XmlField>
+  <Field DisplayText="監護人姓名" Name="CustodianName" ShiftCheckable="True"/>
+  <Field DisplayText="監護人身分證號" Name="CustodianIDNumber" ShiftCheckable="True"/>
+  <Field DisplayText="監護人國籍" Name="CustodianNationality" ShiftCheckable="True"/>
+  <Field DisplayText="監護人稱謂" Name="CustodianRelationship" ShiftCheckable="True"/>
+  <XmlField DisplayText="監護人其它資訊" Name="CustodianOtherInfo">
+    <Element DisplayText="監護人" Name="CustodianOtherInfo">
+      <Field DisplayText="學歷" Name="EducationDegree"/>
+      <Field DisplayText="職業" Name="Job"/>
+      <Field DisplayText="電話" Name="Phone"/>
+    </Element>
+  </XmlField>
+  <Field DisplayText="父親姓名" Name="FatherName" ShiftCheckable="True"/>
+  <Field DisplayText="父親身分證號" Name="FatherIDNumber" ShiftCheckable="True"/>
+  <Field DisplayText="父親國籍" Name="FatherNationality" ShiftCheckable="True"/>
+  <Field DisplayText="父親存歿" Name="FatherLiving" ShiftCheckable="True"/>
+  <XmlField DisplayText="父親其它資訊" Name="FatherOtherInfo">
+    <Element DisplayText="父親" Name="FatherOtherInfo">
+      <Field DisplayText="學歷" Name="FatherEducationDegree"/>
+      <Field DisplayText="職業" Name="FatherJob"/>
+      <Field DisplayText="電話" Name="Phone"/>
+    </Element>
+  </XmlField>
+  <Field DisplayText="母親姓名" Name="MotherName" ShiftCheckable="True"/>
+  <Field DisplayText="母親身分證號" Name="MotherIDNumber" ShiftCheckable="True"/>
+  <Field DisplayText="母親國籍" Name="MotherNationality" ShiftCheckable="True"/>
+  <Field DisplayText="母親存歿" Name="MotherLiving" ShiftCheckable="True"/>
+  <XmlField DisplayText="母親其它資訊" Name="MotherOtherInfo">
+    <Element DisplayText="母親" Name="MotherOtherInfo">
+      <Field DisplayText="學歷" Name="MotherEducationDegree"/>
+      <Field DisplayText="職業" Name="MotherJob"/>
+      <Field DisplayText="電話" Name="Phone"/>
+    </Element>
+  </XmlField>
+  <XmlField DisplayText="前級畢業資訊" Name="BeforeEnrollment">
+    <Element DisplayText="前級" Name="BeforeEnrollment">
+      <Field DisplayText="學校名稱" Name="School"/>
+      <Field DisplayText="學校所在地" Name="SchoolLocation"/>
+      <Field DisplayText="班級" Name="ClassName"/>
+      <Field DisplayText="座號" Name="SeatNo"/>
+      <Field DisplayText="備註" Name="Memo"/>
+    </Element>
+  </XmlField>
+  <!--
+
+					<Field DisplayText="異動代號" Name="EnrollCode" />
+					<Field DataType="DateTime" DisplayText="異動日期" Name="EnrollDate" />
+					<XmlField DisplayText="新生資訊" Name="EnrollmentInfo">
+						<Element DisplayText="新生" Name="ContextInfo">
+							<Field DisplayText="國中校名" Name="GraduateSchool" />
+							<Field DisplayText="國中縣市" Name="GraduateSchoolLocationCode" />
+						</Element>
+					</XmlField>
+						
+-->
+  <!--
+<Field DisplayText="畢結業證書字號" Name="DiplomaNumber" ShiftCheckable="True" />
+-->
+</FieldDescription>

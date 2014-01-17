@@ -38,8 +38,14 @@ namespace JHSchool.TeacherExtendControls.Ribbon
 
             List<string> list = new List<string>(new string[] { "教師系統編號", "教師姓名", "暱稱" });
 
+            //需遮蔽的欄位
+            List<string> avoids = new List<string>(new string[] { "帳號類型" });
+
             foreach (Field field in collection)
             {
+                //遮蔽欄位
+                if (avoids.Contains(field.DisplayText)) continue;
+
                 ListViewItem item = listView.Items.Add(field.DisplayText);
                 if (list.Contains(field.DisplayText))
                 {
