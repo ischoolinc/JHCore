@@ -331,14 +331,15 @@
             // 
             // 
             // 
-            this.txtBirthDate.Border.Class = "";
-            this.txtBirthDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtBirthDate.Border.Class = "TextBoxBorder";
             this.txtBirthDate.EmptyString = "";
-            this.txtBirthDate.Location = new System.Drawing.Point(0, 0);
+            this.txtBirthDate.Location = new System.Drawing.Point(366, 79);
             this.txtBirthDate.Name = "txtBirthDate";
-            this.txtBirthDate.Size = new System.Drawing.Size(100, 22);
-            this.txtBirthDate.TabIndex = 0;
-            this.txtBirthDate.WatermarkText = "請輸入西元日期";
+            this.txtBirthDate.Size = new System.Drawing.Size(138, 25);
+            this.txtBirthDate.TabIndex = 3;
+            this.txtBirthDate.WatermarkText = "yyyy/mm/dd";
+            this.txtBirthDate.Validated += new System.EventHandler(this.txtBirthDate_Validated_1);
+            this.txtBirthDate.TextChanged += new System.EventHandler(this.txtBirthDate_TextChanged);
             // 
             // label1
             // 
@@ -464,6 +465,7 @@
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.contextMenuBar1);
             this.Controls.Add(this.label76);
+            this.Controls.Add(this.txtBirthDate);
             this.Controls.Add(this.cboAccountType);
             this.Controls.Add(this.cboGender);
             this.Controls.Add(this.txtBirthPlace);
