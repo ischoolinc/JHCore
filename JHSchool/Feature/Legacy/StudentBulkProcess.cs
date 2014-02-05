@@ -5,6 +5,8 @@ using FISCA.DSAUtil;
 using System.Xml;
 using Framework;
 using FISCA.Authentication;
+using FISCA.Data;
+using System.Data;
 
 namespace JHSchool.Feature.Legacy
 {
@@ -25,7 +27,21 @@ namespace JHSchool.Feature.Legacy
             //讀取XML欄位描述
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(Properties.Resources.JH_S_FieldValidationRule);
-
+            foreach (XmlElement elem in doc.SelectNodes("//FieldValidator"))
+            {
+                if (elem.GetAttribute("Name") == "合法班級")
+                {
+                    QueryHelper Q = new QueryHelper();
+                    DataTable dt = Q.Select("SELECT class_name FROM class WHERE status=1");
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        XmlElement item = doc.CreateElement("Item");
+                        item.SetAttribute("Value", row["class_name"].ToString());
+                        elem.AppendChild(item);
+                    }
+                    break;
+                }
+            }
             return doc.DocumentElement;
             //return CallNoneRequestService("SmartSchool.Student.BulkProcessJH.GetFieldValidationRule");
         }
