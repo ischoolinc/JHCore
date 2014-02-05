@@ -21,6 +21,9 @@ namespace JHSchool
             //學校組態基本上就是儲存在 App.Configuration 之中。
             School.Configuration = new School.SchoolConfigRedirect(Framework.App.Configuration);
 
+            //電子報表
+            SmartSchool.ePaper.DispatcherProvider.Register("ischool", new DispatcherImp(), true);
+
             Class.Instance.SyncAllBackground();
             Class.Instance.WaitLoadingComplete();
             Student.Instance.SyncAllBackground();
