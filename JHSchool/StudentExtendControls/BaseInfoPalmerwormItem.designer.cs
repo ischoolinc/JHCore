@@ -109,7 +109,7 @@
             this.txtSSN.MaxLength = 20;
             this.txtSSN.Name = "txtSSN";
             this.txtSSN.Size = new System.Drawing.Size(138, 25);
-            this.txtSSN.TabIndex = 2;
+            this.txtSSN.TabIndex = 1;
             this.txtSSN.Validating += new System.ComponentModel.CancelEventHandler(this.txtSSN_Validating);
             // 
             // label78
@@ -148,7 +148,7 @@
             this.txtName.MaxLength = 10;
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(138, 25);
-            this.txtName.TabIndex = 1;
+            this.txtName.TabIndex = 0;
             // 
             // label81
             // 
@@ -174,7 +174,7 @@
             this.txtEngName.MaxLength = 30;
             this.txtEngName.Name = "txtEngName";
             this.txtEngName.Size = new System.Drawing.Size(138, 25);
-            this.txtEngName.TabIndex = 6;
+            this.txtEngName.TabIndex = 7;
             // 
             // label80
             // 
@@ -332,14 +332,15 @@
             // 
             // 
             this.txtBirthDate.Border.Class = "TextBoxBorder";
+            this.txtBirthDate.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtBirthDate.EmptyString = "";
             this.txtBirthDate.Location = new System.Drawing.Point(366, 79);
             this.txtBirthDate.Name = "txtBirthDate";
             this.txtBirthDate.Size = new System.Drawing.Size(138, 25);
-            this.txtBirthDate.TabIndex = 3;
+            this.txtBirthDate.TabIndex = 2;
             this.txtBirthDate.WatermarkText = "yyyy/mm/dd";
-            this.txtBirthDate.Validated += new System.EventHandler(this.txtBirthDate_Validated_1);
             this.txtBirthDate.TextChanged += new System.EventHandler(this.txtBirthDate_TextChanged);
+            this.txtBirthDate.Validated += new System.EventHandler(this.txtBirthDate_Validated_1);
             // 
             // label1
             // 
@@ -365,7 +366,7 @@
             this.txtLoginID.MaxLength = 50;
             this.txtLoginID.Name = "txtLoginID";
             this.txtLoginID.Size = new System.Drawing.Size(138, 25);
-            this.txtLoginID.TabIndex = 7;
+            this.txtLoginID.TabIndex = 6;
             this.txtLoginID.Validating += new System.ComponentModel.CancelEventHandler(this.txtLoginID_Validating);
             // 
             // label2
@@ -395,6 +396,7 @@
             this.txtLoginPwd.PasswordChar = '●';
             this.txtLoginPwd.Size = new System.Drawing.Size(138, 25);
             this.txtLoginPwd.TabIndex = 8;
+            this.txtLoginPwd.TabStop = false;
             this.txtLoginPwd.Visible = false;
             // 
             // label3
