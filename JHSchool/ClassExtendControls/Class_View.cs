@@ -93,18 +93,18 @@ namespace JHSchool.StudentExtendControls
                 DevComponents.AdvTree.Node gyearNode = new DevComponents.AdvTree.Node();
                 switch (gyear)
                 {
-                    case 1:
-                        gyearNode.Text = "一年級";
-                        break;
-                    case 2:
-                        gyearNode.Text = "二年級";
-                        break;
-                    case 3:
-                        gyearNode.Text = "三年級";
-                        break;
-                    case 4:
-                        gyearNode.Text = "四年級";
-                        break;
+                    //case 1:
+                    //    gyearNode.Text = "一年級";
+                    //    break;
+                    //case 2:
+                    //    gyearNode.Text = "二年級";
+                    //    break;
+                    //case 3:
+                    //    gyearNode.Text = "三年級";
+                    //    break;
+                    //case 4:
+                    //    gyearNode.Text = "四年級";
+                    //    break;
                     default:
                         gyearNode.Text = "" + gyear + "年級";
                         break;

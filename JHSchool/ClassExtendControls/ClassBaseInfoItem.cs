@@ -183,8 +183,16 @@ namespace JHSchool.ClassExtendControls
                 if (classRec.GradeYear.HasValue)
                     if (!GradeYearList.Contains(classRec.GradeYear.Value + ""))
                         GradeYearList.Add(classRec.GradeYear.Value + "");
-            GradeYearList.Sort();
+            GradeYearList.Sort(GradeYearSort);
             cboGradeYear.Items.AddRange(GradeYearList.ToArray());
+        }
+
+        private int GradeYearSort(string x, string y)
+        {
+            string xx = x.PadLeft(10, '0');
+            string yy = y.PadLeft(10, '0');
+
+            return xx.CompareTo(yy);
         }
 
         private void BindDataToForm()
