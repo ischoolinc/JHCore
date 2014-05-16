@@ -90,9 +90,8 @@
       <HintPath>Library\DocValidate.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="FISCA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Library\FISCA.dll</HintPath>
+    <Reference Include="FISCA">
+      <HintPath>..\..\..\ischool國中\kernel\FISCA.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FISCA.Authentication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -137,6 +136,9 @@
     <Reference Include="IntelliSchool.DSA.ClientFramework, Version=1.2.2.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>Library\IntelliSchool.DSA.ClientFramework.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="IRewriteAPI_JH">
+      <HintPath>..\..\..\..\核心\JHCore\IRewriteAPI_JH\obj\Debug\IRewriteAPI_JH.dll</HintPath>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using JHSchool.TeacherExtendControls.Ribbon;
 using Framework.Security;
 using System.Data;
+using IRewriteAPI_JH;
 
 namespace JHSchool
 {
@@ -227,7 +228,19 @@ namespace JHSchool
 
             // Teacher.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<TeacherExtendControls.BaseInfoItem>());
 
-            Teacher.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.TeacherExtendControls.BaseInfoItem>());
+            #region 教師基本資料(20140502)
+            ITeacherDatailtemAPI BaseItem = FISCA.InteractionService.DiscoverAPI<ITeacherDatailtemAPI>();
+            if (BaseItem != null)
+            {
+                Teacher.Instance.AddDetailBulider(BaseItem.CreateBasicInfo());
+            }
+            else
+            {
+                Teacher.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.TeacherExtendControls.BaseInfoItem>());
+            } 
+            #endregion
+
+
             // Teacher.Instance.AddDetailBulider(new ContentItemBulider<TeacherExtendControls.BaseInfoItem>());
 //            Teacher.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<TeacherExtendControls.TeachStudentItem>());
 

@@ -12,6 +12,7 @@ using Framework;
 using Framework.Security;
 using JHSchool.StudentExtendControls.Ribbon;
 using System.Data;
+using IRewriteAPI_JH;
 //using Permissions = JHSchool.StudentExtendControls.Permissions;
 
 namespace JHSchool
@@ -389,9 +390,18 @@ namespace JHSchool
             //Student.Instance.AddView(new JHSchool.StudentExtendControls.CategoryView());
             #endregion
 
-            #region Student Detail Items
-            // 學生基本資料
-            Student.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.StudentExtendControls.BaseInfoPalmerwormItem>());
+            #region 學生基本資料(20140429)
+            IStudentDetailItemAPI itemB = FISCA.InteractionService.DiscoverAPI<IStudentDetailItemAPI>();
+            if (itemB != null)
+            {
+                Student.Instance.AddDetailBulider(itemB.CreateBasicInfo());
+            }
+            else
+            {
+                Student.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.StudentExtendControls.BaseInfoPalmerwormItem>());
+            }
+            #endregion
+
             //            Student.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<StudentExtendControls.BaseInfoPalmerwormItem>());
             //            Student.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.StudentExtendControls.SemesterHistoryDetail>());
             //Student.Instance.AddDetailBulider(new DetailBulider<JHSchool.StudentExtendControls.ClassItem>());
@@ -402,7 +412,6 @@ namespace JHSchool
 
             // 電子報表(因相關功能未完成先註)
             //Student.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<StudentExtendControls.ElectronicPaperPalmerworm>());
-            #endregion
 
             #region Search Conditions
             ConfigData cd = User.Configuration["StudentSearchOptionPreference"];
