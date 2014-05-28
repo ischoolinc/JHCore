@@ -391,6 +391,7 @@ namespace JHSchool
             #endregion
 
             #region 學生基本資料(20140429)
+
             IStudentDetailItemAPI itemB = FISCA.InteractionService.DiscoverAPI<IStudentDetailItemAPI>();
             if (itemB != null)
             {
