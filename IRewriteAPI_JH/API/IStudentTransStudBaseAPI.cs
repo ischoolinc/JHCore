@@ -10,6 +10,6 @@ namespace IRewriteAPI_JH
     /// </summary>
     public interface IStudentTransStudBaseAPI
     {
-        FISCA.Presentation.IDetailBulider CreateBasicInfo();
+        ITransStudBase CreateForm();
     }
 }
