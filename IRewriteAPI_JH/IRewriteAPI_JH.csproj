@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevComponents.DotNetBar2, Version=9.5.0.1, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\DevComponents.DotNetBar2.dll</HintPath>
+    </Reference>
     <Reference Include="FISCA, Version=2.5.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\FISCA.dll</HintPath>
@@ -53,6 +57,7 @@
   <ItemGroup>
     <Compile Include="API\IStudentClassDetailItemAPI.cs" />
     <Compile Include="API\IStudentDetailItemAPI.cs" />
+    <Compile Include="API\IStudentImportWizardAPI.cs" />
     <Compile Include="API\ITeacherDatailtemAPI.cs" />
     <Compile Include="API\IStudentTransStudBaseAPI.cs" />
     <Compile Include="API\ITransStudBase.cs" />
@@ -61,6 +66,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Library\DevComponents.DotNetBar2.dll" />
+    <Content Include="Library\DevComponents.DotNetBar2.xml" />
     <Content Include="Library\FISCA.dll" />
     <Content Include="Library\FISCA.pdb" />
     <Content Include="Library\FISCA.Presentation.dll" />
