@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
 {
-    internal class ImportRecord
+    public class ImportRecord
     {
         private string _identity;
         private int _absolute_row_index = -1;

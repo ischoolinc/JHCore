@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
 {
-    internal enum ImportMode
+    public enum ImportMode
     {
         None,
         Insert,

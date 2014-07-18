@@ -9,7 +9,7 @@ using JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.SheetMod
 
 namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
 {
-    internal class WizardContext
+    public class WizardContext
     {
         public string SubFieldSeparator
         {

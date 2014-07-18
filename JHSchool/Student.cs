@@ -286,7 +286,16 @@ namespace JHSchool
             rbItem["匯入"]["學籍相關匯入"]["匯入學生基本資料"].Enable = User.Acl["JHSchool.Student.Ribbon0020"].Executable;
             rbItem["匯入"]["學籍相關匯入"]["匯入學生基本資料"].Click += delegate
             {
-                new StudentImportWizard().ShowDialog();
+                IStudentImportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IStudentImportWizardAPI>();
+                if (item != null)
+                {
+                    item.CreateForm().ShowDialog();
+                }
+                else
+                {
+                    new StudentImportWizard().ShowDialog();
+                }
+            
             };
             #endregion
 

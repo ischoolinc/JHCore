@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace JHSchool.Legacy.ImportSupport.Validators
 {
-    internal class MixDateFieldValidator : IFieldValidator
+    public class MixDateFieldValidator : IFieldValidator
     {
         private const string ErrorSource = "MixDateFieldValidator";
         private const short ErrNumXmlLoadError = 1;

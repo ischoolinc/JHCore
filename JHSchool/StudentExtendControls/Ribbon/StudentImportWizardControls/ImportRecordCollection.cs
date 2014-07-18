@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
 {
-    internal class ImportRecordCollection
+    public class ImportRecordCollection
     {
         Dictionary<string, ImportRecord> _by_identity;
         Dictionary<string, ImportRecord> _by_id_number;
