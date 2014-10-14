@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\IStudentAddStudentAPI.cs" />
     <Compile Include="API\IStudentClassDetailItemAPI.cs" />
     <Compile Include="API\IStudentDetailItemAPI.cs" />
     <Compile Include="API\IStudentImportWizardAPI.cs" />
