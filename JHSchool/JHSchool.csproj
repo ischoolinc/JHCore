@@ -137,6 +137,10 @@
       <HintPath>Library\IntelliSchool.DSA.ClientFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="IRewriteAPI_JH">
+      <HintPath>..\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\JHSchool.Data.dll</HintPath>
@@ -1164,13 +1168,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IRewriteAPI_JH\IRewriteAPI_JH.csproj">
-      <Project>{82fdb4f6-50f4-4e38-a79b-69f8db4df85f}</Project>
-      <Name>IRewriteAPI_JH</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

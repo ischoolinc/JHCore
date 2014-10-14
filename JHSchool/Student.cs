@@ -222,8 +222,15 @@ namespace JHSchool
             rbItem["新增"].Enable = User.Acl["JHSchool.Student.Ribbon0000"].Executable;
             rbItem["新增"].Click += delegate
             {
-                new JHSchool.StudentExtendControls.Ribbon.AddStudent().ShowDialog();
-
+                IStudentAddStudentAPI item = FISCA.InteractionService.DiscoverAPI<IStudentAddStudentAPI>();
+                if (item != null)
+                {
+                    item.CreateForm().ShowDialog();
+                }
+                else
+                {
+                    new JHSchool.StudentExtendControls.Ribbon.AddStudent().ShowDialog();
+                }
             };
 
             rbItem["刪除"].Image = StudentExtendControls.Ribbon.Resources.btnDeleteStudent_Image;
