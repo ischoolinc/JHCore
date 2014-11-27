@@ -7,10 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
-using Framework.Legacy;
 using FISCA.DSAUtil;
 using System.Xml;
-
+using Framework.Feature;
 
 namespace JHSchool
 {
@@ -23,13 +22,11 @@ namespace JHSchool
 
         }
 
-
-
         // 以後交給 DAL
         private SchoolInfoEntity getSchoolInfoData()
         {
-            XmlElement Element= Framework.Feature.Config.GetSchoolInfo();
-            XmlElement sElement = Framework.Feature.Config.GetSystemConfig();
+            XmlElement Element= Config.GetSchoolInfo();
+            XmlElement sElement = Config.GetSystemConfig();
             SchoolInfoEntity sie = new SchoolInfoEntity();
 
             sie.ChinsesName = getNodeData("ChineseName", Element, "SchoolInformation");
@@ -39,16 +36,33 @@ namespace JHSchool
             sie.Code = getNodeData("Code", Element, "SchoolInformation");
             sie.Fax = getNodeData("Fax", Element,"SchoolInformation");
             sie.Telephone = getNodeData("Telephone", Element,"SchoolInformation");
-                // 校長
-            sie.ChancellorChsName = getNodeData("ChancellorChineseName", Element, "SchoolInformation");
-            sie.ChancellorEngName = getNodeData("ChancellorEnglishName", Element, "SchoolInformation");
-                // 教務主任
-            sie.EduDirectorName = getNodeData("EduDirectorName", Element, "SchoolInformation");
-                // 學務主任
-            sie.StuDirectorName = getNodeData("StuDirectorName", Element, "SchoolInformation");
-
             sie.SchoolYear = getNodeData("DefaultSchoolYear", sElement, "SystemConfig");
             sie.Semester = getNodeData("DefaultSemester", sElement, "SystemConfig");
+
+            //校長
+            sie.ChancellorChsName = getNodeData("ChancellorChineseName", Element, "SchoolInformation");
+            sie.ChancellorEngName = getNodeData("ChancellorEnglishName", Element, "SchoolInformation");
+            sie.ChancellorCellPhone = getNodeData("ChancellorCellPhone", Element, "SchoolInformation");
+            sie.ChancellorEmail = getNodeData("ChancellorEmail", Element, "SchoolInformation");
+
+            //教務主任
+            sie.EduDirectorName = getNodeData("EduDirectorName", Element, "SchoolInformation");
+            sie.EduDirectorCellPhone = getNodeData("EduDirectorCellPhone", Element, "SchoolInformation");
+            sie.EduDirectorEmail = getNodeData("EduDirectorEmail", Element, "SchoolInformation");
+
+            //學務主任
+            sie.StuDirectorName = getNodeData("StuDirectorName", Element, "SchoolInformation");
+            sie.StuDirectorCellPhone = getNodeData("StuDirectorCellPhone", Element, "SchoolInformation");
+            sie.StuDirectorEmail = getNodeData("StuDirectorEmail", Element, "SchoolInformation");
+
+            sie.AssociatedWithName = getNodeData("AssociatedWithName", Element, "SchoolInformation");
+            sie.AssociatedWithCellPhone = getNodeData("AssociatedWithCellPhone", Element, "SchoolInformation");
+            sie.AssociatedWithEmail = getNodeData("AssociatedWithEmail", Element, "SchoolInformation");
+
+            sie.OtherTitle = getNodeData("OtherTitle", Element, "SchoolInformation");
+            sie.OtherName = getNodeData("OtherName", Element, "SchoolInformation");
+            sie.OtherCellPhone = getNodeData("OtherCellPhone", Element, "SchoolInformation");
+            sie.OtherEmail = getNodeData("OtherEmail", Element, "SchoolInformation");
 
             return sie;
         }
@@ -79,53 +93,78 @@ namespace JHSchool
             helper.AddElement("SchoolInformation", "Code", ScInfoEntity.Code );
             helper.AddElement("SchoolInformation", "Fax", ScInfoEntity.Fax );
             helper.AddElement("SchoolInformation", "Telephone", ScInfoEntity.Telephone );
+
             helper.AddElement("SchoolInformation", "ChancellorChineseName", ScInfoEntity.ChancellorChsName);
             helper.AddElement("SchoolInformation", "ChancellorEnglishName", ScInfoEntity.ChancellorEngName);
+            helper.AddElement("SchoolInformation", "ChancellorCellPhone", ScInfoEntity.ChancellorCellPhone);
+            helper.AddElement("SchoolInformation", "ChancellorEmail", ScInfoEntity.ChancellorEmail);
+
             helper.AddElement("SchoolInformation", "EduDirectorName", ScInfoEntity.EduDirectorName );
-            helper.AddElement("SchoolInformation", "StuDirectorName", ScInfoEntity.StuDirectorName );           
-            Framework.Feature.Config.SetSchoolInfo(helper.BaseElement);
+            helper.AddElement("SchoolInformation", "EduDirectorCellPhone", ScInfoEntity.EduDirectorCellPhone);
+            helper.AddElement("SchoolInformation", "EduDirectorEmail", ScInfoEntity.EduDirectorEmail);
+
+            helper.AddElement("SchoolInformation", "StuDirectorName", ScInfoEntity.StuDirectorName);
+            helper.AddElement("SchoolInformation", "StuDirectorCellPhone", ScInfoEntity.StuDirectorCellPhone);
+            helper.AddElement("SchoolInformation", "StuDirectorEmail", ScInfoEntity.StuDirectorEmail);
+
+            helper.AddElement("SchoolInformation", "AssociatedWithName", ScInfoEntity.AssociatedWithName);
+            helper.AddElement("SchoolInformation", "AssociatedWithCellPhone", ScInfoEntity.AssociatedWithCellPhone);
+            helper.AddElement("SchoolInformation", "AssociatedWithEmail", ScInfoEntity.AssociatedWithEmail);
+
+            helper.AddElement("SchoolInformation", "OtherTitle", ScInfoEntity.OtherTitle);
+            helper.AddElement("SchoolInformation", "OtherName", ScInfoEntity.OtherName);
+            helper.AddElement("SchoolInformation", "OtherCellPhone", ScInfoEntity.OtherCellPhone);
+            helper.AddElement("SchoolInformation", "OtherEmail", ScInfoEntity.OtherEmail);
+
+
+            Config.SetSchoolInfo(helper.BaseElement);
             
             // 學年度學期
             DSXmlHelper helper1 = new DSXmlHelper("SetSystemConfigRequest");
             helper1.AddElement("SystemConfig");
             helper1.AddElement("SystemConfig", "DefaultSchoolYear",SchoolInfoEnt.SchoolYear);
             helper1.AddElement("SystemConfig", "DefaultSemester", SchoolInfoEnt.Semester);
-            Framework.Feature.Config.SetSystemConfig(helper1.BaseElement);
+            Config.SetSystemConfig(helper1.BaseElement);
 
-        }
-        
-        private class SchoolInfoEntity
-        {
-            public string Code { get; set; }
-            public string  SchoolYear { get; set; }
-            public string  Semester { get; set; }
-            public string ChinsesName { get; set; }
-            public string EnglishName { get; set; }
-            public string ChineseAddress { get; set; }
-            public string EnglishAddress { get; set; }
-            public string Telephone { get; set; }
-            public string Fax { get; set; }
-            public string ChancellorChsName { get; set; }
-            public string ChancellorEngName { get; set; }
-            public string EduDirectorName { get; set; }
-            public string StuDirectorName { get; set; }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SchoolInfoEnt.ChancellorChsName = txtChancellorChsName.Text;
-            SchoolInfoEnt.ChancellorEngName = txtChancellorEngName.Text;
+
             SchoolInfoEnt.ChineseAddress = txtSchoolChsAddress.Text;
             SchoolInfoEnt.ChinsesName = txtSchoolChsName.Text;
-            SchoolInfoEnt.Code = txtSchoolCode.Text;
-            SchoolInfoEnt.EduDirectorName = txtEduDirectorName.Text;
-            SchoolInfoEnt.StuDirectorName = txtStuDirectorName.Text;
+            SchoolInfoEnt.Code = txtSchoolCode.Text; //學校代碼
+
             SchoolInfoEnt.Telephone = txtPhone.Text;
             SchoolInfoEnt.EnglishAddress = txtSchoolEngAddess.Text;
             SchoolInfoEnt.EnglishName = txtSchoolEngName.Text;
             SchoolInfoEnt.Fax = txtFax.Text;
-            SchoolInfoEnt.SchoolYear = intIptSchoolYear.Text;
-            SchoolInfoEnt.Semester = intIptSemester.Text;
+            SchoolInfoEnt.SchoolYear = intSchoolYear.Text;
+            SchoolInfoEnt.Semester = intSemester.Text;
+
+            SchoolInfoEnt.ChancellorChsName = txtChancellorChsName.Text;
+            SchoolInfoEnt.ChancellorEngName = txtChancellorEngName.Text;
+            SchoolInfoEnt.ChancellorCellPhone = txtChancellorCellPhone.Text;
+            SchoolInfoEnt.ChancellorEmail = txtChancellorEmail.Text;
+
+            SchoolInfoEnt.EduDirectorName = txtEduDirectorName.Text;
+            SchoolInfoEnt.EduDirectorCellPhone = txtEduDirectorCellPhone.Text;
+            SchoolInfoEnt.EduDirectorEmail = txtEduDirectorEmail.Text;
+
+            SchoolInfoEnt.StuDirectorName = txtStuDirectorName.Text;
+            SchoolInfoEnt.StuDirectorCellPhone = txtStuDirectorCellPhone.Text;
+            SchoolInfoEnt.StuDirectorEmail = txtStuDirectorEmail.Text;
+
+            SchoolInfoEnt.AssociatedWithName = txtAssociatedWithName.Text;
+            SchoolInfoEnt.AssociatedWithCellPhone = txtAssociatedWithCellPhone.Text;
+            SchoolInfoEnt.AssociatedWithEmail = txtAssociatedWithEmail.Text;
+
+            SchoolInfoEnt.OtherTitle = txtOtherTitle.Text;
+            SchoolInfoEnt.OtherName = txtOtherName.Text;
+            SchoolInfoEnt.OtherCellPhone = txtOtherCellPhone.Text;
+            SchoolInfoEnt.OtherEmail = txtOtherEmail.Text;
+
+
             setSchoolInfoData(SchoolInfoEnt);
             MessageBox.Show("資料儲存完成");
             PermRecLogProcess prlp = new PermRecLogProcess();
@@ -141,9 +180,30 @@ namespace JHSchool
         private void SchoolInfoMangement_Load(object sender, EventArgs e)
         {
             SchoolInfoEnt = getSchoolInfoData();
+
             txtChancellorChsName.Text = SchoolInfoEnt.ChancellorChsName;
             txtChancellorEngName.Text = SchoolInfoEnt.ChancellorEngName;
+            txtChancellorCellPhone.Text = SchoolInfoEnt.ChancellorCellPhone;
+            txtChancellorEmail.Text = SchoolInfoEnt.ChancellorEmail;
+
             txtEduDirectorName.Text = SchoolInfoEnt.EduDirectorName;
+            txtEduDirectorCellPhone.Text = SchoolInfoEnt.EduDirectorCellPhone;
+            txtEduDirectorEmail.Text = SchoolInfoEnt.EduDirectorEmail;
+
+            txtStuDirectorName.Text = SchoolInfoEnt.StuDirectorName;
+            txtStuDirectorCellPhone.Text = SchoolInfoEnt.StuDirectorCellPhone;
+            txtStuDirectorEmail.Text = SchoolInfoEnt.StuDirectorEmail;
+
+            txtAssociatedWithName.Text = SchoolInfoEnt.AssociatedWithName;
+            txtAssociatedWithCellPhone.Text = SchoolInfoEnt.AssociatedWithCellPhone;
+            txtAssociatedWithEmail.Text = SchoolInfoEnt.AssociatedWithEmail;
+
+            txtOtherTitle.Text = SchoolInfoEnt.OtherTitle;
+            txtOtherName.Text = SchoolInfoEnt.OtherName;
+            txtOtherCellPhone.Text = SchoolInfoEnt.OtherCellPhone;
+            txtOtherEmail.Text = SchoolInfoEnt.OtherEmail;
+
+
             txtFax.Text = SchoolInfoEnt.Fax;
             txtPhone.Text = SchoolInfoEnt.Telephone;
             txtSchoolChsAddress.Text = SchoolInfoEnt.ChineseAddress;
@@ -152,12 +212,146 @@ namespace JHSchool
             txtSchoolEngAddess.Text = SchoolInfoEnt.EnglishAddress;
             txtSchoolEngName.Text = SchoolInfoEnt.EnglishName;
             if(!string.IsNullOrEmpty(SchoolInfoEnt.SchoolYear))
-                intIptSchoolYear.Text = SchoolInfoEnt.SchoolYear;
+                intSchoolYear.Text = SchoolInfoEnt.SchoolYear;
 
             if(!string.IsNullOrEmpty(SchoolInfoEnt.Semester))
-                intIptSemester.Text = SchoolInfoEnt.Semester;
-            txtStuDirectorName.Text = SchoolInfoEnt.StuDirectorName;
+                intSemester.Text = SchoolInfoEnt.Semester;
         }
     }
+    public class SchoolInfoEntity
+    {
+         /// <summary>
+         /// 學校代碼
+         /// </summary>
+         public string Code { get; set; }
 
+         /// <summary>
+         /// 學年度
+         /// </summary>
+         public string SchoolYear { get; set; }
+
+         /// <summary>
+         /// 學期
+         /// </summary>
+         public string Semester { get; set; }
+
+         /// <summary>
+         /// 學校名稱
+         /// </summary>
+         public string ChinsesName { get; set; }
+
+         /// <summary>
+         /// 學校英文名稱
+         /// </summary>
+         public string EnglishName { get; set; }
+
+         /// <summary>
+         /// 學校地址
+         /// </summary>
+         public string ChineseAddress { get; set; }
+
+         /// <summary>
+         /// 學校英文地址
+         /// </summary>
+         public string EnglishAddress { get; set; }
+
+         /// <summary>
+         /// 電話
+         /// </summary>
+         public string Telephone { get; set; }
+
+         /// <summary>
+         /// 傳真
+         /// </summary>
+         public string Fax { get; set; }
+
+         #region 學校主管
+
+         /// <summary>
+         /// 校長中文姓名
+         /// </summary>
+         public string ChancellorChsName { get; set; }
+
+         /// <summary>
+         /// 校長英文姓名
+         /// </summary>
+         public string ChancellorEngName { get; set; }
+
+         /// <summary>
+         /// 校長手機
+         /// </summary>
+         public string ChancellorCellPhone { get; set; }
+
+         /// <summary>
+         /// 校長Emai
+         /// </summary>
+         public string ChancellorEmail { get; set; }
+
+         /// <summary>
+         /// 教務主任姓名
+         /// </summary>
+         public string EduDirectorName { get; set; }
+
+         /// <summary>
+         /// 教務主任手機
+         /// </summary>
+         public string EduDirectorCellPhone { get; set; }
+
+         /// <summary>
+         /// 教務主任Email
+         /// </summary>
+         public string EduDirectorEmail { get; set; }
+
+         /// <summary>
+         /// 學務主任姓名
+         /// </summary>
+         public string StuDirectorName { get; set; }
+
+         /// <summary>
+         /// 學務主任手機
+         /// </summary>
+         public string StuDirectorCellPhone { get; set; }
+
+         /// <summary>
+         /// 學務主任Email
+         /// </summary>
+         public string StuDirectorEmail { get; set; } 
+
+         #endregion
+
+         /// <summary>
+         /// 資訊連絡人
+         /// </summary>
+         public string AssociatedWithName { get; set; }
+
+         /// <summary>
+         /// 資訊連絡人手機
+         /// </summary>
+         public string AssociatedWithCellPhone { get; set; }
+
+         /// <summary>
+         /// 資訊連絡人Email
+         /// </summary>
+         public string AssociatedWithEmail { get; set; }
+
+         /// <summary>
+         /// 其它名稱
+         /// </summary>
+         public string OtherTitle { get; set; }
+
+         /// <summary>
+         /// 其它姓名
+         /// </summary>
+         public string OtherName { get; set; }
+
+         /// <summary>
+         /// 其它手機
+         /// </summary>
+         public string OtherCellPhone { get; set; }
+
+         /// <summary>
+         /// 其它Email
+         /// </summary>
+         public string OtherEmail { get; set; }
+    }
 }
