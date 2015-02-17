@@ -32,17 +32,19 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "ScoreCalcFlag");
             helper.AddElement("Condition");
             helper.AddElement("Order");
+            helper.AddElement("Order", "ID");
+            helper.AddElement("Order", "Sequence");
             dsreq.SetContent(helper);
             DSResponse dsrsp = DSAServices.CallService("SmartSchool.Course.GetDetailList", dsreq);
             List<CourseRecord> result = new List<CourseRecord>();
-            foreach ( XmlElement var in dsrsp.GetContent().GetElements("Course") )
+            foreach (XmlElement var in dsrsp.GetContent().GetElements("Course"))
             {
                 result.Add(new CourseRecord(var));
             }
             return result;
         }
         public static List<CourseRecord> GetCourses(params string[] primaryKeys)
-        { return GetCourses((IEnumerable<string>)primaryKeys);}
+        { return GetCourses((IEnumerable<string>)primaryKeys); }
         public static List<CourseRecord> GetCourses(IEnumerable<string> primaryKeys)
         {
             bool hasKey = false;
@@ -63,18 +65,18 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "Domain");
             helper.AddElement("Field", "ScoreCalcFlag");
             helper.AddElement("Condition");
-            foreach ( var key in primaryKeys )
+            foreach (var key in primaryKeys)
             {
                 helper.AddElement("Condition", "ID", key);
                 hasKey = true;
             }
             helper.AddElement("Order");
             List<CourseRecord> result = new List<CourseRecord>();
-            if ( hasKey )
+            if (hasKey)
             {
                 dsreq.SetContent(helper);
                 DSResponse dsrsp = DSAServices.CallService("SmartSchool.Course.GetDetailList", dsreq);
-                foreach ( XmlElement var in dsrsp.GetContent().GetElements("Course") )
+                foreach (XmlElement var in dsrsp.GetContent().GetElements("Course"))
                 {
                     result.Add(new CourseRecord(var));
                 }
