@@ -12,7 +12,6 @@ using Framework;
 using Framework.Security;
 using JHSchool.StudentExtendControls.Ribbon;
 using System.Data;
-using IRewriteAPI_JH;
 //using Permissions = JHSchool.StudentExtendControls.Permissions;
 
 namespace JHSchool
@@ -222,7 +221,7 @@ namespace JHSchool
             rbItem["新增"].Enable = User.Acl["JHSchool.Student.Ribbon0000"].Executable;
             rbItem["新增"].Click += delegate
             {
-                IStudentAddStudentAPI item = FISCA.InteractionService.DiscoverAPI<IStudentAddStudentAPI>();
+                IRewriteAPI_JH.IStudentAddStudentAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentAddStudentAPI>();
                 if (item != null)
                 {
                     item.CreateForm().ShowDialog();
@@ -285,7 +284,15 @@ namespace JHSchool
             rbItem["匯出"]["學籍相關匯出"]["匯出學生基本資料"].Enable = User.Acl["JHSchool.Student.Ribbon0030"].Executable;
             rbItem["匯出"]["學籍相關匯出"]["匯出學生基本資料"].Click += delegate
             {
-                new StudentExportWizard().ShowDialog();
+                IRewriteAPI_JH.IStudentExportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentExportWizardAPI>();
+                if (item != null)
+                {
+                    item.CreateForm().ShowDialog();
+                }
+                else
+                {
+                    new StudentExportWizard().ShowDialog();
+                }
             };
 
             rbItem["匯入"].Size = RibbonBarButton.MenuButtonSize.Large;
@@ -293,7 +300,7 @@ namespace JHSchool
             rbItem["匯入"]["學籍相關匯入"]["匯入學生基本資料"].Enable = User.Acl["JHSchool.Student.Ribbon0020"].Executable;
             rbItem["匯入"]["學籍相關匯入"]["匯入學生基本資料"].Click += delegate
             {
-                IStudentImportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IStudentImportWizardAPI>();
+                IRewriteAPI_JH.IStudentImportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentImportWizardAPI>();
                 if (item != null)
                 {
                     item.CreateForm().ShowDialog();
@@ -408,7 +415,7 @@ namespace JHSchool
 
             #region 學生基本資料(20140429)
 
-            IStudentDetailItemAPI itemB = FISCA.InteractionService.DiscoverAPI<IStudentDetailItemAPI>();
+            IRewriteAPI_JH.IStudentDetailItemAPI itemB = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentDetailItemAPI>();
             if (itemB != null)
             {
                 Student.Instance.AddDetailBulider(itemB.CreateBasicInfo());

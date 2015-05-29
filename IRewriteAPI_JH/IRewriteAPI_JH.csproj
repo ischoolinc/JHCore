@@ -58,6 +58,7 @@
     <Compile Include="API\IStudentAddStudentAPI.cs" />
     <Compile Include="API\IStudentClassDetailItemAPI.cs" />
     <Compile Include="API\IStudentDetailItemAPI.cs" />
+    <Compile Include="API\IStudentExportWizardAPI.cs" />
     <Compile Include="API\IStudentImportWizardAPI.cs" />
     <Compile Include="API\ITeacherDatailtemAPI.cs" />
     <Compile Include="API\IStudentTransStudBaseAPI.cs" />
