@@ -52,8 +52,16 @@ namespace JHSchool
                         base.AddDetailBulider(item);
                 }
             }
+            else if (Attribute.IsDefined(content.GetType(), typeof(FISCA.Permission.FeatureCodeAttribute)))
+                {
+                    FISCA.Permission.FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FISCA.Permission.FeatureCodeAttribute)) as FISCA.Permission.FeatureCodeAttribute;
+                    if (fca != null)
+                    {
+                        if (FISCA.Permission.UserAcl.Current[fca.Code].Viewable)
+                            base.AddDetailBulider(item);
+                    }
+                }
             else base.AddDetailBulider(item);
-
         }
 
         private static Student _Instance = null;
