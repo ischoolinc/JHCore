@@ -292,15 +292,15 @@ namespace JHSchool
             rbItem["匯出"]["學籍相關匯出"]["匯出學生基本資料"].Enable = User.Acl["JHSchool.Student.Ribbon0030"].Executable;
             rbItem["匯出"]["學籍相關匯出"]["匯出學生基本資料"].Click += delegate
             {
-                IRewriteAPI_JH.IStudentExportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentExportWizardAPI>();
-                if (item != null)
-                {
-                    item.CreateForm().ShowDialog();
-                }
-                else
-                {
+                //IRewriteAPI_JH.IStudentExportWizardAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentExportWizardAPI>();
+                //if (item != null)
+                //{
+                    //item.CreateForm().ShowDialog();
+                //}
+                //else
+                //{
                     new StudentExportWizard().ShowDialog();
-                }
+                //}
             };
 
             rbItem["匯入"].Size = RibbonBarButton.MenuButtonSize.Large;
