@@ -138,7 +138,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="IRewriteAPI_JH">
-      <HintPath>..\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
+      <HintPath>Library\IRewriteAPI_JH.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
@@ -385,6 +385,12 @@
     <Compile Include="Feature\QueryCourse.cs" />
     <Compile Include="Feature\QueryStudent.cs" />
     <Compile Include="Feature\QueryTeacher.cs" />
+    <Compile Include="Forms\StudentInformationExportWarningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StudentInformationExportWarningForm.Designer.cs">
+      <DependentUpon>StudentInformationExportWarningForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GeneralTag.cs" />
     <Compile Include="GeneralTagRecord.cs" />
     <Compile Include="InternalExtendControls\BigEvent.cs" />
@@ -635,6 +641,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ePaper\ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StudentInformationExportWarningForm.resx">
+      <DependentUpon>StudentInformationExportWarningForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InternalExtendControls\Tagging\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

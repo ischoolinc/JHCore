@@ -107,6 +107,35 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 return;
             }
 
+            string reason = "";
+
+            Forms.StudentInformationExportWarningForm warningform = new Forms.StudentInformationExportWarningForm();
+
+            if (warningform.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                reason = warningform.reason;
+            }
+            else 
+            {
+                // 若使用者 沒有鍵入事由、點選取消，則中止匯出學生基本程序。
+                return;                        
+            }
+
+            // 取得欄位名稱
+            List<string> field_name_list = new List<string>();
+
+            foreach (var field in GetSelectedFields())
+            {
+                field_name_list.Add(field.DisplayText);                                        
+            }
+
+            string field_name = "";
+
+            field_name = string.Join(",",field_name_list);
+
+            StringBuilder sb = new StringBuilder();
+
+
             saveFileDialog1.Filter = "Excel (*.xls)|*.xls|所有檔案 (*.*)|*.*";
             saveFileDialog1.FileName = "匯出學生基本資料";
 
@@ -116,6 +145,14 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 foreach (StudentRecord student in Student.Instance.SelectedList)
                 {
                     ec.AddCondition(student.ID);
+
+                    string student_log = "";
+
+                    student_log = (student.Class!=null ? student.Class.Name : "") +","+student.SeatNo+","+student.StudentNumber+","+student.Name;
+
+                    sb.AppendLine(student_log);
+
+
                 }
                 ec.SetSelectedFields(GetSelectedFields());
                 ExportTable table = ec.Export();
@@ -126,7 +163,10 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 {
                     output.Save(saveFileDialog1.FileName);
                     PermRecLogProcess prlp = new PermRecLogProcess();
-                    prlp.SaveLog("學生.匯出學生基本資料", "批次匯出", "匯出" + Student.Instance.SelectedKeys.Count + "筆學生資料.");
+
+                    //prlp.SaveLog("學生.匯出學生基本資料", "批次匯出", "匯出" + Student.Instance.SelectedKeys.Count + "筆學生資料，匯出欄位:"+ s+ "，匯出事由:"+reason);
+
+                    prlp.SaveLog("學生.匯出學生基本資料", "批次匯出", "匯出學生(班級,座號,學號,姓名)" + "\r\n" + "\r\n" + sb +  "\r\n" + "匯出欄位:" + field_name + "\r\n" +  "\r\n" + "匯出用途:" + reason);
                 }
                 catch (Exception)
                 {
