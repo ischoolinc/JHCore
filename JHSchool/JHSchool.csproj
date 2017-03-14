@@ -137,9 +137,9 @@
       <HintPath>Library\IntelliSchool.DSA.ClientFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="IRewriteAPI_JH">
-      <HintPath>..\IRewriteAPI_JH\bin\Debug\IRewriteAPI_JH.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="IRewriteAPI_JH, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\IRewriteAPI_JH.dll</HintPath>
     </Reference>
     <Reference Include="JHSchool.Data, Version=1.0.0.9, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1098,6 +1098,8 @@
     <Content Include="Library\FISCA.xml" />
     <Content Include="Library\Framework.dll" />
     <Content Include="Library\IntelliSchool.DSA.ClientFramework.dll" />
+    <Content Include="Library\IRewriteAPI_JH.dll" />
+    <Content Include="Library\IRewriteAPI_JH.pdb" />
     <Content Include="Library\JHSchool.Data.dll" />
     <Content Include="Library\K12.Data.dll" />
     <Content Include="Library\K12.EduAdminDataMapping.dll" />
