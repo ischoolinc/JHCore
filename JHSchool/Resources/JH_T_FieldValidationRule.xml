@@ -5,30 +5,30 @@
     </Field>
     <Field DataType="String" Name="教師姓名">
       <Validate AutoCorrect="False" Description="「教師姓名」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
-      <Validate AutoCorrect="False" Description="「教師姓名」長度必須小於20個文字。" ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「教師姓名」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="暱稱">
-      <Validate AutoCorrect="False" Description="「暱稱」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「暱稱」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="性別">
       <Validate AutoCorrect="True" Description="「性別」只允許「男」或「女」。 " ErrorType="Error" Validator="性別" When=""/>
     </Field>
     <Field DataType="String" Name="身分證號">
       <Validate AutoCorrect="False" Description="「身分證號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="身分證號非空白"/>
-      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="聯絡電話">
-      <Validate AutoCorrect="False" Description="「聯絡電話」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「聯絡電話」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="電子郵件"/>
     <Field DataType="String" Name="教師類別">
-      <Validate AutoCorrect="False" Description="「教師類別」長度必須小於50個文字。 " ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「教師類別」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="登入帳號">
-      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="登入密碼">
-      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="帳號類型">
       <Validate AutoCorrect="False" Description="「帳號類型」只允許「Greening、自定帳號」。" ErrorType="Error" Validator="帳號類型列舉" When=""/>
@@ -51,6 +51,10 @@
     <FieldValidator Name="文字50" Type="String">
       <MinLength>0</MinLength>
       <MaxLength>50</MaxLength>
+    </FieldValidator>
+    <FieldValidator Name="文字100" Type="String">
+      <MinLength>0</MinLength>
+      <MaxLength>100</MaxLength>
     </FieldValidator>
     <FieldValidator Name="Uniq" Type="UNIQUEKEY"/>
     <FieldValidator Name="帳號類型列舉" Type="Enumeration">

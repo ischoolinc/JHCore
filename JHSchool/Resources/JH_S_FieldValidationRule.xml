@@ -5,22 +5,22 @@
     </Field>
     <Field DataType="String" Name="姓名">
       <Validate AutoCorrect="False" Description="「姓名」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
-      <Validate AutoCorrect="False" Description="「姓名」長度必須小於20個文字。" ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「姓名」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="學號">
       <Validate AutoCorrect="False" Description="學號不可重覆。 " ErrorType="Error" Validator="UniqStudentNumber" When="學號非空白"/>
-      <Validate AutoCorrect="False" Description="「學號」長度必須小於12個文字。 " ErrorType="Error" Validator="文字12" When=""/>
+      <Validate AutoCorrect="False" Description="「學號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="身分證號">
       <Validate AutoCorrect="False" Description="「身分證號」不可重覆。 " ErrorType="Error" Validator="UniqIDNumber" When="身分證號非空白"/>
-      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「身分證號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="國籍">
-      <Validate AutoCorrect="False" Description="「國籍」長度必須小於50個文字。 " ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「國籍」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
       <Validate AutoCorrect="False" Description="「國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When="國籍非空白"/>
     </Field>
     <Field DataType="String" Name="出生地">
-      <Validate AutoCorrect="False" Description="「出生地」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「出生地」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="生日">
       <Validate AutoCorrect="True" Description="「生日」格式不正確，例：96/8/8、960828、96-08-28、08-28-2007、20070828、2007/8/28。 " ErrorType="Error" Validator="合法日期" When="生日非空白"/>
@@ -30,7 +30,7 @@
       <Validate AutoCorrect="True" Description="「性別」只允許「男」與「女」。 " ErrorType="Error" Validator="性別" When=""/>
     </Field>
     <Field DataType="String" Name="英文姓名">
-      <Validate AutoCorrect="False" Description="「英文姓名」長度必須小於30個文字。" ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「英文姓名」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="班級">
       <Validate AutoCorrect="False" Description="班級名稱必須是校內的班級。 " ErrorType="Error" Validator="合法班級" When="班級非空白"/>
@@ -42,10 +42,10 @@
     </Field>
     <Field DataType="String" Name="登入帳號">
       <Validate AutoCorrect="False" Description="此欄位的資料不可重覆。 " ErrorType="Error" Validator="UniqAccount" When="登入帳號有資料"/>
-      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="登入密碼">
-      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於50個文字。" ErrorType="Error" Validator="文字50" When=""/>
+      <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="帳號類型">
       <Validate AutoCorrect="False" Description="「帳號類型」只允許「Greening、自定帳號」。" ErrorType="Error" Validator="帳號類型列舉" When=""/>
@@ -74,17 +74,17 @@
     <Field DataType="String" Name="其他電話:2"/>
     <Field DataType="String" Name="其他電話:3"/>
     <Field DataType="String" Name="監護人姓名">
-      <Validate AutoCorrect="False" Description="「監護人姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人姓名」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="監護人身分證號">
-      <Validate AutoCorrect="False" Description="「監護人身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人身分證號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="監護人國籍">
-      <Validate AutoCorrect="False" Description="「監護人國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人國籍」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
       <Validate AutoCorrect="False" Description="「監護人國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
     </Field>
     <Field DataType="String" Name="監護人稱謂">
-      <Validate AutoCorrect="False" Description="「監護人稱謂」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「監護人稱謂」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
       <Validate AutoCorrect="False" Description="「監護人稱謂」資料可能不正確。 " ErrorType="Warning" Validator="合法稱謂" When=""/>
     </Field>
     <Field DataType="String" Name="監護人:學歷">
@@ -93,13 +93,13 @@
     <Field DataType="String" Name="監護人:職業"/>
     <Field DataType="String" Name="監護人:電話"/>
     <Field DataType="String" Name="父親姓名">
-      <Validate AutoCorrect="False" Description="「父親姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「父親姓名」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="父親身分證號">
-      <Validate AutoCorrect="False" Description="「父親身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「父親身分證號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="父親國籍">
-      <Validate AutoCorrect="False" Description="「父親國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「父親國籍」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
       <Validate AutoCorrect="False" Description="「父親國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
     </Field>
     <Field DataType="String" Name="父親存歿">
@@ -111,13 +111,13 @@
     <Field DataType="String" Name="父親:職業"/>
     <Field DataType="String" Name="父親:電話"/>
     <Field DataType="String" Name="母親姓名">
-      <Validate AutoCorrect="False" Description="「母親姓名」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「母親姓名」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="母親身分證號">
-      <Validate AutoCorrect="False" Description="「母親身分證號」長度必須小於20個文字。 " ErrorType="Error" Validator="文字20" When=""/>
+      <Validate AutoCorrect="False" Description="「母親身分證號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
     </Field>
     <Field DataType="String" Name="母親國籍">
-      <Validate AutoCorrect="False" Description="「母親國籍」長度必須小於30個文字。 " ErrorType="Error" Validator="文字30" When=""/>
+      <Validate AutoCorrect="False" Description="「母親國籍」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
       <Validate AutoCorrect="False" Description="「母親國籍」資料可能不正確。 " ErrorType="Warning" Validator="合法國籍" When=""/>
     </Field>
     <Field DataType="String" Name="母親存歿">

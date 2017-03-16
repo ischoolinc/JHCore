@@ -178,9 +178,6 @@
   <data name="JH_S_BulkDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JH_S_BulkDescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="JH_S_FieldValidationRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\JH_S_FieldValidationRule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="JH_T_ExportDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JH_T_ExportDescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -190,7 +187,10 @@
   <data name="JH_T_BulkDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\JH_T_BulkDescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="JH_S_FieldValidationRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\jh_s_fieldvalidationrule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="JH_T_FieldValidationRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\JH_T_FieldValidationRule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\resources\jh_t_fieldvalidationrule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

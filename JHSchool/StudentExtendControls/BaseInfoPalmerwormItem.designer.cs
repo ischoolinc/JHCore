@@ -106,7 +106,6 @@
             this.txtSSN.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtSSN.Location = new System.Drawing.Point(366, 48);
             this.txtSSN.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSSN.MaxLength = 20;
             this.txtSSN.Name = "txtSSN";
             this.txtSSN.Size = new System.Drawing.Size(138, 25);
             this.txtSSN.TabIndex = 1;
@@ -145,7 +144,6 @@
             this.txtName.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtName.Location = new System.Drawing.Point(366, 17);
             this.txtName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtName.MaxLength = 10;
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(138, 25);
             this.txtName.TabIndex = 0;
@@ -171,7 +169,6 @@
             this.txtEngName.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtEngName.Location = new System.Drawing.Point(108, 168);
             this.txtEngName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtEngName.MaxLength = 30;
             this.txtEngName.Name = "txtEngName";
             this.txtEngName.Size = new System.Drawing.Size(138, 25);
             this.txtEngName.TabIndex = 7;
@@ -304,7 +301,6 @@
             this.txtBirthPlace.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtBirthPlace.Location = new System.Drawing.Point(366, 168);
             this.txtBirthPlace.Margin = new System.Windows.Forms.Padding(4);
-            this.txtBirthPlace.MaxLength = 30;
             this.txtBirthPlace.Name = "txtBirthPlace";
             this.txtBirthPlace.Size = new System.Drawing.Size(138, 25);
             this.txtBirthPlace.TabIndex = 5;
@@ -363,7 +359,6 @@
             this.txtLoginID.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLoginID.Location = new System.Drawing.Point(108, 137);
             this.txtLoginID.Margin = new System.Windows.Forms.Padding(4);
-            this.txtLoginID.MaxLength = 50;
             this.txtLoginID.Name = "txtLoginID";
             this.txtLoginID.Size = new System.Drawing.Size(138, 25);
             this.txtLoginID.TabIndex = 6;
@@ -391,7 +386,6 @@
             this.txtLoginPwd.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.txtLoginPwd.Location = new System.Drawing.Point(108, 168);
             this.txtLoginPwd.Margin = new System.Windows.Forms.Padding(4);
-            this.txtLoginPwd.MaxLength = 50;
             this.txtLoginPwd.Name = "txtLoginPwd";
             this.txtLoginPwd.PasswordChar = '●';
             this.txtLoginPwd.Size = new System.Drawing.Size(138, 25);
