@@ -82,7 +82,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Bulk
         }
 
         public void GenerateUpdateRequest(SheetReader reader, BulkColumnCollection acceptColumns,
-            XmlElement output, string identifyName, string shiftName)
+            XmlElement output, string identifyName, string shiftName,string ref_student_id)
         {
             foreach (ElementGenerator each in _generators)
             {
@@ -103,10 +103,11 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Bulk
                     XmlElement condition = output.OwnerDocument.CreateElement("Condition");
                     output.AppendChild(condition);
 
-                    XmlElement identifyElm = output.OwnerDocument.CreateElement(each.TargetName);
+                    //2017/4/19 穎驊新增 以後無論是 學號、身分字號 當識別欄位，最後都是以 StudentID(ref_student_id) 匯入新增 
+                    XmlElement identifyElm = output.OwnerDocument.CreateElement("StudentID");
                     condition.AppendChild(identifyElm);
 
-                    identifyElm.InnerText = reader.GetValue(identifyName);
+                    identifyElm.InnerText = ref_student_id;
                 }
             }
 
@@ -120,6 +121,47 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Bulk
             //    newelm.InnerText = "0";
             //}
         }
+
+        // 舊方法
+        //public void GenerateUpdateRequest(SheetReader reader, BulkColumnCollection acceptColumns,
+        //   XmlElement output, string identifyName, string shiftName)
+        //{
+        //    foreach (ElementGenerator each in _generators)
+        //    {
+        //        if (acceptColumns.ContainGroup(each.SourceName) && each.SourceName != identifyName && each.SourceName != shiftName)
+        //        {
+        //            if (each.SourceName == "畢結業證書字號")
+        //            {
+        //                XmlElement dn = output.OwnerDocument.CreateElement("DiplomaNumberRaw");
+        //                output.AppendChild(dn);
+
+        //                dn.InnerText = reader.GetValue("畢結業證書字號");
+        //            }
+        //            else
+        //                each.Generate(reader, output);
+        //        }
+        //        else if (each.SourceName == identifyName)
+        //        {
+        //            XmlElement condition = output.OwnerDocument.CreateElement("Condition");
+        //            output.AppendChild(condition);
+
+        //            XmlElement identifyElm = output.OwnerDocument.CreateElement(each.TargetName);
+        //            condition.AppendChild(identifyElm);
+
+        //            identifyElm.InnerText = reader.GetValue(identifyName);
+        //        }
+        //    }
+
+        //    //if (acceptColumns.ContainsKey("新生:異動代號") &&
+        //    //    acceptColumns.ContainsKey("新生:異動日期") &&
+        //    //    acceptColumns.ContainsKey("新生:國中校名") &&
+        //    //    acceptColumns.ContainsKey("新生:國中縣市"))
+        //    //{
+        //    //    XmlElement newelm = output.OwnerDocument.CreateElement("EnrollmentSynced");
+        //    //    output.AppendChild(newelm);
+        //    //    newelm.InnerText = "0";
+        //    //}
+        //}
 
 
     }

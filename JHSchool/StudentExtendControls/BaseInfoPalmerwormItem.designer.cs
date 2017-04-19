@@ -320,6 +320,7 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            this.errorProvider1.Icon = ((System.Drawing.Icon)(resources.GetObject("errorProvider1.Icon")));
             // 
             // txtBirthDate
             // 
@@ -430,6 +431,8 @@
             this.cboNationality.Name = "cboNationality";
             this.cboNationality.Size = new System.Drawing.Size(139, 22);
             this.cboNationality.TabIndex = 4;
+            this.cboNationality.TextChanged += new System.EventHandler(this.cboNationality_TextChanged);
+            this.cboNationality.Validating += new System.ComponentModel.CancelEventHandler(this.cboNationality_Validating);
             // 
             // cboAccountType
             // 
