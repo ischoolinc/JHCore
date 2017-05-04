@@ -129,6 +129,10 @@
       <HintPath>Library\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.UDT">
+      <HintPath>Library\FISCA.UDT.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Framework, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\Framework.dll</HintPath>
@@ -322,6 +326,7 @@
     <Compile Include="CourseRecord.cs" />
     <Compile Include="CourseTag.cs" />
     <Compile Include="CourseTagRecord.cs" />
+    <Compile Include="DAO\UDT_NationalityMapping.cs" />
     <Compile Include="Data\Student_Extensions.cs" />
     <Compile Include="Department.cs" />
     <Compile Include="DepartmentRecord.cs" />
@@ -1129,6 +1134,7 @@
     <None Include="Resources\JH_T_ImportFieldList.xml" />
     <None Include="Resources\JH_T_BulkDescription.xml" />
     <None Include="Resources\JH_T_FieldValidationRule.xml" />
+    <Content Include="StudentExtendControls\Ribbon\Farm-Fresh_error.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAddStudent_Image.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAttendance.Image.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnDeleteStudent_Image.png" />
@@ -1143,6 +1149,8 @@
     <Content Include="StudentExtendControls\Ribbon\Resources\btnStatistics.Image.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\calcScore.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\coursePlan.png" />
+    <Content Include="StudentExtendControls\Ribbon\Resources\Warning_Icon.ico" />
+    <Content Include="StudentExtendControls\Ribbon\Resources\Warning_Icon_round.ico" />
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnAddTeacher.Image.png" />
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnDeleteTeacher.Image.png" />
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnHistory.Image.png" />

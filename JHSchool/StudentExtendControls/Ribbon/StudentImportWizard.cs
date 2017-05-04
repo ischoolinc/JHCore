@@ -814,21 +814,40 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     }
                     else if (Context.IdentifyField == snum)
                     {
-                        if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                        if (StudStatus != "一般" && StudStatus != "")
                         {
                             rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
-                                "此資料並不存在於資料庫中，無法更新此筆資料。");
+                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
                             _error_count++;
                         }
+                        else 
+                        {
+                            if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                            {
+                                rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                _error_count++;
+                            }                                                
+                        }
+                        
                     }
                     else if (Context.IdentifyField == ssn)
                     {
-                        if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                        if (StudStatus != "一般" && StudStatus != "")
                         {
-                            rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
-                                "此資料並不存在於資料庫中，無法更新此筆資料。");
+                            rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
                             _error_count++;
                         }
+                        else
+                        {
+                            if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                            {
+                                rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
+                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                _error_count++;
+                            }
+                        }                        
                     }
                 }
 
@@ -1100,6 +1119,26 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
         private void btnImport_Click(object sender, EventArgs e)
         {
+            ImportRecordCollection importRecords = new ImportRecordCollection();
+
+            // 讀取所有狀態學生
+            foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
+            {
+                //    string str1 = studRec.StudentNumber;
+                //    string str2 = studRec.IDNumber;
+
+                //    // 建立用學號對應編號
+                //    if (!StudIDByStudNum.ContainsKey(str1))
+                //        StudIDByStudNum.Add(str1, studRec.ID);
+
+                //    // 建立用身分證號對應編號
+                //    if (!StudIDByStudIDNumber.ContainsKey(str2))
+                //        StudIDByStudIDNumber.Add(str2, studRec.ID);
+
+                importRecords.Add(new ImportRecord(studRec));
+            }
+
+
             try
             {
                 //// 收集學生狀態
@@ -1166,11 +1205,31 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     //        StudStatusDict.Add(ID, Status);
                     //}
 
-                    
+
                     if (Context.ImportMode == ImportMode.Insert)
                         bulkdesc.GenerateInsertRequest(Context.SourceReader, columns, record);
                     else
-                        bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField);
+                    //假如是ImportMode.Update 更新模式
+                    {
+
+                        string ref_student_id = "";
+
+                        if (Context.IdentifyField == "學生系統編號")
+                        {
+                            ref_student_id = Context.SourceReader.GetValue("學生系統編號");
+                        }
+                        if (Context.IdentifyField == "學號")
+                        {
+                            ref_student_id = importRecords.GetByStudentNumber(Context.SourceReader.GetValue("學號") + "一般").Identity;
+                        }
+                        if (Context.IdentifyField == "身分證號")
+                        {
+                            ref_student_id = importRecords.GetByIdNumber(Context.SourceReader.GetValue("身分證號") + "一般").Identity;
+                        }
+
+                        bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField, ref_student_id);
+                    }
+                    
 
                     output.AppendChild(record);
 

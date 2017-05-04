@@ -106,7 +106,7 @@ namespace JHSchool.Feature
                 if (hasUpdate)
                 {
                     DSAServices.CallService("SmartSchool.Student.Update", new DSRequest(updateHelper.BaseElement));
-                    logs.SaveAll();
+                    Framework.LogInfoExtendFunctions.SaveAll(logs);
                     Student.Instance.SyncDataBackground(reflashList);
                 }
             }
@@ -221,7 +221,7 @@ namespace JHSchool.Feature
             if (hasChanged)
             {
                 DSAServices.CallService("SmartSchool.Student.Update", new DSRequest(helper.BaseElement));
-                logs.SaveAll();
+                Framework.LogInfoExtendFunctions.SaveAll(logs);
                 SemesterHistory.Instance.SyncDataBackground(grouped.Keys);
             }
         }

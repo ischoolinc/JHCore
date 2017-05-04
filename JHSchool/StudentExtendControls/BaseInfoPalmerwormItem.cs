@@ -12,7 +12,10 @@ using JHSchool.Feature.Legacy;
 using JHSchool.Legacy;
 using FCode = Framework.Security.FeatureCodeAttribute;
 using K12.EduAdminDataMapping;
+using FISCA.UDT;
+
 namespace JHSchool.StudentExtendControls
+    
 {
     [FCode("JHSchool.Student.Detail0000", "基本資料")]
     internal partial class BaseInfoPalmerwormItem : FISCA.Presentation.DetailContent
@@ -24,6 +27,9 @@ namespace JHSchool.StudentExtendControls
         private JHStudentRecord _StudRec;
         private string _defaultLoginID = string.Empty;
         private string _defaultIDNumber = string.Empty;
+
+        private bool load_completed = false;
+        private string cboNationality_ori = "";
 
         // 入學照片
         private string _FreshmanPhotoStr = string.Empty;
@@ -292,6 +298,9 @@ namespace JHSchool.StudentExtendControls
 
         private void LoadDALDataToForm()
         {
+            //2017/4/19 穎驊新增  尚未載入完畢，避免觸發cboNationality_TextChanged()
+            load_completed = false;
+
             if(_StudRec.Birthday.HasValue )
                 txtBirthDate.Text = _StudRec.Birthday.Value.ToShortDateString();
             txtBirthPlace.Text = _StudRec.BirthPlace;
@@ -303,6 +312,9 @@ namespace JHSchool.StudentExtendControls
             cboAccountType.Text = _StudRec.AccountType;
             cboGender.Text = _StudRec.Gender;
             cboNationality.Text = _StudRec.Nationality;
+
+            //2017/4/19 穎驊新增 記錄原原國籍，作為與新輸入比較使用
+            cboNationality_ori = _StudRec.Nationality;
             // 解析
             try
             {
@@ -323,6 +335,7 @@ namespace JHSchool.StudentExtendControls
                 pic2.Image = pic2.InitialImage;
             }
 
+            load_completed = true;
         }
 
         public DetailContent GetContent()
@@ -345,6 +358,10 @@ namespace JHSchool.StudentExtendControls
             {
                 FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
             }
+
+
+            
+
 
             //this.cboNationality.Items.Add("中華民國");
             //this.cboNationality.Items.Add("中華人民共合國");
@@ -583,6 +600,57 @@ namespace JHSchool.StudentExtendControls
         private void cboGender_TextChanged(object sender, EventArgs e)
         {
             _errors.SetError(cboGender, string.Empty);
+        }
+
+        private void cboNationality_Validating(object sender, CancelEventArgs e)
+        {
+
+            //List<DAO.UDT_NationalityMapping> nation_list = new List<DAO.UDT_NationalityMapping>();
+            //AccessHelper accessHelper = new AccessHelper();
+            //nation_list = accessHelper.Select<DAO.UDT_NationalityMapping>();
+
+            //List<string> nation_name_list = new List<string>();
+
+            //foreach (DAO.UDT_NationalityMapping item in nation_list)
+            //{
+            //    nation_name_list.Add(item.Name);                        
+            //}
+
+
+            //errorProvider1.SetError(cboNationality,string.Empty);
+
+            //if (!nation_name_list.Contains(cboNationality.Text) && cboNationality.Text!="")
+            //{
+            //    errorProvider1.Icon = SystemIcons.Warning;
+            //    errorProvider1.SetError(cboNationality, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");                        
+            //}
+
+        }
+
+        //2017/4/19 穎驊新增 監聽 國籍欄位 內容改變事件
+        private void cboNationality_TextChanged(object sender, EventArgs e)
+        {           
+            errorProvider1.SetError(cboNationality, string.Empty);
+            if (load_completed && cboNationality.Text !=cboNationality_ori) 
+            {
+                List<string> nation_name_list = new List<string>();
+                List<DAO.UDT_NationalityMapping> nation_list = new List<DAO.UDT_NationalityMapping>();
+                AccessHelper accessHelper = new AccessHelper();
+                nation_list = accessHelper.Select<DAO.UDT_NationalityMapping>();
+
+                foreach (DAO.UDT_NationalityMapping item in nation_list)
+                {
+                    nation_name_list.Add(item.Name);
+                }
+
+                if (!nation_name_list.Contains(cboNationality.Text) && cboNationality.Text != "")
+                {
+                    
+                    //errorProvider1.Icon = new Icon(SystemIcons.Warning, 8 ,8);
+
+                    errorProvider1.SetError(cboNationality, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
+                }                        
+            }            
         }
     }
 }
