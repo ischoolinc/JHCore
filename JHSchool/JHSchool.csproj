@@ -1122,7 +1122,9 @@
     <None Include="Resources\world_upload_64.png" />
     <None Include="Resources\JH_S_ExportDescription.xml" />
     <None Include="Resources\JH_S_BulkDescription.xml" />
-    <None Include="Resources\JH_S_FieldValidationRule.xml" />
+    <None Include="Resources\JH_S_FieldValidationRule.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\JH_T_ExportDescription.xml" />
     <None Include="Resources\JH_T_ImportFieldList.xml" />
     <None Include="Resources\JH_T_BulkDescription.xml" />
