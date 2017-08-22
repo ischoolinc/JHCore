@@ -32,7 +32,11 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
                 _target_sheet = outputBook.Worksheets[SheetName];
                 _target_sheet.Cells.ClearContents(0, 0, _target_sheet.Cells.MaxDataRow, _target_sheet.Cells.MaxDataColumn);
                 Range rng = _target_sheet.Cells.CreateRange(0, 0, _target_sheet.Cells.MaxRow + 1, _target_sheet.Cells.MaxColumn + 1);
-                rng.Style = _styles.Normal;
+
+                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                //rng.Style = _styles.Normal;
+
+                rng.SetStyle(_styles.Normal);
             }
             catch (Exception)
             {
@@ -46,7 +50,11 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
             foreach (ValidateColumn each in columns.Values)
             {
                 _target_sheet.Cells[0, each.Index].PutValue(each.Name);
-                _target_sheet.Cells[0, each.Index].Style = _styles.Normal;
+
+                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                //_target_sheet.Cells[0, each.Index].Style = _styles.Normal;
+
+                _target_sheet.Cells[0, each.Index].SetStyle(_styles.Normal);
             }
 
             _target_sheet.ClearComments();
@@ -60,7 +68,12 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
             {
                 Cell cell = _target_sheet.Cells[_new_index, each.Index];
                 cell.PutValue(_reader.GetValue(each.Name));
-                cell.Style = _styles.Normal;
+
+                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                //cell.Style = _styles.Normal;
+
+                cell.SetStyle(_styles.Normal);
+
                 _reader.GetCell(each.Name).Formula = "=" + _target_sheet.Name + "!" + cell.Name;
             }
 
@@ -79,13 +92,23 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
                 switch (each.MessageType)
                 {
                     case MessageType.Correct:
-                        _target_sheet.Cells[row, column].Style = _styles.Correct;
+
+                        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                        //_target_sheet.Cells[row, column].Style = _styles.Correct;
+
+                        _target_sheet.Cells[row, column].SetStyle(_styles.Correct);
                         break;
                     case MessageType.Warning:
-                        _target_sheet.Cells[row, column].Style = _styles.Warning;
+                        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                        //_target_sheet.Cells[row, column].Style = _styles.Warning;
+
+                        _target_sheet.Cells[row, column].SetStyle(_styles.Warning);
                         break;
                     case MessageType.Error:
-                        _target_sheet.Cells[row, column].Style = _styles.Error;
+                        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+                        //_target_sheet.Cells[row, column].Style = _styles.Error;
+
+                        _target_sheet.Cells[row, column].SetStyle(_styles.Error);
                         break;
                 }
             }

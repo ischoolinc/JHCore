@@ -64,7 +64,8 @@ namespace JHSchool.TeacherExtendControls.Ribbon
                 return;
             }
 
-            saveFileDialog1.Filter = "Excel (*.xls)|*.xls|所有檔案 (*.*)|*.*";
+            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，支援.xlsx 匯出
+            saveFileDialog1.Filter = "Excel (*.xlsx)|*.xlsx|Excel (*.xls)|*.xls|所有檔案 (*.*)|*.*";
             saveFileDialog1.FileName = "匯出教師基本資料";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
