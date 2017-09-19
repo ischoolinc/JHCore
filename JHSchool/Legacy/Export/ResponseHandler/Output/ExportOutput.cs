@@ -78,25 +78,7 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Output
 
         public void Save(string filename)
         {
-
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法
-
-            //_book.Save(filename, FileFormatType.Excel2000);
-
-            if (filename.Contains(".xlsx"))
-            {
-                _book.Save(filename, SaveFormat.Xlsx);
-            }
-            else if (filename.Contains(".xls"))
-            {
-                _book.Save(filename, SaveFormat.Excel97To2003);
-            }
-            else
-            {
-                _book.Save(filename, SaveFormat.Xlsx);
-            }
-
-            
+            _book.Save(filename, FileFormatType.Excel2000);
         }
     }
 }

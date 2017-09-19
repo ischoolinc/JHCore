@@ -57,10 +57,7 @@ namespace JHSchool.Legacy.ImportSupport
             List<string> fields = new List<string>();
             foreach (string each in Fields)
             {
-                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，GetStyle()
-                //Style fStyle = _sheet.Cells[StartRow, GetFieldIndex(each)].Style;
-
-                Style fStyle = _sheet.Cells[StartRow, GetFieldIndex(each)].GetStyle();
+                Style fStyle = _sheet.Cells[StartRow, GetFieldIndex(each)].Style;
 
                 Color c1 = MatchColor(fStyle.ForegroundColor);
                 Color c2 = MatchColor(color);
@@ -74,15 +71,7 @@ namespace JHSchool.Legacy.ImportSupport
         public void SetFieldsStyle(List<string> fields, Style style)
         {
             foreach (string each in fields)
-            {
-
-                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                //_sheet.Cells[StartRow, GetFieldIndex(each)].Style = style;
-
-                _sheet.Cells[StartRow, GetFieldIndex(each)].SetStyle(style);
-
-            }
-            
+                _sheet.Cells[StartRow, GetFieldIndex(each)].Style = style;
         }
 
         /// <summary>
@@ -109,10 +98,7 @@ namespace JHSchool.Legacy.ImportSupport
 
         public void SetStyle(int row, int column, Style style)
         {
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-            //_sheet.Cells[row, column].Style = style;
-
-            _sheet.Cells[row, column].SetStyle(style);
+            _sheet.Cells[row, column].Style = style;
         }
 
         /// <summary>
@@ -125,11 +111,7 @@ namespace JHSchool.Legacy.ImportSupport
             int maxRow = MaxDataRowIndex;
 
             Range rng = _sheet.Cells.CreateRange(0, 0, maxRow + 1, maxColumn + 1);
-
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-            //rng.Style = style;
-
-            rng.SetStyle(style);
+            rng.Style = style;
         }
 
         public void SetComment(int row, int column, string msg)

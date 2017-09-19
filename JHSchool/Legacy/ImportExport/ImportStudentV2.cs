@@ -95,7 +95,7 @@ namespace JHSchool.Legacy.ImportExport
             helpButton.TabStop = true;
             helpButton.Text = "Help";
             helpButton.Visible = false;
-            helpButton.Click += delegate { if (HelpButtonClick != null) HelpButtonClick(this, new EventArgs()); };
+            helpButton.Click += delegate { if (HelpButtonClick != null)HelpButtonClick(this, new EventArgs()); };
             helpButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             this.wizard1.Controls[1].Controls.Add(helpButton);
             #endregion
@@ -571,16 +571,9 @@ namespace JHSchool.Legacy.ImportExport
                                 errorSheet.Cells[errorSheetRowIndex, 0].PutValue(i + 1);
                                 errorSheet.Cells[errorSheetRowIndex, 1].PutValue("警告");
                                 errorSheet.Cells[errorSheetRowIndex, 2].PutValue("學生不是在校生。");
-
-                                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                                //errorSheet.Cells[errorSheetRowIndex, 0].Style = warningStyle;
-                                //errorSheet.Cells[errorSheetRowIndex, 1].Style = warningStyle2;
-                                //errorSheet.Cells[errorSheetRowIndex, 2].Style = warningStyle2;
-
-                                errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(warningStyle);
-                                errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(warningStyle2);
-                                errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(warningStyle2);
-
+                                errorSheet.Cells[errorSheetRowIndex, 0].Style = warningStyle;
+                                errorSheet.Cells[errorSheetRowIndex, 1].Style = warningStyle2;
+                                errorSheet.Cells[errorSheetRowIndex, 2].Style = warningStyle2;
                                 errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[i, 0].Name);
                                 errorSheet.AutoFitRow(errorSheetRowIndex);
                                 errorSheetRowIndex++;
@@ -606,26 +599,14 @@ namespace JHSchool.Legacy.ImportExport
                             errorSheet.Cells[errorSheetRowIndex, 0].PutValue(i + 1);
                             errorSheet.Cells[errorSheetRowIndex, 1].PutValue("錯誤");
                             errorSheet.Cells[errorSheetRowIndex, 2].PutValue(rowError);
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
-                            //errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
-                            //errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
-
-                            errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(errorStyle);
-                            errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(errorStyle2);
-                            errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(errorStyle2);
-
-
+                            errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
+                            errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
+                            errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
                             errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[i, 0].Name);
                             wb.Worksheets[0].Hyperlinks.Add(i, 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                             errorSheet.AutoFitRow(errorSheetRowIndex);
                             errorSheetRowIndex++;
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
-
-                            wb.Worksheets[0].Cells[i, 0].SetStyle(errorStyle);
+                            wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
                         }
                     }
                     else
@@ -642,24 +623,14 @@ namespace JHSchool.Legacy.ImportExport
                             errorSheet.Cells[errorSheetRowIndex, 0].PutValue(i + 1);
                             errorSheet.Cells[errorSheetRowIndex, 1].PutValue("錯誤");
                             errorSheet.Cells[errorSheetRowIndex, 2].PutValue("驗證欄位(學生系統編號)不得空白");
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
-                            //errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
-                            //errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
-
-                            errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(errorStyle);
-                            errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(errorStyle2);
-                            errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(errorStyle2);
-
+                            errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
+                            errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
+                            errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
                             errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[i, 0].Name);
                             wb.Worksheets[0].Hyperlinks.Add(i, 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                             errorSheet.AutoFitRow(errorSheetRowIndex);
                             errorSheetRowIndex++;
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
-                            wb.Worksheets[0].Cells[i, 0].SetStyle(errorStyle);
+                            wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
                         }
                     }
                     if (bkw.CancellationPending)
@@ -682,7 +653,7 @@ namespace JHSchool.Legacy.ImportExport
                 //foreach (SmartSchool.StudentRelated.BriefStudentData stu in SmartSchool.StudentRelated.Student.Instance.Items)
                 foreach (StudentRecord stu in Student.Instance.Items)
                 {
-                    if (stu.Status == "一般生")
+                    if (stu.Status=="一般生")
                     {
                         if (!studentNumberStudents.ContainsKey(stu.StudentNumber))
                             studentNumberStudents.Add(stu.StudentNumber, new List<StudentRecord>(new StudentRecord[] { stu }));
@@ -816,27 +787,14 @@ namespace JHSchool.Legacy.ImportExport
                             errorSheet.Cells[errorSheetRowIndex, 0].PutValue(i + 1);
                             errorSheet.Cells[errorSheetRowIndex, 1].PutValue("錯誤");
                             errorSheet.Cells[errorSheetRowIndex, 2].PutValue(rowError);
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
-                            //errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
-                            //errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
-
-                            errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(errorStyle);
-                            errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(errorStyle2);
-                            errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(errorStyle2);
-
-
+                            errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
+                            errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
+                            errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
                             errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[i, 0].Name);
                             wb.Worksheets[0].Hyperlinks.Add(i, 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                             errorSheet.AutoFitRow(errorSheetRowIndex);
                             errorSheetRowIndex++;
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
-
-                            wb.Worksheets[0].Cells[i, 0].SetStyle(errorStyle);
-
+                            wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
                         }
                     }
                     else
@@ -853,25 +811,14 @@ namespace JHSchool.Legacy.ImportExport
                             errorSheet.Cells[errorSheetRowIndex, 0].PutValue(i + 1);
                             errorSheet.Cells[errorSheetRowIndex, 1].PutValue("錯誤");
                             errorSheet.Cells[errorSheetRowIndex, 2].PutValue("驗證欄位(學號)不得空白");
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
-                            //errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
-                            //errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
-
-                            errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(errorStyle);
-                            errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(errorStyle2);
-                            errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(errorStyle2);
-
+                            errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
+                            errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
+                            errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
                             errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[i, 0].Name);
                             wb.Worksheets[0].Hyperlinks.Add(i, 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                             errorSheet.AutoFitRow(errorSheetRowIndex);
                             errorSheetRowIndex++;
-
-                            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                            //wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
-
-                            wb.Worksheets[0].Cells[i, 0].SetStyle(errorStyle);
+                            wb.Worksheets[0].Cells[i, 0].Style = errorStyle;
                         }
                     }
 
@@ -922,10 +869,7 @@ namespace JHSchool.Legacy.ImportExport
                 rowError += args.ErrorMessage;
                 if (rowError == "" && errorFields.Count == 0 && warningFields.Count == 0)
                 {
-                    // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                    //wb.Worksheets[0].Cells[rowDataIndex[row], 0].Style = passStyle;
-
-                    wb.Worksheets[0].Cells[rowDataIndex[row], 0].SetStyle(passStyle);
+                    wb.Worksheets[0].Cells[rowDataIndex[row], 0].Style = passStyle;
                 }
                 else
                 {
@@ -944,16 +888,9 @@ namespace JHSchool.Legacy.ImportExport
                         errorSheet.Cells[errorSheetRowIndex, 0].PutValue(rowDataIndex[row] + 1);
                         errorSheet.Cells[errorSheetRowIndex, 1].PutValue(hasError ? "錯誤" : "警告");
                         errorSheet.Cells[errorSheetRowIndex, 2].PutValue(message);
-
-                        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                        //errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
-                        //errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
-                        //errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
-
-                        errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(errorStyle);
-                        errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(errorStyle2);
-                        errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(errorStyle2);
-
+                        errorSheet.Cells[errorSheetRowIndex, 0].Style = errorStyle;
+                        errorSheet.Cells[errorSheetRowIndex, 1].Style = errorStyle2;
+                        errorSheet.Cells[errorSheetRowIndex, 2].Style = errorStyle2;
                         errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[rowDataIndex[row], 0].Name);
                         wb.Worksheets[0].Hyperlinks.Add(rowDataIndex[row], 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                         errorSheet.AutoFitRow(errorSheetRowIndex);
@@ -972,28 +909,16 @@ namespace JHSchool.Legacy.ImportExport
                         errorSheet.Cells[errorSheetRowIndex, 0].PutValue(rowDataIndex[row] + 1);
                         errorSheet.Cells[errorSheetRowIndex, 1].PutValue("警告");
                         errorSheet.Cells[errorSheetRowIndex, 2].PutValue(message);
-
-                        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                        //errorSheet.Cells[errorSheetRowIndex, 0].Style = warningStyle;
-                        //errorSheet.Cells[errorSheetRowIndex, 1].Style = warningStyle2;
-                        //errorSheet.Cells[errorSheetRowIndex, 2].Style = warningStyle2;
-
-                        errorSheet.Cells[errorSheetRowIndex, 0].SetStyle(warningStyle);
-                        errorSheet.Cells[errorSheetRowIndex, 1].SetStyle(warningStyle2);
-                        errorSheet.Cells[errorSheetRowIndex, 2].SetStyle(warningStyle2);
-
-
+                        errorSheet.Cells[errorSheetRowIndex, 0].Style = warningStyle;
+                        errorSheet.Cells[errorSheetRowIndex, 1].Style = warningStyle2;
+                        errorSheet.Cells[errorSheetRowIndex, 2].Style = warningStyle2;
                         errorSheet.Hyperlinks.Add(errorSheetRowIndex, 0, 1, 1, "'" + wb.Worksheets[0].Name + "'!" + wb.Worksheets[0].Cells[rowDataIndex[row], 0].Name);
                         if (!hasError)
                             wb.Worksheets[0].Hyperlinks.Add(rowDataIndex[row], 0, 1, 1, "'" + errorSheetName + "'!" + errorSheet.Cells[errorSheetRowIndex, 0].Name);
                         errorSheet.AutoFitRow(errorSheetRowIndex);
                         errorSheetRowIndex++;
                     }
-                    // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
-                    //wb.Worksheets[0].Cells[rowDataIndex[row], 0].Style = hasError ? errorStyle : warningStyle;
-
-                    wb.Worksheets[0].Cells[rowDataIndex[row], 0].SetStyle(hasError ? errorStyle : warningStyle);
-
+                    wb.Worksheets[0].Cells[rowDataIndex[row], 0].Style = hasError ? errorStyle : warningStyle;
                 }
                 #endregion
                 if (bkw.CancellationPending)

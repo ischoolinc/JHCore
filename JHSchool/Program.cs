@@ -47,13 +47,7 @@ namespace JHSchool
             stream.Seek(0, System.IO.SeekOrigin.Begin);
             new Aspose.Words.License().SetLicense(stream);
             stream.Seek(0, System.IO.SeekOrigin.Begin);
-
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，
-            //另外詢問耀明後，補充此段程式碼Aspose 已在別的地方做認證，不需要重覆做。
-
-            //new Aspose.Cells.License().SetLicense(stream);
-
-
+            new Aspose.Cells.License().SetLicense(stream);
             stream.Seek(0, System.IO.SeekOrigin.Begin);
             new Aspose.BarCode.License().SetLicense(stream);
             stream.Seek(0, System.IO.SeekOrigin.Begin);

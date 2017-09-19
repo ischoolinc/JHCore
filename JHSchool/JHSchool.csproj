@@ -63,8 +63,9 @@
       <HintPath>Library\Aspose.BarCode.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Aspose.Cells_201402">
-      <HintPath>Library\Aspose.Cells_201402.dll</HintPath>
+    <Reference Include="Aspose.Cells, Version=4.3.0.0, Culture=neutral, PublicKeyToken=9a40d5a4b59e5256, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Library\Aspose.Cells.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Aspose.Pdf, Version=3.7.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">

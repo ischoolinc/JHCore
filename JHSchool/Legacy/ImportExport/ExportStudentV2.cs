@@ -613,13 +613,7 @@ namespace JHSchool.Legacy.ImportExport
                         }
                     }
                 }
-
-                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法
-                //report.Save(path, FileFormatType.Excel2003);
-
-                report.Save(path, SaveFormat.Xlsx);
-
-
+                report.Save(path, FileFormatType.Excel2003);
                 #endregion
                 SmartSchool.Customization.PlugIn.Global.SetStatusBarMessage(_Title + "完成。");
                 if (overLimit)
