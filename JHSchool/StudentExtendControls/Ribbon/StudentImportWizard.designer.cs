@@ -154,7 +154,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             // SelectSourceFileDialog
             // 
-            this.SelectSourceFileDialog.Filter = "Excel 檔案 (*.xls)| *.xls";
+            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，支援.xlsx 匯入
+            this.SelectSourceFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Excel 檔案 (*.xls)| *.xls";
             // 
             // ImportWizard
             // 

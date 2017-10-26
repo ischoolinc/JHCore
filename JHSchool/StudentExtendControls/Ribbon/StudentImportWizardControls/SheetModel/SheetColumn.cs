@@ -11,7 +11,12 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
         private Cell _binding_cell;
         private BulkColumn _binding_bulk;
         private string _name;
-        private byte _absolute_index, _relatively_index;
+
+        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，從使用 byte 改為 int
+        //private byte _absolute_index, _relatively_index;
+
+        private int _absolute_index, _relatively_index;
+
         private bool _is_group_field;
         private bool _used_valid;
         private string _group_name;
@@ -63,10 +68,12 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
             set { _used_valid = value; }
         }
 
+
+        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，從使用 byte 改為 int
         /// <summary>
         /// 取的欄位在原始資料中的 Index。
         /// </summary>
-        public byte AbsoluteIndex
+        public int AbsoluteIndex
         {
             get
             {
@@ -74,10 +81,11 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
             }
         }
 
+        // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，從使用 byte 改為 int
         /// <summary>
         /// 取得欄位的順序。
         /// </summary>
-        public byte RelativelyIndex
+        public int RelativelyIndex
         {
             get { return _relatively_index; }
         }
@@ -89,7 +97,10 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
 
         public void SetStyle(Style style)
         {
-            _binding_cell.Style = style;
+            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，SetStyle()
+            //_binding_cell.Style = style;
+
+            _binding_cell.SetStyle(style);
         }
 
         public void SetBulkColumn(BulkColumn column)

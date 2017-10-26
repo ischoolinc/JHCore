@@ -118,8 +118,13 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
             {
                 sheet = _workbook.Worksheets[0];
             }
+            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，GetStyle()
+            //_styles = new TipStyle(_workbook, sheet.Cells[0, 0].Style); //用第一格來當作樣版。
 
-            _styles = new TipStyle(_workbook, sheet.Cells[0, 0].Style); //用第一格來當作樣版。
+
+            _styles = new TipStyle(_workbook, sheet.Cells[0, 0].GetStyle()); //用第一格來當作樣版。
+
+
             _source_sheet = sheet;
 
             _source_reader = new SheetReader();
@@ -136,7 +141,10 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
             //將 Accept SheetColumn 與 BulkColumn 建立關係。
             foreach (SheetColumn each in SourceColumns.Values)
             {
-                Style s = each.BindingCell.Style, t = TipStyle.Header;
+                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，GetStyle()
+                //Style s = each.BindingCell.Style, t = TipStyle.Header;
+
+                Style s = each.BindingCell.GetStyle(), t = TipStyle.Header;
 
                 if (s.ForegroundColor == t.ForegroundColor && s.Font.Color == t.Font.Color)
                     each.UsedValid = true;
