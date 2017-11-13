@@ -418,12 +418,6 @@
     </Compile>
     <Compile Include="SearchParentEntity.cs" />
     <Compile Include="SearchStudentRecord.cs" />
-    <Compile Include="sendMessage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="sendMessage.Designer.cs">
-      <DependentUpon>sendMessage.cs</DependentUpon>
-    </Compile>
     <Compile Include="StudentData_Extensions.cs" />
     <Compile Include="StudentExtendControls\Permissions.cs" />
     <Compile Include="StudentExtendControls\Ribbon\StudentTagForm.cs">
@@ -458,7 +452,6 @@
     <Compile Include="UserInfoManager.Designer.cs">
       <DependentUpon>UserInfoManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility.cs" />
     <Compile Include="ValueTextItem.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -690,9 +683,6 @@
     <EmbeddedResource Include="AllItemView.resx">
       <DependentUpon>AllItemView.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="sendMessage.resx">
-      <DependentUpon>sendMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentExtendControls\BaseInfoPalmerwormItem.resx">
       <DependentUpon>BaseInfoPalmerwormItem.cs</DependentUpon>

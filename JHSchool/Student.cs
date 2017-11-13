@@ -252,123 +252,29 @@ namespace JHSchool
                     string msg = string.Format("確定要刪除「{0}」？", studRec.Name);
                     if (FISCA.Presentation.Controls.MsgBox.Show(msg, "刪除學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        //// 檢查刪除狀態是否有同學號或身分證號,空白可刪
-                        //List<string> tmpSnumList = new List<string>();
-                        //List<string> tmpStudIDNumberList = new List<string>();
-                        //foreach (JHSchool.Data.JHStudentRecord checkStudRec in JHSchool.Data.JHStudent.SelectAll())
-                        //    if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
-                        //    {
-                        //        if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
-                        //            tmpSnumList.Add(checkStudRec.StudentNumber);
-                        //        if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
-                        //            tmpStudIDNumberList.Add(checkStudRec.IDNumber);
-                        //    }
+                        // 檢查刪除狀態是否有同學號或身分證號,空白可刪
+                        List<string> tmpSnumList = new List<string>();
+                        List<string> tmpStudIDNumberList = new List<string>();
+                        foreach (JHSchool.Data.JHStudentRecord checkStudRec in JHSchool.Data.JHStudent.SelectAll())
+                            if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
+                            {
+                                if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
+                                    tmpSnumList.Add(checkStudRec.StudentNumber);
+                                if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
+                                    tmpStudIDNumberList.Add(checkStudRec.IDNumber);
+                            }
 
-                        //if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
-                        //{
-                        //    MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
-                        //    return;
-                        //}
-
-                        // 2017/11/9 穎驊註解，因應高雄小組項目 [06-01][03] 修改學生狀態沒有上傳局端 而新增的Code
-                        if (studRec != null)
+                        if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
                         {
-                            try
-                            {
-                                bool chkSendSpec = false;
-
-                                string StudStatus = studRec.StatusStr;
-                                //string NewStudStatus = ((StatusItem)button.Tag).Text;
-
-                                string NewStudStatus = "刪除";
-
-                                // 2017/11/9 穎驊註解 從畢業或離校、休學、刪除，變成一般 叫做"特殊狀態更動"，而從一般狀態到刪除是"一般狀態更動" 以本例而言，都是一般狀態更動
-                                if ((StudStatus == "畢業或離校" || StudStatus == "休學" || StudStatus == "刪除") && NewStudStatus == "一般")
-                                    chkSendSpec = true;
-
-
-                                chkSendSpec = false;
-
-                                //string ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，局端會留狀態變更紀錄。"; 
-
-                                //if (chkSendSpec)
-                                //{
-                                //    ShowMsg = "請問是否將 " + studentRec.Name + " 由" + StudStatus + " 調整成 " + NewStudStatus + "，按下「是」確認後，需報局備查。"; 
-                                //}
-
-                                StudentChangeStatus_KH.sendMessage smg = new StudentChangeStatus_KH.sendMessage(studRec.Name, StudStatus, NewStudStatus, chkSendSpec);
-                                if (smg.ShowDialog() == DialogResult.Yes)
-                                {
-                                    string log = "學生「" + studRec.Name + "」狀態已";
-                                    log += "由「" + studRec.StatusStr + "」變更為「刪除」";
-
-                                    studRec.Status = K12.Data.StudentRecord.StudentStatus.刪除;
-
-                                    // 檢查同狀態要身分證或學號相同時，無法變更
-                                    List<string> checkIDNumber = new List<string>();
-                                    List<string> checkSnum = new List<string>();
-
-                                    foreach (K12.Data.StudentRecord sr in K12.Data.Student.SelectAll())
-                                    {
-                                        if (sr.Status == studRec.Status)
-                                        {
-                                            if (!string.IsNullOrEmpty(sr.StudentNumber))
-                                                checkSnum.Add(sr.StudentNumber.Trim());
-                                            if (!string.IsNullOrEmpty(sr.IDNumber))
-                                                checkIDNumber.Add(sr.IDNumber.Trim());
-                                        }
-                                    }
-
-                                    if (checkSnum.Contains(studRec.StudentNumber.Trim()))
-                                    {
-                                        MsgBox.Show("在" + studRec.Status.ToString() + "狀態學號有重複無法變更.");
-                                        return;
-                                    }
-
-                                    if (checkIDNumber.Contains(studRec.IDNumber.Trim()))
-                                    {
-                                        MsgBox.Show("在" + studRec.Status.ToString() + "狀態身分證號有重複無法變更.");
-                                        return;
-                                    }
-
-                                    // 傳送到局端
-                                    string action = "一般狀態變更";
-
-                                    // 特殊狀態
-                                    if (chkSendSpec)
-                                        action = "特殊狀態變更";
-
-                                    string ClassName = "";
-                                    if (studRec.Class != null)
-                                        ClassName = studRec.Class.Name;
-                                    StudentChangeStatus_KH.Utility.SendData(action, ClassName, studRec.Name, studRec.StudentNumber, studRec.IDNumber, StudStatus, NewStudStatus, smg.GetMessage());
-
-                                    K12.Data.Student.Update(studRec);
-                                    FISCA.LogAgent.ApplicationLog.Log("學生狀態", "變更", "student", studRec.ID, log);
-
-                                    //註冊一個事件引發模組
-                                    EventHandler eh = FISCA.InteractionService.PublishEvent("KH_StudentChangeStatus");
-                                    eh(this, EventArgs.Empty);
-                                }
-                            }
-                            catch (ArgumentException)
-                            {
-                                MessageBox.Show("目前無法移到刪除");
-                            }
-                            catch
-                            {
-                                MotherForm.SetStatusBarMessage("變更狀態失敗，可能發生原因為學號或身分證號在刪除" + "學生中已經存在，請檢查學生資料。");
-                                return;
-                            }
-
-                           
+                            MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
+                            return;
                         }
 
-                        //// 修改學生狀態 delete
-                        //studRec.Status = K12.Data.StudentRecord.StudentStatus.刪除;
-                        //JHSchool.Data.JHStudent.Update(studRec);
-                        //Student.Instance.SyncDataBackground(studRec.ID);
-                        //prlp.SaveLog("學籍學生", "刪除學生", "刪除學生，姓名:" + studRec.Name + ",學號:" + studRec.StudentNumber);
+                        // 修改學生狀態 delete
+                        studRec.Status = K12.Data.StudentRecord.StudentStatus.刪除;
+                        JHSchool.Data.JHStudent.Update(studRec);
+                        Student.Instance.SyncDataBackground(studRec.ID);
+                        prlp.SaveLog("學籍學生", "刪除學生", "刪除學生，姓名:" + studRec.Name + ",學號:" + studRec.StudentNumber);
                     }
                     else
                         return;
