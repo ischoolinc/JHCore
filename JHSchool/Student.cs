@@ -247,38 +247,46 @@ namespace JHSchool
             {
                 if (SelectedList.Count == 1)
                 {
-                    PermRecLogProcess prlp = new PermRecLogProcess();
-                    JHSchool.Data.JHStudentRecord studRec = JHSchool.Data.JHStudent.SelectByID(SelectedList[0].ID);
-                    string msg = string.Format("確定要刪除「{0}」？", studRec.Name);
-                    if (FISCA.Presentation.Controls.MsgBox.Show(msg, "刪除學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    // 2017/11/13 穎驊依據 [06-01][03] 修改學生狀態沒有上傳局端 項目，使用IRewriteAPI_JH 方法， 高雄區 將會 走另一條能夠呈報局端的Form
+                    IRewriteAPI_JH.IStudentDeleteStudentAPI item = FISCA.InteractionService.DiscoverAPI<IRewriteAPI_JH.IStudentDeleteStudentAPI>();
+                    if (item != null)
                     {
-                        // 檢查刪除狀態是否有同學號或身分證號,空白可刪
-                        List<string> tmpSnumList = new List<string>();
-                        List<string> tmpStudIDNumberList = new List<string>();
-                        foreach (JHSchool.Data.JHStudentRecord checkStudRec in JHSchool.Data.JHStudent.SelectAll())
-                            if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
-                            {
-                                if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
-                                    tmpSnumList.Add(checkStudRec.StudentNumber);
-                                if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
-                                    tmpStudIDNumberList.Add(checkStudRec.IDNumber);
-                            }
-
-                        if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
-                        {
-                            MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
-                            return;
-                        }
-
-                        // 修改學生狀態 delete
-                        studRec.Status = K12.Data.StudentRecord.StudentStatus.刪除;
-                        JHSchool.Data.JHStudent.Update(studRec);
-                        Student.Instance.SyncDataBackground(studRec.ID);
-                        prlp.SaveLog("學籍學生", "刪除學生", "刪除學生，姓名:" + studRec.Name + ",學號:" + studRec.StudentNumber);
+                        item.CreateForm().ShowDialog();
                     }
                     else
-                        return;
+                    {
+                        PermRecLogProcess prlp = new PermRecLogProcess();
+                        JHSchool.Data.JHStudentRecord studRec = JHSchool.Data.JHStudent.SelectByID(SelectedList[0].ID);
+                        string msg = string.Format("確定要刪除「{0}」？", studRec.Name);
+                        if (FISCA.Presentation.Controls.MsgBox.Show(msg, "刪除學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            // 檢查刪除狀態是否有同學號或身分證號,空白可刪
+                            List<string> tmpSnumList = new List<string>();
+                            List<string> tmpStudIDNumberList = new List<string>();
+                            foreach (JHSchool.Data.JHStudentRecord checkStudRec in JHSchool.Data.JHStudent.SelectAll())
+                                if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
+                                {
+                                    if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
+                                        tmpSnumList.Add(checkStudRec.StudentNumber);
+                                    if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
+                                        tmpStudIDNumberList.Add(checkStudRec.IDNumber);
+                                }
 
+                            if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
+                            {
+                                MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
+                                return;
+                            }
+
+                            // 修改學生狀態 delete
+                            studRec.Status = K12.Data.StudentRecord.StudentStatus.刪除;
+                            JHSchool.Data.JHStudent.Update(studRec);
+                            Student.Instance.SyncDataBackground(studRec.ID);
+                            prlp.SaveLog("學籍學生", "刪除學生", "刪除學生，姓名:" + studRec.Name + ",學號:" + studRec.StudentNumber);
+                        }
+                        else
+                            return;
+                    }                 
                 }
             };
 

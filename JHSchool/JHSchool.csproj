@@ -141,7 +141,7 @@
       <HintPath>Library\IntelliSchool.DSA.ClientFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="IRewriteAPI_JH, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IRewriteAPI_JH, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Library\IRewriteAPI_JH.dll</HintPath>
       <Private>False</Private>
