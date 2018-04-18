@@ -1160,7 +1160,9 @@
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnSaveTeacher.Image.png" />
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnAddTeacher.png" />
     <Content Include="TeacherExtendControls\Ribbon\Resources\btnDeleteTeacher.png" />
-    <None Include="Aspose.Total.lic" />
+    <None Include="Aspose.Total.lic">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\TeacherIcon.png" />
     <None Include="Resources\StudentIcon.png" />
     <None Include="Resources\CourseIcon.png" />
