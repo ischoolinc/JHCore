@@ -156,7 +156,6 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // SelectSourceFileDialog
             // 
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，支援.xlsx 匯出
             this.SelectSourceFileDialog.Filter = "Excel (*.xlsx)|*.xlsx|Excel 檔案 (*.xls)| *.xls";
             // 
             // ImportWizard
@@ -224,9 +223,9 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // wpSelectFileAndAction
             // 
-            this.wpSelectFileAndAction.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.wpSelectFileAndAction.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wpSelectFileAndAction.AntiAlias = false;
             this.wpSelectFileAndAction.BackColor = System.Drawing.Color.Transparent;
             this.wpSelectFileAndAction.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -411,9 +410,9 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // wpCollectKeyInfo
             // 
-            this.wpCollectKeyInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.wpCollectKeyInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wpCollectKeyInfo.AntiAlias = false;
             this.wpCollectKeyInfo.BackColor = System.Drawing.Color.Transparent;
             this.wpCollectKeyInfo.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
@@ -515,9 +514,9 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // wpSelectField
             // 
-            this.wpSelectField.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.wpSelectField.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wpSelectField.AntiAlias = false;
             this.wpSelectField.BackColor = System.Drawing.Color.Transparent;
             this.wpSelectField.ColorSchemeStyle = DevComponents.DotNetBar.eDotNetBarStyle.Office2007;
@@ -654,9 +653,9 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // wpValidation
             // 
-            this.wpValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.wpValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wpValidation.AntiAlias = false;
             this.wpValidation.BackColor = System.Drawing.Color.Transparent;
             this.wpValidation.Controls.Add(this.buttonX1);
@@ -905,9 +904,9 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             // wpImport
             // 
-            this.wpImport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.wpImport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.wpImport.AntiAlias = false;
             this.wpImport.BackColor = System.Drawing.Color.Transparent;
             this.wpImport.Controls.Add(this.btnImport);
@@ -1006,6 +1005,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.ClientSize = new System.Drawing.Size(542, 423);
             this.ControlBox = false;
             this.Controls.Add(this.ImportWizard);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ClassImportWizard";
             this.Text = "匯入班級基本資料";

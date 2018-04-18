@@ -730,7 +730,8 @@ namespace JHSchool.ClassExtendControls.Ribbon
         {
             try
             {
-                wpValidation.NextButtonEnabled = eWizardButtonState.False;
+                // 2018/04/18 穎驊註解，是否能按下一步 應為驗證資料是否error 決定，而非按下檢視資料就卡住。
+                //wpValidation.NextButtonEnabled = eWizardButtonState.False;
                 Process.Start(Context.SourceFile);
             }
             catch (Exception ex)

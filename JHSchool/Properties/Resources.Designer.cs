@@ -151,6 +151,24 @@ namespace JHSchool.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 &lt;ValidateRule&gt;
+        ///  &lt;FieldList&gt;
+        ///    &lt;Field DataType=&quot;Integer&quot; Name=&quot;班級系統編號&quot;&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班級系統編號」必須是數字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;數字最大極限&quot; When=&quot;&quot; /&gt;
+        ///    &lt;/Field&gt;
+        ///    &lt;Field DataType=&quot;String&quot; Name=&quot;班級名稱&quot;&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班級名稱」長度必須小於10個文字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;文字10&quot; When=&quot;&quot; /&gt;
+        ///    &lt;/Field&gt;
+        ///    &lt;Field DataType=&quot;String&quot; Name=&quot;班導師&quot;&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班導師」必須存在於系統中。 &quot; ErrorType=&quot;Error&quot; Valida [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_C_ImportValidatorRule {
+            get {
+                return ResourceManager.GetString("JH_C_ImportValidatorRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 &lt;FieldDescription&gt;
         ///  &lt;Field DisplayText=&quot;學生系統編號&quot; Identifiable=&quot;True&quot; Name=&quot;StudentID&quot; ReadOnly=&quot;True&quot;/&gt;
         ///  &lt;Field DisplayText=&quot;姓名&quot; Name=&quot;Name&quot; Required=&quot;True&quot; ShiftCheckable=&quot;True&quot;/&gt;

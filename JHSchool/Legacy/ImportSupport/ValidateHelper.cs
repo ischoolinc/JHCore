@@ -42,7 +42,16 @@ namespace JHSchool.Legacy.ImportSupport
             //int t1 = Environment.TickCount;
             _valid_factory.UpdateUnique = new UpdateUniqueRowValidator(_context, sheet);
 
-            XmlElement xmlRule = _context.DataSource.GetValidateFieldRule();
+            // 2018/4/17 穎驊註解，因應客服#5944 反應，檢查匯入班級機制，發現其驗證規則為抓取Severice 回傳的xml
+            // 經過與恩正、均泰、耀明的討論後，決定將舊的程式碼註解，將其設定存在程式碼中(JH_C_ImportValidatorRule)，直接抓取使用，方便日後維護。
+            //XmlElement xmlRule = _context.DataSource.GetValidateFieldRule();
+
+            //讀取XML欄位描述
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
+
+            XmlElement xmlRule = doc.DocumentElement;
+
             _validator.InitFromXMLNode(xmlRule);
 
             //Console.WriteLine("初始化 Validator時間：{0}", Environment.TickCount - t1);

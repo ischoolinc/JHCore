@@ -1133,6 +1133,9 @@
     <None Include="Resources\JH_T_ImportFieldList.xml" />
     <None Include="Resources\JH_T_BulkDescription.xml" />
     <None Include="Resources\JH_T_FieldValidationRule.xml" />
+    <Content Include="Resources\JH_C_ImportValidatorRule.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="StudentExtendControls\Ribbon\Farm-Fresh_error.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAddStudent_Image.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAttendance.Image.png" />
