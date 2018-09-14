@@ -1449,10 +1449,12 @@ namespace JHSchool.StudentExtendControls.Ribbon
             {
                 if (Context.ImportMode == ImportMode.Update)
                 {
-                    DiplomaNumberLookup dnlook = new DiplomaNumberLookup(Context.IdentifyField);
+                    
+                    DiplomaNumberLookup dnlook = new DiplomaNumberLookup();
                     foreach (XmlElement each in output.SelectNodes("Student"))
                     {
-                        string identity = each.SelectSingleNode("Condition/" + dnlook.ExportName).InnerText.Trim();
+                        //string identity = each.SelectSingleNode("Condition/" + dnlook.ExportName).InnerText.Trim();
+                        string identity = each.SelectSingleNode("Condition/StudentID").InnerText.Trim();
                         XmlElement diplomaDB = dnlook.GetDiplomaElement(identity);
                         XmlElement diplomaNew = each.SelectSingleNode("DiplomaNumberRaw") as XmlElement;
 
@@ -1522,33 +1524,17 @@ namespace JHSchool.StudentExtendControls.Ribbon
         {
             private Dictionary<string, XmlElement> _diploma_list;
 
-            public DiplomaNumberLookup(string idFieldName)
+            public DiplomaNumberLookup()
             {
-                _diploma_list = new Dictionary<string, XmlElement>();
+                _diploma_list = new Dictionary<string, XmlElement>();            
 
-                if (idFieldName == "學生系統編號")
-                {
-                    _id_fieldName = "ID";
-                    _export_name = "StudentID";
-                }
-                else if (idFieldName == "學號")
-                {
-                    _id_fieldName = "StudentNumber";
-                    _export_name = "StudentNumber";
-                }
-                else if (idFieldName == "身分證號")
-                {
-                    _id_fieldName = "IDNumber";
-                    _export_name = "IDNumber";
-                }
-
-                string[] fields = new string[] { _id_fieldName, "DiplomaNumber","Status" };
+                string[] fields = new string[] {"ID", "DiplomaNumber","Status" };
                 DSXmlHelper alldiploma = QueryStudent.GetDetailList(fields).GetContent();
 
                 foreach (XmlElement each in alldiploma.GetElements("Student"))
                 {
                     DSXmlHelper hlpeach = new DSXmlHelper(each);
-                    string key = hlpeach.GetText(getFieldName());
+                    string key = hlpeach.GetText("@ID");
 
                     if (hlpeach.GetText("Status") != "一般") continue;
 

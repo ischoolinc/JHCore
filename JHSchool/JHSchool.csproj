@@ -1132,7 +1132,9 @@
     <None Include="Resources\JH_T_ExportDescription.xml" />
     <None Include="Resources\JH_T_ImportFieldList.xml" />
     <None Include="Resources\JH_T_BulkDescription.xml" />
-    <None Include="Resources\JH_T_FieldValidationRule.xml" />
+    <None Include="Resources\JH_T_FieldValidationRule.xml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Resources\JH_C_ImportValidatorRule.xml">
       <SubType>Designer</SubType>
     </Content>
