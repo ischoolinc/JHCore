@@ -3,6 +3,7 @@ using FISCA;
 using Framework;
 using JHSchool.Properties;
 using FISCA.Presentation;
+using IRewriteAPI_JH;
 
 namespace JHSchool
 {
@@ -89,6 +90,18 @@ namespace JHSchool
 
             //設定畫面選取Count
             SelectedListChanged();
+
+
+            // 學生>班級資訊覆寫
+            IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
+            if (item != null)
+            {
+                Class.Instance.AddDetailBulider(item.CreateBasicInfo());
+            }
+            else
+            {
+                Class.Instance.AddDetailBulider(new DetailBulider<JHSchool.ClassExtendControls.ClassBaseInfoItem>());
+            }
 
             //new K12.General.Feedback.NewsNotice();
 

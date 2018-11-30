@@ -303,7 +303,7 @@ namespace JHSchool
             //Class.Instance.AddView(new JHSchool.ClassExtendControls.SubjectView()); //由類別模組提供
 
             // 班級基本資料
-            Class.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.ClassExtendControls.ClassBaseInfoItem>());
+            //Class.Instance.AddDetailBulider(new FISCA.Presentation.DetailBulider<JHSchool.ClassExtendControls.ClassBaseInfoItem>());
 
             //Class.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<ClassExtendControls.ClassBaseInfoItem>());
 
