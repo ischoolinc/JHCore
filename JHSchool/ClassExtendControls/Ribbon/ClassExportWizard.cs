@@ -11,6 +11,7 @@ using JHSchool.Legacy.Export.ResponseHandler.Connector;
 using JHSchool.Legacy.Export.ResponseHandler;
 using System.Drawing;
 using System.Collections.Generic;
+using IRewriteAPI_JH;
 
 namespace JHSchool.ClassExtendControls.Ribbon
 {
@@ -54,8 +55,24 @@ namespace JHSchool.ClassExtendControls.Ribbon
             //將資料格式化,並組成集合
             FieldCollection collection = formater.Format(element);
 
-            List<string> list = new List<string>(new string[] { "班級系統編號", "班級名稱" });
+            // 2018/12/21 穎驊 因應高雄項目 [10-03][??] 局端夠查詢學校班級有調整”導師”的功能
+            // 讓匯出的說明，班導師也納入 必填欄位
+            // 但蠻無言的， 原來的必填欄位居然只是這樣填寫List...
+            // 有載入高雄自動編班模組的 ， 其匯入規則 載Local 的設定(班導師必填)
+            // 其餘的學校 依然為舊做法，自Service 載匯入規則資料
 
+            List<string> list;
+
+            IClassBaseInfoItemAPI ClassBaseInfoItem = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
+            if (ClassBaseInfoItem != null)
+            {
+                list = new List<string>(new string[] { "班級系統編號", "班級名稱","班導師" });
+            }
+            else
+            {
+                list = new List<string>(new string[] { "班級系統編號", "班級名稱" });
+            }
+            
             //將集合內容,逐一填入使用者勾選清單中(Tag放置一份field),預設為(true)
             foreach (Field field in collection)
             {
