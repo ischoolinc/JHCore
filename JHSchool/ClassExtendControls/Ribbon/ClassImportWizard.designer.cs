@@ -668,8 +668,8 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.wpValidation.Controls.Add(this.chkContinue);
             this.wpValidation.Controls.Add(this.lblWarning);
             this.wpValidation.Controls.Add(this.lblError);
-            this.wpValidation.Controls.Add(this.btnViewResult);
             this.wpValidation.Controls.Add(this.btnValidate);
+            this.wpValidation.Controls.Add(this.btnViewResult);
             this.wpValidation.Controls.Add(this.lnkCancelValid);
             this.wpValidation.Controls.Add(this.lblValidMsg);
             this.wpValidation.Controls.Add(this.pgValidProgress);

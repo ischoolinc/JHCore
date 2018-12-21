@@ -1,0 +1,15 @@
+﻿<FieldDescription>
+  <Field InternalName="ClassID" Name="班級系統編號" PrimaryKey="True" UniqueGroup="PrimaryKey"/>
+  <Field InsertRequired="True" InternalName="ClassName" Name="班級名稱" ShiftCheckable="True" UniqueGroup="ClassName"/>
+  <Field InsertRequired="True" InternalName="TeacherName" Name="班導師" ShiftCheckable="True"/>
+  <Field InternalName="GradeYear" Name="年級" ShiftCheckable="True"/>
+  <!--<Field InternalName="DepartmentName" Name="科別" ShiftCheckable="True" />-->
+  <Field InternalName="GraduationPlan" Name="課程規劃" ShiftCheckable="True"/>
+  <Field InternalName="CalcuationRule" Name="計算規則" ShiftCheckable="True"/>
+  <Field InternalName="DisplayOrder" Name="排列序號" ShiftCheckable="True"/>
+  <Field InternalName="NamingRule" Name="班級名稱規則" ShiftCheckable="True"/>
+  <UpdateCondition>
+    <Condition Name="班級系統編號" UniqueGroup="PrimaryKey"/>
+    <Condition Name="班級名稱" UniqueGroup="ClassName"/>
+  </UpdateCondition>
+</FieldDescription>

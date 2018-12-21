@@ -14,6 +14,7 @@ using JHSchool.ClassExtendControls.Ribbon.ClassImportWizardControls;
 using JHSchool.Legacy.ImportSupport;
 using JHSchool.Legacy.ImportSupport.Lookups;
 using DevComponents.DotNetBar.Rendering;
+using IRewriteAPI_JH;
 
 namespace JHSchool.ClassExtendControls.Ribbon
 {
@@ -135,7 +136,24 @@ namespace JHSchool.ClassExtendControls.Ribbon
                 pUser.Visible = false;
                 Application.DoEvents();
 
-                XmlElement fieldData = Context.DataSource.GetImportFieldList();
+                XmlElement fieldData;
+
+                //2018/12/21 穎驊 完成高雄項目 [10-03][??] 局端夠查詢學校班級有調整”導師”的功能 
+                // 有載入高雄自動編班模組的 ， 其匯入規則 載Local 的設定(班導師必填)
+                // 其餘的學校 依然為舊做法，自Service 載匯入規則資料
+                IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
+                if (item != null)
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(Properties.Resources.JH_C_BulkDescription);
+
+                    fieldData =doc.DocumentElement;
+                }
+                else
+                {
+                    fieldData = Context.DataSource.GetImportFieldList();
+                }
+                
                 Context.SupportFields = ImportFieldCollection.CreateFieldsFromXml(fieldData);
                 Context.UpdateConditions = ImportCondition.CreateConditionFromXml(fieldData, Context.SupportFields);
 

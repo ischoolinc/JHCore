@@ -193,7 +193,13 @@
   <data name="JH_T_FieldValidationRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\jh_t_fieldvalidationrule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="JH_C_BulkDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\jh_c_bulkdescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="JH_C_ImportValidatorRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\jh_c_importvalidatorrule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="JH_C_ImportValidatorRule_KH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\jh_c_importvalidatorrule_kh.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

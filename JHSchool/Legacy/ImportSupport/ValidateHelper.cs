@@ -7,6 +7,7 @@ using System.Xml;
 using FISCA.DSAUtil;
 using System.Windows.Forms;
 using JHSchool.Legacy.ImportSupport.Validators;
+using IRewriteAPI_JH;
 
 namespace JHSchool.Legacy.ImportSupport
 {
@@ -46,12 +47,26 @@ namespace JHSchool.Legacy.ImportSupport
             // 經過與恩正、均泰、耀明的討論後，決定將舊的程式碼註解，將其設定存在程式碼中(JH_C_ImportValidatorRule)，直接抓取使用，方便日後維護。
             //XmlElement xmlRule = _context.DataSource.GetValidateFieldRule();
 
-            //讀取XML欄位描述
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
+            //2018/12/21 穎驊 完成高雄項目 [10-03][??] 局端夠查詢學校班級有調整”導師”的功能 
+            // 有載入高雄自動編班模組的 ， 其匯入規則 載Local 的設定KH版本(班級名稱、班導師 不得空白)            
+            XmlElement xmlRule;
 
-            XmlElement xmlRule = doc.DocumentElement;
-
+            IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
+            if (item != null)
+            {
+                //讀取XML欄位描述
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule_KH);
+                xmlRule = doc.DocumentElement;
+            }
+            else
+            {
+                //讀取XML欄位描述
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
+                xmlRule = doc.DocumentElement;
+            };
+                         
             _validator.InitFromXMLNode(xmlRule);
 
             //Console.WriteLine("初始化 Validator時間：{0}", Environment.TickCount - t1);

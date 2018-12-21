@@ -151,6 +151,21 @@ namespace JHSchool.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 &lt;FieldDescription&gt;
+        ///  &lt;Field InternalName=&quot;ClassID&quot; Name=&quot;班級系統編號&quot; PrimaryKey=&quot;True&quot; UniqueGroup=&quot;PrimaryKey&quot;/&gt;
+        ///  &lt;Field InsertRequired=&quot;True&quot; InternalName=&quot;ClassName&quot; Name=&quot;班級名稱&quot; ShiftCheckable=&quot;True&quot; UniqueGroup=&quot;ClassName&quot;/&gt;
+        ///  &lt;Field InsertRequired=&quot;True&quot; InternalName=&quot;TeacherName&quot; Name=&quot;班導師&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///  &lt;Field InternalName=&quot;GradeYear&quot; Name=&quot;年級&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///  &lt;!--&lt;Field InternalName=&quot;DepartmentName&quot; Name=&quot;科別&quot; ShiftCheckable=&quot;True&quot; /&gt;--&gt;
+        ///  &lt;Field InternalName=&quot;GraduationPlan&quot; [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_C_BulkDescription {
+            get {
+                return ResourceManager.GetString("JH_C_BulkDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 &lt;ValidateRule&gt;
         ///  &lt;FieldList&gt;
         ///    &lt;Field DataType=&quot;Integer&quot; Name=&quot;班級系統編號&quot;&gt;
@@ -165,6 +180,24 @@ namespace JHSchool.Properties {
         internal static string JH_C_ImportValidatorRule {
             get {
                 return ResourceManager.GetString("JH_C_ImportValidatorRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 &lt;ValidateRule&gt;
+        ///  &lt;FieldList&gt;
+        ///    &lt;Field DataType=&quot;Integer&quot; Name=&quot;班級系統編號&quot;&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班級系統編號」必須是數字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;數字最大極限&quot; When=&quot;&quot; /&gt;
+        ///    &lt;/Field&gt;
+        ///    &lt;Field DataType=&quot;String&quot; Name=&quot;班級名稱&quot;&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班級名稱」長度必須小於10個文字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;文字10&quot; When=&quot;&quot; /&gt;
+        ///      &lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「班級名稱」不允許空白。&quot; ErrorType=&quot;Error&quot; Validator=&quot;不可空白&quot; When=&quot;&quot;/&gt;
+        ///    &lt;/Field&gt;
+        ///    &lt;Field DataType=&quot;St [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_C_ImportValidatorRule_KH {
+            get {
+                return ResourceManager.GetString("JH_C_ImportValidatorRule_KH", resourceCulture);
             }
         }
         
