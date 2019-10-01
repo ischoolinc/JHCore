@@ -6,6 +6,7 @@ using FISCA.DSAUtil;
 using Framework;
 using System.Xml;
 using FISCA.Authentication;
+using JHSchool.Feature.Legacy;
 
 namespace JHSchool.Feature
 {
@@ -327,6 +328,22 @@ namespace JHSchool.Feature
             {
                 if (each.HasException)
                     throw each.Exception;
+            }
+        }
+
+        [QueryRequest()]
+        public static void ChangeStudentStatus(string newStatus, params string[] ids)
+        {
+            if (ids.Length > 0)
+            {
+                string req = "<ChangeStatusRequest><Student><Field><Status>" + newStatus + "</Status></Field><Condition>";
+                foreach (string id in ids)
+                {
+                    req += "<ID>" + id + "</ID>";
+                }
+                req += "</Condition></Student></ChangeStatusRequest>";
+                DSRequest dsreq = new DSRequest(req);
+                DSResponse dsrsp = DSAServices.CallService("SmartSchool.Student.Update", dsreq);
             }
         }
     }

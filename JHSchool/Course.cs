@@ -174,7 +174,7 @@ namespace JHSchool
             {
                 cd.SetBoolean("SearchName", SearchName.Checked);
                 BackgroundWorker async = new BackgroundWorker();
-                async.DoWork += delegate(object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
+                async.DoWork += delegate (object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
                 async.RunWorkerAsync(cd);
             };
 
@@ -186,7 +186,7 @@ namespace JHSchool
             {
                 cd.SetBoolean("SearchDomain", SearchDomain.Checked);
                 BackgroundWorker async = new BackgroundWorker();
-                async.DoWork += delegate(object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
+                async.DoWork += delegate (object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
                 async.RunWorkerAsync(cd);
             };
 
@@ -198,7 +198,7 @@ namespace JHSchool
             {
                 cd.SetBoolean("SearchSubject", SearchSubject.Checked);
                 BackgroundWorker async = new BackgroundWorker();
-                async.DoWork += delegate(object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
+                async.DoWork += delegate (object sender, DoWorkEventArgs e) { (e.Argument as ConfigData).Save(); };
                 async.RunWorkerAsync(cd);
             };
 
@@ -206,7 +206,7 @@ namespace JHSchool
             #endregion
 
             ListPaneField nameField = new ListPaneField("名稱");
-            nameField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            nameField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     e.Value = Items[e.Key].Name;
@@ -214,7 +214,7 @@ namespace JHSchool
             this.AddListPaneField(nameField);
 
             ListPaneField domainField = new ListPaneField("領域");
-            domainField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            domainField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     e.Value = Items[e.Key].Domain;
@@ -222,7 +222,7 @@ namespace JHSchool
             this.AddListPaneField(domainField);
 
             ListPaneField subjectField = new ListPaneField("科目名稱");
-            subjectField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            subjectField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     e.Value = Items[e.Key].Subject;
@@ -230,7 +230,7 @@ namespace JHSchool
             this.AddListPaneField(subjectField);
 
             ListPaneField classField = new ListPaneField("所屬班級");
-            classField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            classField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     if (Items[e.Key].Class != null)
@@ -239,7 +239,7 @@ namespace JHSchool
             this.AddListPaneField(classField);
 
             ListPaneField sectField = new ListPaneField("節數/權數");
-            sectField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            sectField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                 {
@@ -252,7 +252,7 @@ namespace JHSchool
             this.AddListPaneField(sectField);
 
             ListPaneField schoolyearField = new ListPaneField("學年度");
-            schoolyearField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            schoolyearField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     e.Value = Items[e.Key].SchoolYear;
@@ -260,7 +260,7 @@ namespace JHSchool
             this.AddListPaneField(schoolyearField);
 
             ListPaneField semesterField = new ListPaneField("學期");
-            semesterField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            semesterField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                     e.Value = Items[e.Key].Semester;
@@ -268,7 +268,7 @@ namespace JHSchool
             this.AddListPaneField(semesterField);
 
             ListPaneField semScoreField = new ListPaneField("學期成績");
-            semScoreField.GetVariable += delegate(object sender, GetVariableEventArgs e)
+            semScoreField.GetVariable += delegate (object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
                 {
@@ -292,13 +292,24 @@ namespace JHSchool
             //    e.Result = this[e.PrimaryKey].GetDescription();
             //};
 
-            Present.NavPaneContexMenu.GetChild("重新整理").Click += delegate { this.SyncAllBackground(); };
+            Present.NavPaneContexMenu.GetChild("重新整理").Click += delegate
+            {
+                this.SyncAllBackground();
+            };
+
+            //處理產品社團,當使用轉入課程功能時
+            //需要引發課程的更新事件
+            //2019/9/10 - Dylan
+            FISCA.InteractionService.SubscribeEvent("課程/重新整理", (sender, args) =>
+            {
+                this.SyncAllBackground();
+            });
 
             //由類別模組提供
             //Present.SetDescriptionPaneBulider(new DescriptionPaneBulider<CourseDescription>());
 
             Present.FilterMenu.SupposeHasChildern = true;
-            Present.FilterMenu.PopupOpen += delegate(object sender, PopupOpenEventArgs e)
+            Present.FilterMenu.PopupOpen += delegate (object sender, PopupOpenEventArgs e)
             {
                 List<SemesterInfo> semesterList = new List<SemesterInfo>();
                 foreach (var item in Items)

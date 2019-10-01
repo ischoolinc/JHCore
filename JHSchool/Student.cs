@@ -240,6 +240,12 @@ namespace JHSchool
                 }
             };
 
+            //本權限控制來自 - MOD_Tagging (Dylan - 20190828 補功能)
+            if (User.Acl["JHSchool.Student.Ribbon04150.Change20130315"].Executable)
+            {
+                ChangeStatusBatch.Init();//右鍵變更學生狀態
+            }
+
             rbItem["刪除"].Image = StudentExtendControls.Ribbon.Resources.btnDeleteStudent_Image;
             rbItem["刪除"].Size = RibbonBarButton.MenuButtonSize.Large;
             rbItem["刪除"].Enable = User.Acl["JHSchool.Student.Ribbon0010"].Executable;
