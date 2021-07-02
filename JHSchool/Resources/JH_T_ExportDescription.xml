@@ -9,6 +9,7 @@
   <Field DisplayText="教師類別" Name="Category"/>
   <Field DisplayText="登入帳號" Name="SmartTeacherLoginName"/>
   <Field DisplayText="帳號類型" Name="AccountType"/>
+  <Field DisplayText="教師編號" Name="TeacherNumber"/>
   <!--
 <Field DisplayText="密碼" Name="SmartTeacherPassword" />
 -->

@@ -24,6 +24,7 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "Category");
             helper.AddElement("Field", "ContactPhone");
             helper.AddElement("Field", "TALoginName");
+            helper.AddElement("Field", "TeacherNumber");
             return helper;
         }
 

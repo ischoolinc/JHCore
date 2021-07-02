@@ -21,12 +21,14 @@ namespace JHSchool.TeacherExtendControls
         ErrorProvider epGender = new ErrorProvider();
         ErrorProvider epLoginName = new ErrorProvider();
         ErrorProvider epIDNumber = new ErrorProvider();
+        ErrorProvider epTeacherNumber = new ErrorProvider();
         private bool _isBGWorkBusy = false;
         private BackgroundWorker _BGWork;
         private JHTeacherRecord _TeacherRec;
         private Dictionary<string,string> _AllTeacherNameDic;
         private Dictionary<string, string> _AllLogIDDic;
         Dictionary<string, string> _AllIDNumberDict = new Dictionary<string, string>();
+        Dictionary<string, string> _AllTeacherNumberDict = new Dictionary<string, string>();
         PermRecLogProcess prlp;
         private ChangeListener _DataListener;
 
@@ -49,6 +51,7 @@ namespace JHSchool.TeacherExtendControls
             _DataListener.Add(new TextBoxSource(txtCategory));
             _DataListener.Add(new TextBoxSource(txtSTLoginAccount));
             _DataListener.Add(new TextBoxSource(txtSTLoginPwd));
+            _DataListener.Add(new TextBoxSource(txtTeacherNumber));
             _DataListener.Add(new ComboBoxSource(cboAccountType, ComboBoxSource.ListenAttribute.Text));
             _DataListener.Add(new ComboBoxSource(cboGender, ComboBoxSource.ListenAttribute.Text));            
             _DataListener.StatusChanged += new EventHandler<ChangeEventArgs>(_DataListener_StatusChanged);
@@ -126,6 +129,8 @@ namespace JHSchool.TeacherExtendControls
             txtSTLoginAccount.Text = _TeacherRec.TALoginName;
             txtSTLoginPwd.Text = _TeacherRec.TAPassword;
             cboAccountType.Text = _TeacherRec.AccountType;
+            txtTeacherNumber.Text = _TeacherRec.TeacherNumber;
+  
 
             try
             {
@@ -150,6 +155,7 @@ namespace JHSchool.TeacherExtendControls
             prlp.SetBeforeSaveText("登入帳號", txtSTLoginAccount.Text);
             prlp.SetBeforeSaveText("登入密碼", txtSTLoginPwd.Text);
             prlp.SetBeforeSaveText("帳號類型", cboAccountType.Text);
+            prlp.SetBeforeSaveText("教師編號", txtTeacherNumber.Text);
             this.Loading = false;
             SaveButtonVisible = false;
             CancelButtonVisible = false;
@@ -162,6 +168,7 @@ namespace JHSchool.TeacherExtendControls
             _AllTeacherNameDic.Clear();
             _AllLogIDDic.Clear();
             _AllIDNumberDict.Clear();
+            _AllTeacherNumberDict.Clear();
 
             foreach (JHTeacherRecord TR in JHTeacher.SelectAll())
             {
@@ -174,6 +181,10 @@ namespace JHSchool.TeacherExtendControls
                 if (!string.IsNullOrWhiteSpace(TR.IDNumber))
                     if (!_AllIDNumberDict.ContainsKey(TR.IDNumber))
                         _AllIDNumberDict.Add(TR.IDNumber, TR.ID);
+                // 教師編號檢查
+                if (!string.IsNullOrWhiteSpace(TR.TeacherNumber))
+                    if (!_AllTeacherNumberDict.ContainsKey(TR.TeacherNumber))
+                        _AllTeacherNumberDict.Add(TR.TeacherNumber, TR.ID);
             }
 
             // 讀取教師資料
@@ -234,6 +245,16 @@ namespace JHSchool.TeacherExtendControls
                 }
             }
 
+            // 檢查教師編號是否重複
+            if (_AllTeacherNumberDict.ContainsKey(txtTeacherNumber.Text))
+            {
+                if (_TeacherRec.ID != _AllTeacherNumberDict[txtTeacherNumber.Text])
+                {
+                    epTeacherNumber.SetError(txtTeacherNumber, "教師編號重複，請檢查!");
+                    return;
+                }
+            }
+
             // 回填到 DAL
             _TeacherRec.AccountType = cboAccountType.Text;
             _TeacherRec.Category = txtCategory.Text;
@@ -245,7 +266,8 @@ namespace JHSchool.TeacherExtendControls
             _TeacherRec.Name = txtName.Text;
             _TeacherRec.Nickname = txtNickname.Text;
             _TeacherRec.TAPassword = txtSTLoginPwd.Text;
-            
+            _TeacherRec.TeacherNumber = txtTeacherNumber.Text;
+
             // 存檔
             JHTeacher.Update(_TeacherRec);
             
@@ -260,7 +282,7 @@ namespace JHSchool.TeacherExtendControls
             prlp.SetAfterSaveText("登入帳號", txtSTLoginAccount.Text);
             prlp.SetAfterSaveText("登入密碼", txtSTLoginPwd.Text);
             prlp.SetAfterSaveText("帳號類型", cboAccountType.Text);
-
+            prlp.SetAfterSaveText("教師編號", txtTeacherNumber.Text);
 
             prlp.SetDescTitle("教師姓名：" + txtName.Text + ",");
             prlp.SetActionBy("學籍", "教師基本資料");
@@ -281,6 +303,7 @@ namespace JHSchool.TeacherExtendControls
             epName.Clear();
             epNick.Clear();
             epIDNumber.Clear();
+            epTeacherNumber.Clear();
         }
 
         protected override void OnCancelButtonClick(EventArgs e)
@@ -387,6 +410,11 @@ namespace JHSchool.TeacherExtendControls
         private void txtIDNumber_TextChanged(object sender, EventArgs e)
         {
             epIDNumber.Clear();
+        }
+
+        private void txtTeacherNumber_TextChanged(object sender, EventArgs e)
+        {
+            epTeacherNumber.Clear();
         }
     }
 

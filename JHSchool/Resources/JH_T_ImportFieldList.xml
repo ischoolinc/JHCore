@@ -10,10 +10,12 @@
   <Field InternalName="LoginName" Name="登入帳號" ShiftCheckable="True" UniqueGroup="LoginName"/>
   <Field InternalName="Password" Name="登入密碼"/>
   <Field InternalName="AccountType" Name="帳號類型" ShiftCheckable="True"/>
+  <Field InternalName="TeacherNumber" Name="教師編號" ShiftCheckable="True" UniqueGroup="TeacherNumber"/>
   <UpdateCondition>
     <Condition Name="教師系統編號" UniqueGroup="PrimaryKey"/>
     <Condition Name="教師姓名+暱稱" UniqueGroup="TeacherName"/>
     <Condition EmptySkipValidate="True" Name="身分證號" UniqueGroup="IDNumber"/>
     <Condition EmptySkipValidate="True" Name="登入帳號" UniqueGroup="LoginName"/>
+    <Condition EmptySkipValidate="True" Name="教師編號" UniqueGroup="TeacherNumber"/>
   </UpdateCondition>
 </FieldDescription>

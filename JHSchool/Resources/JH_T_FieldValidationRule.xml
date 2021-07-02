@@ -30,6 +30,10 @@
     <Field DataType="String" Name="登入密碼">
       <Validate AutoCorrect="False" Description="「登入密碼」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
     </Field>
+	  <Field DataType="String" Name="教師編號">
+		  <Validate AutoCorrect="False" Description="「教師編號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="教師編號非空白"/>
+		  <Validate AutoCorrect="False" Description="「教師編號」長度必須小於100個文字。 " ErrorType="Error" Validator="文字100" When=""/>
+	  </Field>
     <Field DataType="String" Name="帳號類型">
       <Validate AutoCorrect="False" Description="「帳號類型」只允許「Greening、自定帳號」。" ErrorType="Error" Validator="帳號類型列舉" When=""/>
     </Field>
@@ -100,5 +104,8 @@
     <Condition Name="身分證號非空白">
       <Match Field="身分證號" Operator="!=" Value=""/>
     </Condition>
+	  <Condition Name="教師編號非空白">
+		  <Match Field="教師編號" Operator="!=" Value=""/>
+	  </Condition>
   </ConditionList>
 </ValidateRule>

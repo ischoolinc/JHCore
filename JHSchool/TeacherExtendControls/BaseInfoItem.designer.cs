@@ -62,6 +62,8 @@
             this.buttonItem1 = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItem2 = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItem5 = new DevComponents.DotNetBar.ButtonItem();
+            this.txtTeacherNumber = new DevComponents.DotNetBar.Controls.TextBoxX();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).BeginInit();
@@ -241,7 +243,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(28, 195);
+            this.label9.Location = new System.Drawing.Point(285, 198);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 17);
             this.label9.TabIndex = 17;
@@ -304,7 +306,7 @@
             this.comboItem6,
             this.comboItem3,
             this.comboItem4});
-            this.cboAccountType.Location = new System.Drawing.Point(106, 192);
+            this.cboAccountType.Location = new System.Drawing.Point(363, 195);
             this.cboAccountType.Name = "cboAccountType";
             this.cboAccountType.Size = new System.Drawing.Size(140, 26);
             this.cboAccountType.TabIndex = 10;
@@ -361,9 +363,33 @@
             this.buttonItem5.Text = "清除照片";
             this.buttonItem5.Click += new System.EventHandler(this.buttonItem5_Click);
             // 
+            // txtTeacherNumber
+            // 
+            // 
+            // 
+            // 
+            this.txtTeacherNumber.Border.Class = "TextBoxBorder";
+            this.txtTeacherNumber.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtTeacherNumber.Location = new System.Drawing.Point(106, 192);
+            this.txtTeacherNumber.Name = "txtTeacherNumber";
+            this.txtTeacherNumber.Size = new System.Drawing.Size(140, 25);
+            this.txtTeacherNumber.TabIndex = 212;
+            this.txtTeacherNumber.TextChanged += new System.EventHandler(this.txtTeacherNumber_TextChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(28, 197);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(60, 17);
+            this.label11.TabIndex = 213;
+            this.label11.Text = "教師編號";
+            // 
             // BaseInfoItem
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.Controls.Add(this.txtTeacherNumber);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.contextMenuBar1);
             this.Controls.Add(this.cboAccountType);
             this.Controls.Add(this.txtCategory);
@@ -387,7 +413,7 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.txtNickname);
             this.Name = "BaseInfoItem";
-            this.Size = new System.Drawing.Size(550, 205);
+            this.Size = new System.Drawing.Size(550, 230);
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).EndInit();
@@ -431,5 +457,7 @@
         private DevComponents.DotNetBar.ButtonItem buttonItem1;
         private DevComponents.DotNetBar.ButtonItem buttonItem2;
         private DevComponents.DotNetBar.ButtonItem buttonItem5;
+        private DevComponents.DotNetBar.Controls.TextBoxX txtTeacherNumber;
+        private System.Windows.Forms.Label label11;
     }
 }
