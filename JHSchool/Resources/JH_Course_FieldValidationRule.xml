@@ -1,0 +1,89 @@
+﻿<ValidateRule>
+	<FieldList>
+		<Field DataType="Integer" Name="課程系統編號">
+			<Validate AutoCorrect="False" Description="「課程系統編號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="" />
+		</Field>
+		<Field DataType="String" Name="所屬班級" />
+		<Field DataType="String" Name="課程名稱">
+			<Validate AutoCorrect="False" Description="「課程名稱」必須有資料。 " ErrorType="Error" Validator="不可空白" When="" />
+			<Validate AutoCorrect="False" Description="「課程名稱」長度必須小於300個文字。 " ErrorType="Error" Validator="文字300" When="" />
+		</Field>
+		<Field DataType="String" Name="科目名稱">
+			<Validate AutoCorrect="False" Description="「科目名稱」長度必須小於300個文字。 " ErrorType="Error" Validator="文字300" When="" />
+		</Field>
+		<Field DataType="Integer" Name="領域" />
+		<Field DataType="Integer" Name="學年度">
+			<Validate AutoCorrect="False" Description="「學年度」必須是數字。 " ErrorType="Error" Validator="數字型態" When="" />
+			<Validate AutoCorrect="False" Description="「學年度」的數字大小超過範圍。 " ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+		<Field DataType="Integer" Name="學期">
+			<Validate AutoCorrect="False" Description="「學期」必須是數字。 " ErrorType="Error" Validator="數字型態" When="" />
+			<Validate AutoCorrect="False" Description="「學期」的數字大小超過範圍。 " ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+		<Field DataType="Integer" Name="權數">
+			<Validate AutoCorrect="False" Description="「權數」必須是數字。 " ErrorType="Error" Validator="數字型態" When="" />
+			<Validate AutoCorrect="False" Description="「權數」的數字大小超過範圍。 " ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+		<Field DataType="Integer" Name="節數">
+			<Validate AutoCorrect="False" Description="「節數」必須是數字。 " ErrorType="Error" Validator="數字型態" When="" />
+			<Validate AutoCorrect="False" Description="「節數」的數字大小超過範圍。 " ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+		<Field DataType="String" Name="授課教師一" />
+		<Field DataType="String" Name="授課教師二" />
+		<Field DataType="String" Name="授課教師三" />
+		<Field DataType="String" Name="學期成績">
+			<Validate AutoCorrect="False" Description="「學期成績」只允許「列入」或「不列入」。 " ErrorType="Error" Validator="列入" When="" />
+		</Field>
+
+		<Field DataType="String" Name="評量設定" />
+		<Field DataType="String" Name="課程編號">
+			<!--<Validate AutoCorrect="False" Description="「課程編號」不可重複。 " ErrorType="Error" Validator="Uniq" When="課程編號非空白"/>-->
+		</Field>
+	</FieldList>
+	<ValidatorList>
+		<FieldValidator Name="數字型態" Type="Type">
+			<Type>Integer</Type>
+		</FieldValidator>
+		<FieldValidator Name="合理數字資料" Type="Integer">
+			<MinValue>0</MinValue>
+			<MaxValue>20000</MaxValue>
+		</FieldValidator>
+		<FieldValidator Name="數字最大極限" Type="Integer">
+			<MinValue>0</MinValue>
+			<MaxValue>2000000000</MaxValue>
+		</FieldValidator>
+		<FieldValidator Name="不可空白" Type="String">
+			<MinLength>1</MinLength>
+			<MaxLength>3000</MaxLength>
+		</FieldValidator>
+		<FieldValidator Name="文字25" Type="String">
+			<MinLength>0</MinLength>
+			<MaxLength>25</MaxLength>
+		</FieldValidator>
+		<FieldValidator Name="文字300" Type="String">
+			<MinLength>0</MinLength>
+			<MaxLength>300</MaxLength>
+		</FieldValidator>
+		<!--<FieldValidator Name="分項類別" Type="Enumeration">
+			-->
+		<!-- Value 是正確的值，一般 Code 是不用的。-->
+		<!--
+			<Item Value="學業" />
+			<Item Value="體育" />
+			<Item Value="國防通識" />
+			<Item Value="健康與護理" />
+			<Item Value="實習科目" />
+			<Item Value="專業科目" />
+		</FieldValidator>-->
+		<FieldValidator Name="列入" Type="Enumeration">
+			<!-- Value 是正確的值，一般 Code 是不用的。-->
+			<Item Value="列入" />
+			<Item Value="不列入" />
+		</FieldValidator>
+	</ValidatorList>
+	<ConditionList>
+		<Condition Name="課程編號非空白">
+			<Match Field="課程編號" Operator="!=" Value=""/>
+		</Condition>
+	</ConditionList>
+</ValidateRule>

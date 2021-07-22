@@ -202,4 +202,16 @@
   <data name="JH_C_ImportValidatorRule_KH" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\jh_c_importvalidatorrule_kh.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="JH_C_ExportDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JH_C_ExportDescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="JH_Course_ExportDescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JH_Course_ExportDescription.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="JH_Course_FieldValidationRule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JH_Course_FieldValidationRule.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="JH_Course_ImportFieldList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JH_Course_ImportFieldList .xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

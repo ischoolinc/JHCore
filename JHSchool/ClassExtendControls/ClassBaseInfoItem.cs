@@ -40,6 +40,7 @@ namespace JHSchool.ClassExtendControls
             _DataListener = new ChangeListener();
             _DataListener.Add(new TextBoxSource(txtClassName));
             _DataListener.Add(new TextBoxSource(txtSortOrder));
+            _DataListener.Add(new TextBoxSource(txtClassNumber));
             _DataListener.Add(new ComboBoxSource(cboGradeYear, ComboBoxSource.ListenAttribute.Text));
             _DataListener.Add(new ComboBoxSource(cboTeacher, ComboBoxSource.ListenAttribute.Text));
             _DataListener.StatusChanged += new EventHandler<ChangeEventArgs>(_DataListener_StatusChanged);
@@ -88,8 +89,8 @@ namespace JHSchool.ClassExtendControls
             }
 
             
-            _ClassRecord.NamingRule = _NamingRule;            
-
+            _ClassRecord.NamingRule = _NamingRule;
+            _ClassRecord.ClassNumber = txtClassNumber.Text;
             // 年級
             int GrYear;
             if (int.TryParse(cboGradeYear.Text, out GrYear))
@@ -123,6 +124,7 @@ namespace JHSchool.ClassExtendControls
             prlp.SetAfterSaveText("年級", cboGradeYear.Text);
             prlp.SetAfterSaveText("班導師", cboTeacher.Text);
             prlp.SetAfterSaveText("排列序號", txtSortOrder.Text);
+            prlp.SetAfterSaveText("班級編號", txtClassNumber.Text);
             prlp.SetActionBy("學籍", "班級基本資料");
             prlp.SetAction("修改班級基本資料");
             prlp.SetDescTitle("班級名稱:" + _ClassRecord.Name+",");
@@ -208,7 +210,8 @@ namespace JHSchool.ClassExtendControls
             prlp.SetBeforeSaveText("年級", cboGradeYear.Text);
             prlp.SetBeforeSaveText("班導師", cboTeacher.Text);
             prlp.SetBeforeSaveText("排列序號", txtSortOrder.Text);
-            if(_ClassRecord !=null )
+            prlp.SetBeforeSaveText("班級編號", txtClassNumber.Text);
+            if (_ClassRecord !=null )
                 prlp.SetBeforeSaveText("班級命名規則", _ClassRecord.NamingRule);
             _DataListener.Reset();
             _DataListener.ResumeListen();
@@ -225,6 +228,7 @@ namespace JHSchool.ClassExtendControls
             if (_ClassRecord != null)
             {
                 txtSortOrder.Text = _ClassRecord.DisplayOrder;
+                txtClassNumber.Text = _ClassRecord.ClassNumber;
                 if (_ClassRecord.GradeYear.HasValue)
                     cboGradeYear.Text = _ClassRecord.GradeYear.Value + "";
                 else
@@ -511,6 +515,13 @@ namespace JHSchool.ClassExtendControls
             
         }
 
+        private void txtClassNumber_TextChanged(object sender, EventArgs e)
+        {
+            //_DataListener.SuspendListen();
+            //_DataListener.Reset();
+            //_DataListener.ResumeListen();
+            //txtClassNumber.Tag = null;
+        }
         private void txtClassName_Leave(object sender, EventArgs e)
         {
             _DataListener.SuspendListen();

@@ -29,6 +29,7 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "RefClassID");
             helper.AddElement("Field", "Subject");
             helper.AddElement("Field", "Domain");
+            helper.AddElement("Field", "CourseNumber");
             helper.AddElement("Field", "ScoreCalcFlag");
             helper.AddElement("Condition");
             helper.AddElement("Order");
@@ -64,6 +65,7 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "Subject");
             helper.AddElement("Field", "Domain");
             helper.AddElement("Field", "ScoreCalcFlag");
+            helper.AddElement("Field", "CourseNumber");
             helper.AddElement("Condition");
             foreach (var key in primaryKeys)
             {

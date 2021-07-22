@@ -1140,6 +1140,7 @@
     <None Include="Resources\JH_T_FieldValidationRule.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Resources\JH_C_ExportDescription.xml" />
     <Content Include="Resources\JH_C_ImportValidatorRule.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1147,6 +1148,11 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Resources\JH_C_BulkDescription.xml" />
+    <None Include="Resources\JH_Course_ExportDescription.xml" />
+    <None Include="Resources\JH_Course_FieldValidationRule.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\JH_Course_ImportFieldList .xml" />
     <Content Include="StudentExtendControls\Ribbon\Farm-Fresh_error.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAddStudent_Image.png" />
     <Content Include="StudentExtendControls\Ribbon\Resources\btnAttendance.Image.png" />

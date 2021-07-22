@@ -1,0 +1,23 @@
+﻿<FieldDescription>
+	<Field InternalName="CourseID" Name="課程系統編號" PrimaryKey="True" UniqueGroup="PrimaryKey"/>
+	<Field InternalName="CourseName" Name="課程名稱" ShiftCheckable="True" UniqueGroup="CourseNamePlus"/>
+	<Field InternalName="Subject" Name="科目名稱" ShiftCheckable="True"/>
+	<Field InternalName="Domain" Name="領域" ShiftCheckable="True"/>
+	<Field InternalName="ClassName" Name="所屬班級" ShiftCheckable="True"/>
+	<Field InternalName="SchoolYear" Name="學年度" ShiftCheckable="True" UniqueGroup="CourseNamePlus"/>
+	<Field InternalName="Semester" Name="學期" ShiftCheckable="True" UniqueGroup="CourseNamePlus"/>
+	<Field InternalName="Credit" Name="權數" ShiftCheckable="True"/>
+	<Field InternalName="Period" Name="節數" ShiftCheckable="True"/>
+	<Field InternalName="Teacher1Name" Name="授課教師一" ShiftCheckable="True"/>
+	<Field InternalName="Teacher2Name" Name="授課教師二" ShiftCheckable="True"/>
+	<Field InternalName="Teacher3Name" Name="授課教師三" ShiftCheckable="True"/>
+
+	<Field InternalName="ExamTemplate" Name="評量設定" ShiftCheckable="True"/>
+	<Field InternalName="ScoreCalcFlag" Name="學期成績" ShiftCheckable="True"/>
+	<Field InternalName="CourseNumber" Name="課程編號" ShiftCheckable="True"/>
+
+	<UpdateCondition>
+		<Condition Name="課程系統編號" UniqueGroup="PrimaryKey"/>
+		<Condition EmptySkipValidate="True" Name="課程名稱+學年度+學期" UniqueGroup="CourseNamePlus"/>
+	</UpdateCondition>
+</FieldDescription>

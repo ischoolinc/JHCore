@@ -13,7 +13,10 @@ namespace SmartSchool.Feature.Course
     {
         public static System.Xml.XmlElement GetExportDescription()
         {
-            return CallNoneRequestService("SmartSchool.Course.BulkProcessJH.GetExportDescription");
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_Course_ExportDescription);
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Course.BulkProcessJH.GetExportDescription");
         }
 
         private static XmlElement CallNoneRequestService(string serviceName)

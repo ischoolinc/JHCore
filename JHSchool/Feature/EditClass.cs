@@ -40,6 +40,7 @@ namespace JHSchool.Feature
                         updateHelper.AddElement("Class/Field", "RefScoreCalcRuleID", editor.RefScoreCalcRuleID);
                         updateHelper.AddElement("Class/Field", "RefTeacherID", editor.RefTeacherID);
                         updateHelper.AddElement("Class/Field", "DisplayOrder", editor.DisplayOrder);
+                        updateHelper.AddElement("Class/Field", "ClassNumber", editor.DisplayOrder);
                         updateHelper.AddElement("Class", "Condition");
                         updateHelper.AddElement("Class/Condition", "ID", editor.ID);
 
@@ -61,6 +62,7 @@ namespace JHSchool.Feature
                         insertHelper.AddElement("Class/Field", "RefScoreCalcRuleID", editor.RefScoreCalcRuleID);
                         insertHelper.AddElement("Class/Field", "RefTeacherID", editor.RefTeacherID);
                         insertHelper.AddElement("Class/Field", "DisplayOrder", editor.DisplayOrder);
+                        insertHelper.AddElement("Class/Field", "ClassNumber", editor.DisplayOrder);
 
                         hasInsert = true;
                     }

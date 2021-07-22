@@ -8,6 +8,7 @@
   <Field InternalName="CalcuationRule" Name="計算規則" ShiftCheckable="True"/>
   <Field InternalName="DisplayOrder" Name="排列序號" ShiftCheckable="True"/>
   <Field InternalName="NamingRule" Name="班級名稱規則" ShiftCheckable="True"/>
+  <Field InternalName="ClassNumber" Name="班級編號" ShiftCheckable="True"/>
   <UpdateCondition>
     <Condition Name="班級系統編號" UniqueGroup="PrimaryKey"/>
     <Condition Name="班級名稱" UniqueGroup="ClassName"/>

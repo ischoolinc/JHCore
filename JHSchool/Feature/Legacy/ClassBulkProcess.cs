@@ -13,7 +13,10 @@ namespace SmartSchool.Feature.Class
         [AutoRetryOnWebException()]
         public static XmlElement GetExportDescription()
         {
-            return CallNoneRequestService("SmartSchool.Class.BulkProcessJH.GetExportDescription");
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(JHSchool.Properties.Resources.JH_C_ExportDescription);
+            return doc.DocumentElement;
+            //return CallNoneRequestService("SmartSchool.Class.BulkProcessJH.GetExportDescription");
         }
 
         private static XmlElement CallNoneRequestService(string serviceName)

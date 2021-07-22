@@ -13,12 +13,18 @@ namespace JHSchool.ClassExtendControls.Ribbon.ClassImportWizardControls
     {
         public XmlElement GetImportFieldList()
         {
-            return SmartSchool.Feature.Class.ClassBulkProcess.GetImportFieldList();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_C_BulkDescription);
+            return doc.DocumentElement;
+            //return SmartSchool.Feature.Class.ClassBulkProcess.GetImportFieldList();
         }
 
         public XmlElement GetValidateFieldRule()
         {
-            return SmartSchool.Feature.Class.ClassBulkProcess.GetValidateFieldRule();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
+            return doc.DocumentElement;
+            //return SmartSchool.Feature.Class.ClassBulkProcess.GetValidateFieldRule();
         }
 
         public XmlElement GetUniqueFieldData()

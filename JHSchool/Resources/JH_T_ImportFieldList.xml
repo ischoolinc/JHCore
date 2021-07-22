@@ -16,6 +16,6 @@
     <Condition Name="教師姓名+暱稱" UniqueGroup="TeacherName"/>
     <Condition EmptySkipValidate="True" Name="身分證號" UniqueGroup="IDNumber"/>
     <Condition EmptySkipValidate="True" Name="登入帳號" UniqueGroup="LoginName"/>
-    <Condition EmptySkipValidate="True" Name="教師編號" UniqueGroup="TeacherNumber"/>
+    <!--<Condition EmptySkipValidate="True" Name="教師編號" UniqueGroup="TeacherNumber"/>-->
   </UpdateCondition>
 </FieldDescription>

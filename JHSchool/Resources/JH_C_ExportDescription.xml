@@ -1,0 +1,11 @@
+﻿<FieldDescription>
+	<Field DataType="integer" DisplayText="班級系統編號" Identifiable="True" Name="ID" ReadOnly="True"/>
+	<Field DisplayText="班級名稱" Name="ClassName" ShiftCheckable="True"/>
+	<Field DisplayText="班導師" Name="TeacherName" ShiftCheckable="True"/>
+	<Field DataType="integer" DisplayText="年級" Name="GradeYear" ShiftCheckable="True"/>
+	<Field DisplayText="課程規劃" Name="GraduationPlan" ShiftCheckable="True"/>
+	<Field DisplayText="計算規則" Name="CalcuationRule" ShiftCheckable="True"/>
+	<Field DataType="integer" DisplayText="排列序號" Name="DisplayOrder" ShiftCheckable="True"/>
+	<Field DisplayText="班級名稱規則" Name="NamingRule" ShiftCheckable="True"/>
+	<Field DisplayText="班級編號" Name="ClassNumber" ShiftCheckable="True"/>
+</FieldDescription>

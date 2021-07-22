@@ -246,14 +246,14 @@ namespace JHSchool.TeacherExtendControls
             }
 
             // 檢查教師編號是否重複
-            if (_AllTeacherNumberDict.ContainsKey(txtTeacherNumber.Text))
-            {
-                if (_TeacherRec.ID != _AllTeacherNumberDict[txtTeacherNumber.Text])
-                {
-                    epTeacherNumber.SetError(txtTeacherNumber, "教師編號重複，請檢查!");
-                    return;
-                }
-            }
+            //if (_AllTeacherNumberDict.ContainsKey(txtTeacherNumber.Text))
+            //{
+            //    if (_TeacherRec.ID != _AllTeacherNumberDict[txtTeacherNumber.Text])
+            //    {
+            //        epTeacherNumber.SetError(txtTeacherNumber, "教師編號重複，請檢查!");
+            //        return;
+            //    }
+            //}
 
             // 回填到 DAL
             _TeacherRec.AccountType = cboAccountType.Text;

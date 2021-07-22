@@ -26,6 +26,9 @@
       <Validate AutoCorrect="False" Description="「排列序號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="排列序號有資料" />
     </Field>
     <Field DataType="String" Name="班級名稱規則" />
+	  <Field DataType="String" Name="班級編號">
+		  <!--<Validate AutoCorrect="False" Description="「班級編號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="班級編號非空白"/>-->
+	  </Field>
   </FieldList>
   <ValidatorList>
     <FieldValidator Name="數字型態" Type="Type">

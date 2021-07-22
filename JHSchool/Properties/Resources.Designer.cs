@@ -19,7 +19,7 @@ namespace JHSchool.Properties {
     // 類別透過 ResGen 或 Visual Studio 這類工具。
     // 若要加入或移除成員，請編輯您的 .ResX 檔，然後重新執行 ResGen
     // (利用 /str 選項)，或重建您的 VS 專案。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -166,6 +166,22 @@ namespace JHSchool.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 &lt;FieldDescription&gt;
+        ///	&lt;Field DataType=&quot;integer&quot; DisplayText=&quot;班級系統編號&quot; Identifiable=&quot;True&quot; Name=&quot;ID&quot; ReadOnly=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;班級名稱&quot; Name=&quot;ClassName&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;班導師&quot; Name=&quot;TeacherName&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DataType=&quot;integer&quot; DisplayText=&quot;年級&quot; Name=&quot;GradeYear&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;課程規劃&quot; Name=&quot;GraduationPlan&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;計算規則&quot; Name=&quot;CalcuationRule&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DataType=&quot;inte [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_C_ExportDescription {
+            get {
+                return ResourceManager.GetString("JH_C_ExportDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 &lt;ValidateRule&gt;
         ///  &lt;FieldList&gt;
         ///    &lt;Field DataType=&quot;Integer&quot; Name=&quot;班級系統編號&quot;&gt;
@@ -198,6 +214,55 @@ namespace JHSchool.Properties {
         internal static string JH_C_ImportValidatorRule_KH {
             get {
                 return ResourceManager.GetString("JH_C_ImportValidatorRule_KH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 &lt;FieldDescription&gt;
+        ///	&lt;Field DataType=&quot;integer&quot; DisplayText=&quot;課程系統編號&quot; Identifiable=&quot;True&quot; Name=&quot;ID&quot; ReadOnly=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;課程名稱&quot; Name=&quot;CourseName&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;科目名稱&quot; Name=&quot;Subject&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;領域&quot; Name=&quot;Domain&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;所屬班級&quot; Name=&quot;ClassName&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;學年度&quot; Name=&quot;SchoolYear&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field DisplayText=&quot;學期&quot; Name=&quot;Semester&quot; ShiftCheckable= [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_Course_ExportDescription {
+            get {
+                return ResourceManager.GetString("JH_Course_ExportDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 &lt;ValidateRule&gt;
+        ///	&lt;FieldList&gt;
+        ///		&lt;Field DataType=&quot;Integer&quot; Name=&quot;課程系統編號&quot;&gt;
+        ///			&lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「課程系統編號」必須是數字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;數字最大極限&quot; When=&quot;&quot; /&gt;
+        ///		&lt;/Field&gt;
+        ///		&lt;Field DataType=&quot;String&quot; Name=&quot;所屬班級&quot; /&gt;
+        ///		&lt;Field DataType=&quot;String&quot; Name=&quot;課程名稱&quot;&gt;
+        ///			&lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「課程名稱」必須有資料。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;不可空白&quot; When=&quot;&quot; /&gt;
+        ///			&lt;Validate AutoCorrect=&quot;False&quot; Description=&quot;「課程名稱」長度必須小於300個文字。 &quot; ErrorType=&quot;Error&quot; Validator=&quot;文字300&quot; When=&quot;&quot; /&gt;
+        ///		&lt;/Fi [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_Course_FieldValidationRule {
+            get {
+                return ResourceManager.GetString("JH_Course_FieldValidationRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 &lt;FieldDescription&gt;
+        ///	&lt;Field InternalName=&quot;CourseID&quot; Name=&quot;課程系統編號&quot; PrimaryKey=&quot;True&quot; UniqueGroup=&quot;PrimaryKey&quot;/&gt;
+        ///	&lt;Field InternalName=&quot;CourseName&quot; Name=&quot;課程名稱&quot; ShiftCheckable=&quot;True&quot; UniqueGroup=&quot;CourseNamePlus&quot;/&gt;
+        ///	&lt;Field InternalName=&quot;Subject&quot; Name=&quot;科目名稱&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field InternalName=&quot;Domain&quot; Name=&quot;領域&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field InternalName=&quot;ClassName&quot; Name=&quot;所屬班級&quot; ShiftCheckable=&quot;True&quot;/&gt;
+        ///	&lt;Field InternalName=&quot;SchoolYear&quot; Name=&quot;學年度&quot; ShiftCheckable=&quot;True&quot; UniqueGroup=&quot;CourseNamePlus&quot;/&gt; [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        /// </summary>
+        internal static string JH_Course_ImportFieldList {
+            get {
+                return ResourceManager.GetString("JH_Course_ImportFieldList", resourceCulture);
             }
         }
         
@@ -280,8 +345,7 @@ namespace JHSchool.Properties {
         ///  &lt;Field DisplayText=&quot;教師類別&quot; Name=&quot;Category&quot;/&gt;
         ///  &lt;Field DisplayText=&quot;登入帳號&quot; Name=&quot;SmartTeacherLoginName&quot;/&gt;
         ///  &lt;Field DisplayText=&quot;帳號類型&quot; Name=&quot;AccountType&quot;/&gt;
-        ///  &lt;!--
-        ///&lt;Fie [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
+        ///  &lt;Field Dis [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
         /// </summary>
         internal static string JH_T_ExportDescription {
             get {

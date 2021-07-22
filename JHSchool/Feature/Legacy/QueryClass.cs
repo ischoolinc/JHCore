@@ -44,6 +44,7 @@ namespace JHSchool.Feature.Legacy
             helper.AddElement("Order");
             helper.AddElement("Order", "DisplayOrder");
             helper.AddElement("Order", "ClassName");
+            helper.AddElement("Order", "ClassNumber");
             DSRequest dsreq = new DSRequest(helper);
             return DSAServices.CallService("SmartSchool.Class.GetAbstractList", dsreq);
         }

@@ -31,8 +31,10 @@ namespace JHSchool.ClassExtendControls.Ribbon
 
         private void ExportClass_Load(object sender, EventArgs e)
         {
-            XmlElement element = SmartSchool.Feature.Class.ClassBulkProcess.GetExportDescription();
-
+            //XmlElement element = SmartSchool.Feature.Class.ClassBulkProcess.GetExportDescription();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Properties.Resources.JH_C_ExportDescription);
+            XmlElement element = doc.DocumentElement;
             #region XML內容
             /*	<FieldDescription>
 					<Field DisplayText="班級系統編號" Name="ID" ReadOnly="True" />
