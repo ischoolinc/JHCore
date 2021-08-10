@@ -1,7 +1,7 @@
 ﻿<FieldDescription>
 	<Field InternalName="CourseID" Name="課程系統編號" PrimaryKey="True" UniqueGroup="PrimaryKey"/>
 	<Field InternalName="CourseName" Name="課程名稱" ShiftCheckable="True" UniqueGroup="CourseNamePlus"/>
-	<Field InternalName="Subject" Name="科目名稱" ShiftCheckable="True"/>
+	<Field InternalName="SubjectName" Name="科目名稱" ShiftCheckable="True"/>
 	<Field InternalName="Domain" Name="領域" ShiftCheckable="True"/>
 	<Field InternalName="ClassName" Name="所屬班級" ShiftCheckable="True"/>
 	<Field InternalName="SchoolYear" Name="學年度" ShiftCheckable="True" UniqueGroup="CourseNamePlus"/>
