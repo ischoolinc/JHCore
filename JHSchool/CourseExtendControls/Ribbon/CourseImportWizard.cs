@@ -26,7 +26,8 @@ namespace JHSchool.CourseExtendControls.Ribbon
     {
         private WizardContext _context;
         private ImportDataAccess _data_source;
-
+        EventHandler eh;
+        string EventCode = "JH_CourseTeacherChange";
         public CourseImportWizard()
         {
             InitializeComponent();
@@ -51,6 +52,7 @@ namespace JHSchool.CourseExtendControls.Ribbon
             //SmartSchool.Common.SkillSchool.SetConnection("smartschool@dev", "admin", "1234");
             _context = new WizardContext();
             _data_source = new ImportDataAccess();
+            eh = FISCA.InteractionService.PublishEvent(EventCode);
             _context.DataSource = _data_source;
         }
 
@@ -848,10 +850,12 @@ namespace JHSchool.CourseExtendControls.Ribbon
                 //SmartSchool.Broadcaster.Events.Items["課程/新增"].Invoke();
                 //SmartSchool.TeacherRelated.Teacher tea = SmartSchool.TeacherRelated.Teacher.Instance;
                 //tea.Reflash();
-
+                
                 Course.Instance.SyncAllBackground();
+             
                 JHSchool.Data.JHCourse.RemoveAll();
                 JHSchool.Data.JHCourse.SelectAll();
+                eh(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
