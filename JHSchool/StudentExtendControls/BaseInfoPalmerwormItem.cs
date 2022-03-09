@@ -52,6 +52,7 @@ namespace JHSchool.StudentExtendControls
             _DataListener.Add(new TextBoxSource(txtEngName));
             _DataListener.Add(new TextBoxSource(txtLoginID));
             _DataListener.Add(new TextBoxSource(txtLoginPwd));
+            _DataListener.Add(new TextBoxSource(txtEmail));
             _DataListener.Add(new ComboBoxSource(cboGender, ComboBoxSource.ListenAttribute.Text));
             _DataListener.Add(new ComboBoxSource(cboNationality, ComboBoxSource.ListenAttribute.Text));
             _DataListener.Add(new ComboBoxSource(cboAccountType, ComboBoxSource.ListenAttribute.Text));
@@ -201,6 +202,7 @@ namespace JHSchool.StudentExtendControls
             _StudRec.Nationality = cboNationality.Text;
             _StudRec.SALoginName = txtLoginID.Text;
             _StudRec.SAPassword = txtLoginPwd.Text;
+            _StudRec.EMail = txtEmail.Text;
         }
 
         protected override void OnCancelButtonClick(EventArgs e)
@@ -241,7 +243,7 @@ namespace JHSchool.StudentExtendControls
         //將畫面清空
         private void ClearFormValue()
         {
-            txtBirthDate.Text = txtBirthPlace.Text = txtEngName.Text = txtLoginID.Text = txtName.Text = txtSSN.Text = cboAccountType.Text = cboGender.Text = cboNationality.Text = string.Empty;           
+            txtEmail.Text=txtBirthDate.Text = txtBirthPlace.Text = txtEngName.Text = txtLoginID.Text = txtName.Text = txtSSN.Text = cboAccountType.Text = cboGender.Text = cboNationality.Text = string.Empty;           
         }
         
         private void BindDataToForm()
@@ -275,7 +277,8 @@ namespace JHSchool.StudentExtendControls
             prlp.SetBeforeSaveText("出生地", txtBirthPlace.Text);
             prlp.SetBeforeSaveText("英文姓名", txtEngName.Text);
             prlp.SetBeforeSaveText("登入帳號", txtLoginID.Text);
-            prlp.SetBeforeSaveText("帳號類型", cboAccountType.Text);        
+            prlp.SetBeforeSaveText("帳號類型", cboAccountType.Text);
+            prlp.SetBeforeSaveText("電子信箱", txtEmail.Text);
         }
 
         private void SetAfterEditLog()
@@ -289,6 +292,7 @@ namespace JHSchool.StudentExtendControls
             prlp.SetAfterSaveText("英文姓名", txtEngName.Text);
             prlp.SetAfterSaveText("登入帳號", txtLoginID.Text);
             prlp.SetAfterSaveText("帳號類型", cboAccountType.Text);
+            prlp.SetAfterSaveText("電子信箱", txtEmail.Text);
             prlp.SetActionBy("學籍", "學生基本資料");
             prlp.SetAction("修改學生基本資料");
             prlp.SetDescTitle("姓名:"+_StudRec.Name+",學號:"+_StudRec.StudentNumber +",");
@@ -312,7 +316,7 @@ namespace JHSchool.StudentExtendControls
             cboAccountType.Text = _StudRec.AccountType;
             cboGender.Text = _StudRec.Gender;
             cboNationality.Text = _StudRec.Nationality;
-
+            txtEmail.Text = _StudRec.EMail;
             //2017/4/19 穎驊新增 記錄原原國籍，作為與新輸入比較使用
             cboNationality_ori = _StudRec.Nationality;
             // 解析
@@ -651,6 +655,11 @@ namespace JHSchool.StudentExtendControls
                     errorProvider1.SetError(cboNationality, "此國籍名稱，不存在於教務作業>對照/代碼>國籍中英文對照表 的設定中，建議檢察。");
                 }                        
             }            
+        }
+
+        private void txtEmail_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

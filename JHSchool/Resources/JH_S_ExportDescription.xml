@@ -14,6 +14,7 @@
 -->
   <Field DisplayText="年級" Name="GradeYear" ShiftCheckable="True"/>
   <Field DisplayText="座號" Name="SeatNo" ShiftCheckable="True"/>
+	<Field DisplayText="電子信箱" Name="EMail" ShiftCheckable="True"/>
   <Field DisplayText="登入帳號" Name="LoginName" ShiftCheckable="True"/>
   <Field DisplayText="帳號類型" Name="AccountType" ShiftCheckable="True"/>
   <Field DisplayText="狀態" Name="Status" ShiftCheckable="True"/>

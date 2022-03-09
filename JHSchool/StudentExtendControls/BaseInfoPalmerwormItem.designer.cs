@@ -69,6 +69,8 @@
             this.comboItem6 = new DevComponents.Editors.ComboItem();
             this.comboItem4 = new DevComponents.Editors.ComboItem();
             this.comboItem5 = new DevComponents.Editors.ComboItem();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtEmail = new DevComponents.DotNetBar.Controls.TextBoxX();
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).BeginInit();
@@ -398,7 +400,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(36, 204);
+            this.label3.Location = new System.Drawing.Point(294, 203);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 17);
@@ -444,7 +446,7 @@
             this.comboItem6,
             this.comboItem4,
             this.comboItem5});
-            this.cboAccountType.Location = new System.Drawing.Point(108, 200);
+            this.cboAccountType.Location = new System.Drawing.Point(366, 199);
             this.cboAccountType.Name = "cboAccountType";
             this.cboAccountType.Size = new System.Drawing.Size(138, 25);
             this.cboAccountType.TabIndex = 9;
@@ -458,10 +460,37 @@
             // 
             this.comboItem5.Text = "自定帳號";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Location = new System.Drawing.Point(36, 203);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(60, 17);
+            this.label4.TabIndex = 212;
+            this.label4.Text = "電子信箱";
+            // 
+            // txtEmail
+            // 
+            // 
+            // 
+            // 
+            this.txtEmail.Border.Class = "TextBoxBorder";
+            this.txtEmail.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.txtEmail.Location = new System.Drawing.Point(108, 200);
+            this.txtEmail.Margin = new System.Windows.Forms.Padding(4);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(138, 25);
+            this.txtEmail.TabIndex = 211;
+            this.txtEmail.TextChanged += new System.EventHandler(this.txtEmail_TextChanged);
+            // 
             // BaseInfoPalmerwormItem
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.contextMenuBar1);
             this.Controls.Add(this.label76);
             this.Controls.Add(this.txtBirthDate);
@@ -487,7 +516,7 @@
             this.Controls.Add(this.label1);
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "BaseInfoPalmerwormItem";
-            this.Size = new System.Drawing.Size(550, 205);
+            this.Size = new System.Drawing.Size(550, 240);
             ((System.ComponentModel.ISupportInitialize)(this.pic1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenuBar1)).EndInit();
@@ -538,5 +567,7 @@
         private DevComponents.DotNetBar.ButtonItem buttonItem5;
         private DevComponents.DotNetBar.ButtonItem buttonItem6;
         private DevComponents.Editors.ComboItem comboItem6;
+        internal System.Windows.Forms.Label label4;
+        internal DevComponents.DotNetBar.Controls.TextBoxX txtEmail;
     }
 }

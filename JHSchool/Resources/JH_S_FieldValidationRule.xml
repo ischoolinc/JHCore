@@ -40,6 +40,9 @@
       <Validate AutoCorrect="False" Description="「座號」過大，可能有錯誤，請檢查。 " ErrorType="Warning" Validator="座號範圍" When="座號非空白"/>
       <Validate AutoCorrect="False" Description="「座號」大小超過極限。 " ErrorType="Error" Validator="Integer極限" When="座號非空白"/>
     </Field>
+	  <Field DataType="String" Name="電子信箱">
+		  <Validate AutoCorrect="False" Description="「電子信箱」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>
+	  </Field>	  
     <Field DataType="String" Name="登入帳號">
       <Validate AutoCorrect="False" Description="此欄位的資料不可重覆。 " ErrorType="Error" Validator="UniqAccount" When="登入帳號有資料"/>
       <Validate AutoCorrect="False" Description="「登入帳號」長度必須小於100個文字。" ErrorType="Error" Validator="文字100" When=""/>

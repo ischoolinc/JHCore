@@ -10,6 +10,7 @@
   <Field DisplayText="英文姓名" Name="EnglishName" ShiftCheckable="True"/>
   <Field DisplayText="班級" Name="ClassName" ShiftCheckable="True"/>
   <Field DisplayText="座號" Name="SeatNo" ShiftCheckable="True"/>
+	<Field DisplayText="電子信箱" Name="EMail" ShiftCheckable="True"/>
   <Field DisplayText="登入帳號" Name="LoginName" ShiftCheckable="True"/>
   <Field DisplayText="登入密碼" Name="Password" ShiftCheckable="True"/>
   <Field DisplayText="帳號類型" Name="AccountType" ShiftCheckable="True"/>
