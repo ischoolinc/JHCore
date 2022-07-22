@@ -45,6 +45,8 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Bulk
 
         public void Generate(SheetReader reader, XmlElement output)
         {
+            List<string> toTrimColumnsList = new List<string> { "姓名", "身分證號", "登入帳號", "電子信箱", "學號" };
+
             XmlElement newelm = output.OwnerDocument.CreateElement(TargetName);
             output.AppendChild(newelm);
 
@@ -58,7 +60,12 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Bulk
                 if (_full_source_name == "狀態")
                     newelm.InnerText = GetStudStatusCode(reader.GetValue("狀態"));
                 else
-                    newelm.InnerText = reader.GetValue(_full_source_name);
+                {
+                    if (toTrimColumnsList.Contains(_full_source_name))
+                        newelm.InnerText = reader.GetValue(_full_source_name).Trim();
+                    else
+                        newelm.InnerText = reader.GetValue(_full_source_name);
+                }
             }
         }
 

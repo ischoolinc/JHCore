@@ -33,8 +33,8 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
                     _by_student_number.Add(record.StudentNumber+record.Status, record);
 
             if (!string.IsNullOrEmpty(record.SALoginName))
-                if(!_by_login_name.ContainsKey(record.SALoginName+record.Status))
-                    _by_login_name.Add(record.SALoginName+record.Status, record);
+                if(!_by_login_name.ContainsKey(record.SALoginName.ToLower()+record.Status))
+                    _by_login_name.Add(record.SALoginName.ToLower() + record.Status, record);
         }
 
         public ImportRecord GetByIdentity(string key)
@@ -141,18 +141,18 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
             {
                 if (string.IsNullOrEmpty(each.SALoginName)) continue;
 
-                // 多加狀態
-                if (checkList.ContainsKey(each.SALoginName+each.Status))
+                // 多加狀態 //登入帳號改成全部小寫
+                if (checkList.ContainsKey(each.SALoginName.ToLower() + each.Status))
                     duplicateList.Add(each.Identity, each);
                 else
-                    checkList.Add(each.SALoginName+each.Status, each);
+                    checkList.Add(each.SALoginName.ToLower()+each.Status, each);
             }
 
             //將重覆資料的第一筆也加入到 Duplicate 清單中，因為在檢查時會略過第一筆(因為出現第二筆才當重覆)。
             List<ImportRecord> copyList = new List<ImportRecord>(duplicateList.Values);
             foreach (ImportRecord each in copyList)
             {
-                ImportRecord origin = checkList[each.SALoginName+each.Status];
+                ImportRecord origin = checkList[each.SALoginName.ToLower() + each.Status];
                 duplicateList.Add(origin.Identity, origin);
             }
 

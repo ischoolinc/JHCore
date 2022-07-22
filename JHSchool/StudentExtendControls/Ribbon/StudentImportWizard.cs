@@ -783,7 +783,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
                     if (Context.SelectedFields.ContainsKey(login))
                     {
-                        if (importRecords.ContainSALoginName(reader.GetValue(login) + StudStatus))
+                        if (importRecords.ContainSALoginName(reader.GetValue(login).ToLower() + StudStatus))
                         {
                             rowMessages[reader.RelativelyIndex].ReportMessage(login, MessageType.Error,
                                 "此資料已存在於資料庫中，無法重複新增。");

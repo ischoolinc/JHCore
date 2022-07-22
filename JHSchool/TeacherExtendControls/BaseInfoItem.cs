@@ -25,7 +25,7 @@ namespace JHSchool.TeacherExtendControls
         private bool _isBGWorkBusy = false;
         private BackgroundWorker _BGWork;
         private JHTeacherRecord _TeacherRec;
-        private Dictionary<string,string> _AllTeacherNameDic;
+        private Dictionary<string, string> _AllTeacherNameDic;
         private Dictionary<string, string> _AllLogIDDic;
         Dictionary<string, string> _AllIDNumberDict = new Dictionary<string, string>();
         Dictionary<string, string> _AllTeacherNumberDict = new Dictionary<string, string>();
@@ -53,7 +53,7 @@ namespace JHSchool.TeacherExtendControls
             _DataListener.Add(new TextBoxSource(txtSTLoginPwd));
             _DataListener.Add(new TextBoxSource(txtTeacherNumber));
             _DataListener.Add(new ComboBoxSource(cboAccountType, ComboBoxSource.ListenAttribute.Text));
-            _DataListener.Add(new ComboBoxSource(cboGender, ComboBoxSource.ListenAttribute.Text));            
+            _DataListener.Add(new ComboBoxSource(cboGender, ComboBoxSource.ListenAttribute.Text));
             _DataListener.StatusChanged += new EventHandler<ChangeEventArgs>(_DataListener_StatusChanged);
             cboGender.DropDownStyle = ComboBoxStyle.DropDownList;
             JHTeacher.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
@@ -67,7 +67,7 @@ namespace JHSchool.TeacherExtendControls
         }
 
         void BaseInfoItem_Disposed(object sender, EventArgs e)
-        {            
+        {
             JHTeacher.AfterChange -= new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
             JHTeacher.AfterDelete -= new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterDelete);
         }
@@ -117,8 +117,8 @@ namespace JHSchool.TeacherExtendControls
             if (_TeacherRec == null)
                 _TeacherRec = new JHTeacherRecord();
 
-            _DataListener.SuspendListen();            
-            
+            _DataListener.SuspendListen();
+
             txtName.Text = _TeacherRec.Name;
             txtIDNumber.Text = _TeacherRec.IDNumber;
             cboGender.Text = _TeacherRec.Gender;
@@ -130,7 +130,7 @@ namespace JHSchool.TeacherExtendControls
             txtSTLoginPwd.Text = _TeacherRec.TAPassword;
             cboAccountType.Text = _TeacherRec.AccountType;
             txtTeacherNumber.Text = _TeacherRec.TeacherNumber;
-  
+
 
             try
             {
@@ -173,9 +173,10 @@ namespace JHSchool.TeacherExtendControls
             foreach (JHTeacherRecord TR in JHTeacher.SelectAll())
             {
                 _AllTeacherNameDic.Add(TR.Name + TR.Nickname, TR.ID);
-                
-                if(!string.IsNullOrEmpty(TR.TALoginName))
-                    _AllLogIDDic.Add(TR.TALoginName, TR.ID);
+
+                if (!string.IsNullOrEmpty(TR.TALoginName))
+                    if (!_AllLogIDDic.ContainsKey(TR.TALoginName.ToLower()))
+                        _AllLogIDDic.Add(TR.TALoginName.ToLower(), TR.ID);
 
                 // 身分證號檢查
                 if (!string.IsNullOrWhiteSpace(TR.IDNumber))
@@ -198,7 +199,7 @@ namespace JHSchool.TeacherExtendControls
                 _isBGWorkBusy = true;
             else
                 _BGWork.RunWorkerAsync();
-            
+
             ClearErrorMessage();
         }
 
@@ -206,20 +207,20 @@ namespace JHSchool.TeacherExtendControls
         {
 
             // 驗證資料
-            if(string.IsNullOrEmpty (txtName.Text.Trim()))
+            if (string.IsNullOrEmpty(txtName.Text.Trim()))
             {
-                epName.SetError(txtName,"姓名不可空白!");
-                return ;
+                epName.SetError(txtName, "姓名不可空白!");
+                return;
             }
 
             // 檢查帳號是否重複
-            if (_AllLogIDDic.ContainsKey(txtSTLoginAccount.Text ))
+            if (_AllLogIDDic.ContainsKey(txtSTLoginAccount.Text.ToLower()))
             {
-                if (_AllLogIDDic[txtSTLoginAccount.Text] != _TeacherRec.ID)
+                if (_AllLogIDDic[txtSTLoginAccount.Text.ToLower()] != _TeacherRec.ID)
                 {
                     epLoginName.SetError(txtSTLoginAccount, "登入帳號重覆!");
                     return;
-                }                
+                }
             }
 
             // 檢查姓名+暱稱是否重複
@@ -237,10 +238,10 @@ namespace JHSchool.TeacherExtendControls
 
             // 檢查身分證號是否重複
             if (_AllIDNumberDict.ContainsKey(txtIDNumber.Text))
-            { 
-                if(_TeacherRec.ID != _AllIDNumberDict[txtIDNumber.Text])
+            {
+                if (_TeacherRec.ID != _AllIDNumberDict[txtIDNumber.Text])
                 {
-                    epIDNumber.SetError(txtIDNumber,"身分證號重複，請檢查!");
+                    epIDNumber.SetError(txtIDNumber, "身分證號重複，請檢查!");
                     return;
                 }
             }
@@ -262,7 +263,7 @@ namespace JHSchool.TeacherExtendControls
             _TeacherRec.Email = txtEmail.Text;
             _TeacherRec.Gender = cboGender.Text;
             _TeacherRec.IDNumber = txtIDNumber.Text;
-            _TeacherRec.TALoginName  = txtSTLoginAccount.Text;
+            _TeacherRec.TALoginName = txtSTLoginAccount.Text;
             _TeacherRec.Name = txtName.Text;
             _TeacherRec.Nickname = txtNickname.Text;
             _TeacherRec.TAPassword = txtSTLoginPwd.Text;
@@ -270,7 +271,7 @@ namespace JHSchool.TeacherExtendControls
 
             // 存檔
             JHTeacher.Update(_TeacherRec);
-            
+
             // Save Log
             prlp.SetAfterSaveText("姓名", txtName.Text);
             prlp.SetAfterSaveText("身分證號", txtIDNumber.Text);
@@ -328,7 +329,7 @@ namespace JHSchool.TeacherExtendControls
 
                     Bitmap newBmp = new Bitmap(orgBmp, pic1.Size);
                     pic1.Image = newBmp;
-                    
+
                     _TeacherRec.Photo = ToBase64String(Photo.Resize(new Bitmap(orgBmp)));
                     JHTeacher.Update(_TeacherRec);
                     prlp.SaveLog("學籍系統-教師基本資料", "變更教師照片", "teacher", PrimaryKey, "變更教師:" + _TeacherRec.Name + "的照片");

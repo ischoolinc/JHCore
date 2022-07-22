@@ -157,11 +157,11 @@ namespace JHSchool.StudentExtendControls
 
             foreach (JHStudentRecord studRec in JHStudent.SelectAll())
             {
-                checkID.Add(studRec.SALoginName);
+                checkID.Add(studRec.SALoginName.ToLower());
                 checkSSN.Add(studRec.IDNumber);
             }
             if(!string.IsNullOrEmpty(_StudRec.SALoginName ))
-                if (checkID.Contains(_StudRec.SALoginName))
+                if (checkID.Contains(_StudRec.SALoginName.ToLower()))
                 {
                     if (_defaultLoginID != _StudRec.SALoginName)
                     {
@@ -197,12 +197,12 @@ namespace JHSchool.StudentExtendControls
             _StudRec.BirthPlace = txtBirthPlace.Text;
             _StudRec.EnglishName = txtEngName.Text;
             _StudRec.Gender = cboGender.Text;
-            _StudRec.IDNumber = txtSSN.Text;
-            _StudRec.Name = txtName.Text;
+            _StudRec.IDNumber = txtSSN.Text.Trim();
+            _StudRec.Name = txtName.Text.Trim();
             _StudRec.Nationality = cboNationality.Text;
-            _StudRec.SALoginName = txtLoginID.Text;
+            _StudRec.SALoginName = txtLoginID.Text.Trim();
             _StudRec.SAPassword = txtLoginPwd.Text;
-            _StudRec.EMail = txtEmail.Text;
+            _StudRec.EMail = txtEmail.Text.Trim();
         }
 
         protected override void OnCancelButtonClick(EventArgs e)
@@ -283,16 +283,16 @@ namespace JHSchool.StudentExtendControls
 
         private void SetAfterEditLog()
         {
-            prlp.SetAfterSaveText("姓名", txtName.Text);
-            prlp.SetAfterSaveText("身分證號", txtSSN.Text);
+            prlp.SetAfterSaveText("姓名", txtName.Text.Trim());
+            prlp.SetAfterSaveText("身分證號", txtSSN.Text.Trim());
             prlp.SetAfterSaveText("生日", txtBirthDate.Text);
             prlp.SetAfterSaveText("性別", cboGender.Text);
             prlp.SetAfterSaveText("國籍", cboNationality.Text);
             prlp.SetAfterSaveText("出生地", txtBirthPlace.Text);
             prlp.SetAfterSaveText("英文姓名", txtEngName.Text);
-            prlp.SetAfterSaveText("登入帳號", txtLoginID.Text);
+            prlp.SetAfterSaveText("登入帳號", txtLoginID.Text.Trim());
             prlp.SetAfterSaveText("帳號類型", cboAccountType.Text);
-            prlp.SetAfterSaveText("電子信箱", txtEmail.Text);
+            prlp.SetAfterSaveText("電子信箱", txtEmail.Text.Trim());
             prlp.SetActionBy("學籍", "學生基本資料");
             prlp.SetAction("修改學生基本資料");
             prlp.SetDescTitle("姓名:"+_StudRec.Name+",學號:"+_StudRec.StudentNumber +",");
@@ -535,13 +535,13 @@ namespace JHSchool.StudentExtendControls
         {
             _errors.SetError(txtSSN, string.Empty);
 
-            if (string.IsNullOrEmpty(txtSSN.Text))
+            if (string.IsNullOrEmpty(txtSSN.Text.Trim()))
             {
                 _errors.SetError(txtSSN, string.Empty);
                 return;
             }
 
-            if (QueryStudent.IDNumberExists(PrimaryKey, txtSSN.Text))
+            if (QueryStudent.IDNumberExists(PrimaryKey, txtSSN.Text.Trim()))
                 _errors.SetError(txtSSN, "身分證號重覆，請確認資料。");           
                 
         }
@@ -550,13 +550,13 @@ namespace JHSchool.StudentExtendControls
         {
             _errors.SetError(txtLoginID, string.Empty);
 
-            if (string.IsNullOrEmpty(txtLoginID.Text))
+            if (string.IsNullOrEmpty(txtLoginID.Text.Trim()))
             {
                 _errors.SetError(txtLoginID, string.Empty);
                 return;
             }
 
-            if (QueryStudent.LoginIDExists(txtLoginID.Text, PrimaryKey))
+            if (QueryStudent.LoginIDExists(txtLoginID.Text.Trim(), PrimaryKey))
                 _errors.SetError(txtLoginID, "帳號重覆，請重新選擇。");
         }
 
