@@ -107,8 +107,9 @@ namespace JHSchool
             _CheckIDNumber.Clear();
             _CheckStudNumber.Clear();
             // 取得檢查資料,所有學生建立 Dict
-            List<K12.Data.StudentRecord> studList = K12.Data.Student.SelectByIDs(K12.Presentation.NLDPanels.Student.SelectedSource);
-            foreach (K12.Data.StudentRecord stud in studList)
+            List<K12.Data.StudentRecord> allStudentList = K12.Data.Student.SelectAll();
+            //List<K12.Data.StudentRecord> studList = K12.Data.Student.SelectByIDs(K12.Presentation.NLDPanels.Student.SelectedSource);           
+            foreach (K12.Data.StudentRecord stud in allStudentList)
             {
                 // 學號
                 if (!string.IsNullOrEmpty(stud.StudentNumber))
@@ -235,6 +236,7 @@ namespace JHSchool
             if (e.Error != null)
             {
                 MsgBox.Show("變更狀態發生錯誤，可能有部分學生狀態未修改。\n" + e.Error.Message);
+                return;
             }
             List<string> idlist = (List<string>)e.Result;
             if (idlist.Count > 0)
