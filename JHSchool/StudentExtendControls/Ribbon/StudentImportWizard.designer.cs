@@ -182,8 +182,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
             this.ImportWizard.FooterStyle.Class = "";
             this.ImportWizard.FooterStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.ImportWizard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(57)))), ((int)(((byte)(129)))));
-            this.ImportWizard.HeaderCaptionFont = new System.Drawing.Font("微軟正黑體", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ImportWizard.HeaderDescriptionFont = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ImportWizard.HeaderCaptionFont = new System.Drawing.Font("Microsoft JhengHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportWizard.HeaderDescriptionFont = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ImportWizard.HeaderDescriptionIndent = 16;
             this.ImportWizard.HeaderImage = ((System.Drawing.Image)(resources.GetObject("ImportWizard.HeaderImage")));
             // 
@@ -289,7 +289,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // label4
             // 
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label4.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label4.Location = new System.Drawing.Point(15, 56);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(310, 38);
@@ -305,7 +305,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.txtSourceFile.Border.Class = "TextBoxBorder";
             this.txtSourceFile.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSourceFile.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.txtSourceFile.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.txtSourceFile.Location = new System.Drawing.Point(18, 32);
             this.txtSourceFile.Name = "txtSourceFile";
             this.txtSourceFile.Size = new System.Drawing.Size(345, 23);
@@ -317,7 +317,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label8.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label8.Location = new System.Drawing.Point(6, 119);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(125, 20);
@@ -328,7 +328,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label7.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label7.Location = new System.Drawing.Point(5, 7);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(199, 20);
@@ -339,7 +339,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.btnSelectFile.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSelectFile.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSelectFile.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnSelectFile.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnSelectFile.Location = new System.Drawing.Point(369, 32);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(29, 22);
@@ -367,7 +367,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // lblInserDesc
             // 
             this.lblInserDesc.BackColor = System.Drawing.Color.Transparent;
-            this.lblInserDesc.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblInserDesc.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblInserDesc.Location = new System.Drawing.Point(34, 162);
             this.lblInserDesc.Name = "lblInserDesc";
             this.lblInserDesc.Size = new System.Drawing.Size(338, 37);
@@ -378,7 +378,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // lblUpdateDesc
             // 
             this.lblUpdateDesc.BackColor = System.Drawing.Color.Transparent;
-            this.lblUpdateDesc.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblUpdateDesc.Font = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblUpdateDesc.Location = new System.Drawing.Point(34, 232);
             this.lblUpdateDesc.Name = "lblUpdateDesc";
             this.lblUpdateDesc.Size = new System.Drawing.Size(338, 40);
@@ -452,7 +452,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // lblValidDesc
             // 
             this.lblValidDesc.BackColor = System.Drawing.Color.Transparent;
-            this.lblValidDesc.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblValidDesc.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblValidDesc.Location = new System.Drawing.Point(64, 214);
             this.lblValidDesc.Name = "lblValidDesc";
             this.lblValidDesc.Size = new System.Drawing.Size(396, 41);
@@ -462,19 +462,20 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // label9
             // 
             this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label9.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label9.Location = new System.Drawing.Point(63, 65);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(397, 58);
+            this.label9.Size = new System.Drawing.Size(397, 88);
             this.label9.TabIndex = 22;
-            this.label9.Text = "此欄位是系統用來識別資料用，在來源資料中必須是唯一的，不可重覆的。目前系統只提供三種欄位可當作識別：學生系統編號、身分證號、學號。";
+            this.label9.Text = "此欄位是系統用來識別資料用，在來源資料中必須是唯一的，不可重覆的。目前系統只提供三種欄位可當作識別：\r\n　1. 學生系統編號\r\n　2. 學號 + 狀態\r\n　3. " +
+    "身分證號 + 狀態";
             // 
             // cboValidateField
             // 
             this.cboValidateField.DisplayMember = "Text";
             this.cboValidateField.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboValidateField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboValidateField.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cboValidateField.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cboValidateField.FormattingEnabled = true;
             this.cboValidateField.ItemHeight = 18;
             this.cboValidateField.Location = new System.Drawing.Point(68, 183);
@@ -486,7 +487,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.lblValid.AutoSize = true;
             this.lblValid.BackColor = System.Drawing.Color.Transparent;
-            this.lblValid.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblValid.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblValid.Location = new System.Drawing.Point(64, 162);
             this.lblValid.Name = "lblValid";
             this.lblValid.Size = new System.Drawing.Size(56, 16);
@@ -498,7 +499,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             this.cboIdField.DisplayMember = "Text";
             this.cboIdField.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboIdField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboIdField.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cboIdField.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cboIdField.FormattingEnabled = true;
             this.cboIdField.ItemHeight = 18;
             this.cboIdField.Location = new System.Drawing.Point(67, 35);
@@ -510,7 +511,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.lblIdField.AutoSize = true;
             this.lblIdField.BackColor = System.Drawing.Color.Transparent;
-            this.lblIdField.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblIdField.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblIdField.Location = new System.Drawing.Point(63, 14);
             this.lblIdField.Name = "lblIdField";
             this.lblIdField.Size = new System.Drawing.Size(56, 16);
@@ -892,7 +893,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.lblValidMsg.AutoSize = true;
             this.lblValidMsg.BackColor = System.Drawing.Color.Transparent;
-            this.lblValidMsg.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblValidMsg.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblValidMsg.Location = new System.Drawing.Point(98, 37);
             this.lblValidMsg.Name = "lblValidMsg";
             this.lblValidMsg.Size = new System.Drawing.Size(80, 16);
@@ -982,7 +983,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             this.lblImportProgress.AutoSize = true;
             this.lblImportProgress.BackColor = System.Drawing.Color.Transparent;
-            this.lblImportProgress.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblImportProgress.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblImportProgress.Location = new System.Drawing.Point(98, 82);
             this.lblImportProgress.Name = "lblImportProgress";
             this.lblImportProgress.Size = new System.Drawing.Size(80, 16);

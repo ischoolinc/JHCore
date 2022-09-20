@@ -149,7 +149,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 Context.RefreshImportSource();
                 Context.IdentifyField = string.Empty;
                 Context.ShiftCheckField = string.Empty;
-                
+
                 //// 加入學生狀態與原住民族別欄位可以勾選
                 //BulkColumn BC1 = new BulkColumn("狀態");
                 //BC1.SetDefaultData1();
@@ -321,6 +321,11 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     {//「驗證欄」不可以匯入。
                         each.Enabled = false;
                         each.ToolTipText = "驗證欄不可以當作匯入欄位。";
+                    }
+                    else if (each.Text == "狀態" && (Context.IdentifyField == "學號" || Context.IdentifyField == "身分證號"))
+                    {// 狀態欄位只能使用學生系統編號為識別欄位修改
+                        each.Enabled = false;
+                        each.ToolTipText = "識別欄不可以當作匯入欄位。";
                     }
                     else
                         each.Enabled = true;
@@ -595,16 +600,16 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 // 讀取所有狀態學生
                 foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectAll())
                 {
-                //    string str1 = studRec.StudentNumber;
-                //    string str2 = studRec.IDNumber;
+                    //    string str1 = studRec.StudentNumber;
+                    //    string str2 = studRec.IDNumber;
 
-                //    // 建立用學號對應編號
-                //    if (!StudIDByStudNum.ContainsKey(str1))
-                //        StudIDByStudNum.Add(str1, studRec.ID);
+                    //    // 建立用學號對應編號
+                    //    if (!StudIDByStudNum.ContainsKey(str1))
+                    //        StudIDByStudNum.Add(str1, studRec.ID);
 
-                //    // 建立用身分證號對應編號
-                //    if (!StudIDByStudIDNumber.ContainsKey(str2))
-                //        StudIDByStudIDNumber.Add(str2, studRec.ID);
+                    //    // 建立用身分證號對應編號
+                    //    if (!StudIDByStudIDNumber.ContainsKey(str2))
+                    //        StudIDByStudIDNumber.Add(str2, studRec.ID);
 
                     importRecords.Add(new ImportRecord(studRec));
                 }
@@ -757,7 +762,10 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     // 預設狀態為一般
                     StudStatus = "一般";
                     if (reader.Columns.ContainsKey("狀態"))
-                        StudStatus = reader.GetValue("狀態");
+                    {
+                        string statusValue = reader.GetValue("狀態").Trim();
+                        StudStatus = string.IsNullOrEmpty(statusValue) ? "一般" : statusValue;
+                    }
 
                     if (Context.SelectedFields.ContainsKey(snum))
                     {
@@ -801,10 +809,13 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     StudStatus = "一般";
 
                     if (reader.Columns.ContainsKey("狀態"))
-                        StudStatus = reader.GetValue("狀態");
+                    {
+                        StudStatus = reader.GetValue("狀態").Trim();
+                    }
 
                     if (Context.IdentifyField == id)
                     {
+                        StudStatus = string.IsNullOrEmpty(StudStatus) ? "一般" : StudStatus;
                         if (!importRecords.ContainIdentity(reader.GetValue(id)))
                         {
                             rowMessages[reader.RelativelyIndex].ReportMessage(id, MessageType.Error,
@@ -814,40 +825,57 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     }
                     else if (Context.IdentifyField == snum)
                     {
-                        if (StudStatus != "一般" && StudStatus != "")
+                        if (!string.IsNullOrEmpty(StudStatus))
                         {
-                            rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
-                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
-                            _error_count++;
-                        }
-                        else 
-                        {
-                            if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                            if (StudStatus != "一般")
                             {
                                 rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
-                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                        "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為識別欄位");
                                 _error_count++;
-                            }                                                
-                        }
-                        
-                    }
-                    else if (Context.IdentifyField == ssn)
-                    {
-                        if (StudStatus != "一般" && StudStatus != "")
-                        {
-                            rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
-                                    "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為驗證欄位");
-                            _error_count++;
+                            }
+                            else
+                            {
+                                if (!importRecords.ContainStudentNumber(reader.GetValue(snum) + StudStatus))
+                                {
+                                    rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                        "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號、狀態是否輸入錯誤。");
+                                    _error_count++;
+                                }
+                            } 
                         }
                         else
                         {
-                            if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                            rowMessages[reader.RelativelyIndex].ReportMessage(snum, MessageType.Error,
+                                "狀態欄位為識別欄位不可為空值。");
+                            _error_count++;
+                        }
+                    }
+                    else if (Context.IdentifyField == ssn)
+                    {
+                        if (!string.IsNullOrEmpty(StudStatus))
+                        {
+                            if (StudStatus != "一般")
                             {
                                 rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
-                                    "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號是、狀態否輸入錯誤。");
+                                        "若要匯入更新狀態非一般的學生基本資料，請使用學生系統編號作為識別欄位");
                                 _error_count++;
                             }
-                        }                        
+                            else
+                            {
+                                if (!importRecords.ContainIdNumber(reader.GetValue(ssn) + StudStatus))
+                                {
+                                    rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
+                                        "此資料並不存在於資料庫中，無法更新此筆資料，請確認身分證號、狀態是否輸入錯誤。");
+                                    _error_count++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            rowMessages[reader.RelativelyIndex].ReportMessage(ssn, MessageType.Error,
+                                "狀態欄位為識別欄位不可為空值。");
+                            _error_count++;
+                        }
                     }
                 }
 
@@ -861,7 +889,10 @@ namespace JHSchool.StudentExtendControls.Ribbon
                         StudStatus = "一般";
 
                         if (reader.Columns.ContainsKey("狀態"))
-                            StudStatus = reader.GetValue("狀態");
+                        {
+                            string statusValue = reader.GetValue("狀態").Trim();
+                            StudStatus = string.IsNullOrEmpty(statusValue) ? "一般" : statusValue;
+                        }
 
                         ImportRecord record = null;
                         string key = reader.GetValue(Context.IdentifyField);
@@ -871,12 +902,12 @@ namespace JHSchool.StudentExtendControls.Ribbon
                         else if (Context.IdentifyField == snum)
                         {
                             if (importRecords.ContainStudentNumber(key + StudStatus))
-                                record = importRecords.GetByStudentNumber(key+StudStatus);
+                                record = importRecords.GetByStudentNumber(key + StudStatus);
                         }
                         else if (Context.IdentifyField == ssn)
                         {
                             if (importRecords.ContainIdNumber(key + StudStatus))
-                                record = importRecords.GetByIdNumber(key+StudStatus);
+                                record = importRecords.GetByIdNumber(key + StudStatus);
                         }
                         if (record == null)
                             continue;
@@ -1168,7 +1199,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 while (reader.MoveNext())
                 {
                     XmlElement record = output.OwnerDocument.CreateElement("Student");
-                                        
+
                     //// 這段在收集工作表內的狀態，主要用在更新學生狀態使用
                     //if (Context.SourceReader.Columns.ContainsKey("狀態"))
                     //{
@@ -1198,9 +1229,9 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     //                if(StudIDByStudIDNumber.ContainsKey(Context.SourceReader.GetValue("身分證號")))
                     //                    ID = StudIDByStudIDNumber[Context.SourceReader.GetValue("身分證號")];
                     //        }
-                        
+
                     //    }   
-                        
+
                     //    if (!StudStatusDict.ContainsKey(ID))
                     //        StudStatusDict.Add(ID, Status);
                     //}
@@ -1229,7 +1260,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
                         bulkdesc.GenerateUpdateRequest(Context.SourceReader, columns, record, Context.IdentifyField, Context.ShiftCheckField, ref_student_id);
                     }
-                    
+
 
                     output.AppendChild(record);
 
@@ -1252,8 +1283,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 if (Context.SelectedFields.ContainsKey("登入密碼"))
                     HashPassword(output);
 
-               
-               
+
+
 
                 ImportMessage("上傳資料到主機，請稍後…");
                 //GeneralActionLog log = new GeneralActionLog();
@@ -1292,7 +1323,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     //log.ActionName = "新增匯入";
                     //log.Description = "新增匯入 " + reader.RowCount + " 筆學生資料。";
                     prlp.SaveLog("學生.匯入學生基本資料", "批次匯入", "批次新增匯入" + reader.RowCount + "筆學生資料.");
-                    
+
 
                 }
                 else
@@ -1303,7 +1334,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     //    checkUpdate = false;
 
                     //if(checkUpdate)
-                        StudentBulkProcess.UpdateImportStudent(output);
+                    StudentBulkProcess.UpdateImportStudent(output);
 
                     //// 更新學生狀態
                     //if(StudStatusDict.Count >0)
@@ -1339,8 +1370,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 //SmartSchool.StudentRelated.Student stu = SmartSchool.StudentRelated.Student.Instance;
                 //stu.ReloadData();
             }
-            
-            catch (Exception ex)            
+
+            catch (Exception ex)
             {
                 //Console.Write((ex as DSAServerException).WarpedError.Response);
                 ImportMessage("上傳資料失敗");
@@ -1355,14 +1386,14 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 }
                 else
                     FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
-                
+
                 //CurrentUser user = CurrentUser.Instance;
                 //BugReporter.ReportException(user.SystemName, user.SystemVersion, ex, false);
 
                 btnImport.Enabled = true;
 
-                
-               
+
+
             }
         }
 
@@ -1373,8 +1404,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
         //private void UpdateStudStatusByStudID(Dictionary<string, string> StudStatusName)
         //{
         //    StringBuilder sb = new StringBuilder();           
-           
-            
+
+
         //    List<JHSchool.Data.JHStudentRecord> UpdateList = new List<JHSchool.Data.JHStudentRecord>();
         //    foreach (JHSchool.Data.JHStudentRecord studRec in JHSchool.Data.JHStudent.SelectByIDs(StudStatusName.Keys))
         //    {
@@ -1449,7 +1480,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             {
                 if (Context.ImportMode == ImportMode.Update)
                 {
-                    
+
                     DiplomaNumberLookup dnlook = new DiplomaNumberLookup();
                     foreach (XmlElement each in output.SelectNodes("Student"))
                     {
@@ -1526,9 +1557,9 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             public DiplomaNumberLookup()
             {
-                _diploma_list = new Dictionary<string, XmlElement>();            
+                _diploma_list = new Dictionary<string, XmlElement>();
 
-                string[] fields = new string[] {"ID", "DiplomaNumber","Status" };
+                string[] fields = new string[] { "ID", "DiplomaNumber", "Status" };
                 DSXmlHelper alldiploma = QueryStudent.GetDetailList(fields).GetContent();
 
                 foreach (XmlElement each in alldiploma.GetElements("Student"))
