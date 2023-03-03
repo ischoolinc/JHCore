@@ -13,6 +13,7 @@ using JHSchool.Legacy;
 using FCode = Framework.Security.FeatureCodeAttribute;
 using K12.EduAdminDataMapping;
 using FISCA.UDT;
+using System.Net.Http;
 
 namespace JHSchool.StudentExtendControls
     
@@ -181,9 +182,60 @@ namespace JHSchool.StudentExtendControls
 
             JHStudent.Update(_StudRec);
             SetAfterEditLog();
+
+            if (IfNeededSynchronize(prlp))
+                SynchronizeGreeningImmediately();
+
+            SaveLog();
+
             Student.Instance.SyncDataBackground(PrimaryKey);
             _errors.Clear();
             //BindDataToForm();
+        }
+
+        public bool IfNeededSynchronize(PermRecLogProcess prlp)
+        {
+            bool needed = false;
+            string oldValue = "";
+            string newValue = "";
+            foreach (KeyValuePair<string, string> each in prlp.GetBeforeSaveText())
+            {
+                if (each.Key == "登入帳號") //登入帳號
+                {
+                    oldValue = each.Value;
+                }
+            }
+
+            foreach (KeyValuePair<string, string> each in prlp.GetAfterSaveText())
+            {
+                if (each.Key == "登入帳號") //登入帳號
+                {
+                    newValue = each.Value;                  
+                }
+            }
+
+            if(oldValue!=newValue)
+                needed = true;
+            return needed;
+        }
+        public async void SynchronizeGreeningImmediately()
+        {
+            string dsns = FISCA.Authentication.DSAServices.AccessPoint;
+            string url = @"https://onecampus-task-yc3uirpz5a-de.a.run.app/greening/sync/" + dsns + "?delaySeconds=600&mode=immediately";
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpResponseMessage rsp = await client.GetAsync(url);
+                if (rsp.IsSuccessStatusCode)
+                    Console.WriteLine("Greening帳號同步成功。");
+                else
+                    Console.WriteLine("Greening帳號同步失敗。");
+            }
+            catch
+            {
+                Console.WriteLine("Greening帳號同步失敗。");
+            }
         }
 
         private void SetFormDataToDALRec()
@@ -296,8 +348,15 @@ namespace JHSchool.StudentExtendControls
             prlp.SetActionBy("學籍", "學生基本資料");
             prlp.SetAction("修改學生基本資料");
             prlp.SetDescTitle("姓名:"+_StudRec.Name+",學號:"+_StudRec.StudentNumber +",");
+           // prlp.SaveLog("", "", "Student", PrimaryKey);    
+        }
+
+        private void SaveLog()
+        {
+            //prlp.SetActionBy("學籍", "學生基本資料");
+            //prlp.SetAction("修改學生基本資料");
+            //prlp.SetDescTitle("姓名:" + _StudRec.Name + ",學號:" + _StudRec.StudentNumber + ",");
             prlp.SaveLog("", "", "Student", PrimaryKey);
-            
         }
 
         private void LoadDALDataToForm()

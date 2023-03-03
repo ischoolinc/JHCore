@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net.Http;
 using System.Windows.Forms;
 using FISCA.Presentation;
 using Framework;
@@ -288,6 +289,10 @@ namespace JHSchool.TeacherExtendControls
             prlp.SetDescTitle("教師姓名：" + txtName.Text + ",");
             prlp.SetActionBy("學籍", "教師基本資料");
             prlp.SetAction("修改教師基本資料");
+
+            if (IfNeededSynchronize(prlp))
+                SynchronizeGreeningImmediately();
+
             prlp.SaveLog("", "", "teacher", PrimaryKey);
             DataBindToForm();
             SaveButtonVisible = false;
@@ -296,6 +301,52 @@ namespace JHSchool.TeacherExtendControls
             Class.Instance.SyncAllBackground();
             ClearErrorMessage();
         }
+
+        public bool IfNeededSynchronize(PermRecLogProcess prlp)
+        {
+            bool needed = false;
+            string oldValue = "";
+            string newValue = "";
+            foreach (KeyValuePair<string, string> each in prlp.GetBeforeSaveText())
+            {
+                if (each.Key == "登入帳號") //登入帳號
+                {
+                    oldValue = each.Value;
+                }
+            }
+
+            foreach (KeyValuePair<string, string> each in prlp.GetAfterSaveText())
+            {
+                if (each.Key == "登入帳號") //登入帳號
+                {
+                    newValue = each.Value;
+                }
+            }
+
+            if (oldValue != newValue)
+                needed = true;
+            return needed;
+        }
+        public async void SynchronizeGreeningImmediately()
+        {
+            string dsns = FISCA.Authentication.DSAServices.AccessPoint;
+            string url = @"https://onecampus-task-yc3uirpz5a-de.a.run.app/greening/sync/" + dsns + "?delaySeconds=600&mode=immediately";
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpResponseMessage rsp = await client.GetAsync(url);
+                if (rsp.IsSuccessStatusCode)
+                    Console.WriteLine("Greening帳號同步成功。");
+                else
+                    Console.WriteLine("Greening帳號同步失敗。");
+            }
+            catch
+            {
+                Console.WriteLine("Greening帳號同步失敗。");
+            }
+        }
+
 
         private void ClearErrorMessage()
         {
