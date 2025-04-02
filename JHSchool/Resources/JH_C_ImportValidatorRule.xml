@@ -1,83 +1,101 @@
 ﻿<ValidateRule>
-  <FieldList>
-    <Field DataType="Integer" Name="班級系統編號">
-      <Validate AutoCorrect="False" Description="「班級系統編號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="" />
-    </Field>
-    <Field DataType="String" Name="班級名稱">
-      <Validate AutoCorrect="False" Description="「班級名稱」長度必須小於10個文字。 " ErrorType="Error" Validator="文字10" When="" />
-    </Field>
-    <Field DataType="String" Name="班導師">
-      <Validate AutoCorrect="False" Description="「班導師」必須存在於系統中。 " ErrorType="Error" Validator="合法教師驗證" When="" />
-    </Field>
-    <Field DataType="String" Name="年級">
-      <Validate AutoCorrect="False" Description="「年級」資料錯誤。資料庫無法儲存過大數字。 " ErrorType="Error" Validator="合理數字資料" When="年級有資料" />
-      <Validate AutoCorrect="False" Description="「年級」資料可能有錯誤，通常是 1 到 6。 " ErrorType="Warning" Validator="合理年級驗證" When="年級有資料" />
-    </Field>
-    <!--\t\t\t\t\t\t<Field DataType="String" Name="科別">\t\t\t\t\t\t\t<Validate AutoCorrect="False" Description="「科別」必須存在於系統中。 " ErrorType="Error" Validator="合法科別驗證" When="" />\t\t\t\t\t\t</Field>\t\t\t\t\t\t\t-->
-    <Field DataType="String" Name="課程規劃">
-      <Validate AutoCorrect="False" Description="「課程規劃」必須存在於系統中。 " ErrorType="Error" Validator="合法課程規劃驗證" When="" />
-    </Field>
-    <Field DataType="String" Name="計算規則">
-      <Validate AutoCorrect="False" Description="「計算規則」必須存在於系統中。 " ErrorType="Error" Validator="合法計算規則驗證" When="" />
-    </Field>
-    <Field DataType="String" Name="排列序號">
-      <Validate AutoCorrect="False" Description="「排列序號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="排列序號有資料" />
-    </Field>
-    <Field DataType="String" Name="班級名稱規則" />
-	  <Field DataType="String" Name="班級編號">
-		  <!--<Validate AutoCorrect="False" Description="「班級編號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="班級編號非空白"/>-->
-	  </Field>
-  </FieldList>
-  <ValidatorList>
-    <FieldValidator Name="數字型態" Type="Type">
-      <Type>Integer</Type>
-    </FieldValidator>
-    <FieldValidator Name="合理數字資料" Type="Integer">
-      <MinValue>0</MinValue>
-      <MaxValue>20000</MaxValue>
-    </FieldValidator>
-    <FieldValidator Name="數字最大極限" Type="Integer">
-      <MinValue>0</MinValue>
-      <MaxValue>2000000000</MaxValue>
-      </FieldValidator>
-      <FieldValidator Name="合理年級驗證" Type="Integer">
-        <MinValue>1</MinValue>
-        <MaxValue>6</MaxValue>
-      </FieldValidator>
-      <FieldValidator Name="文字10" Type="String">
-        <MinLength>0</MinLength>
-        <MaxLength>10</MaxLength>
-      </FieldValidator>
-      <FieldValidator Name="合法教師驗證" SkipEmpty="True" Type="TeacherLookup">
-        <ActivatorField>班導師</ActivatorField>
-      </FieldValidator>
-      <!--\t\t\t\t\t\t<FieldValidator Name="合法科別驗
+	<FieldList>
+		<Field DataType="Integer" Name="班級系統編號">
+			<Validate AutoCorrect="False" Description="「班級系統編號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="" />
+		</Field>
+		<Field DataType="String" Name="班級名稱">
+			<Validate AutoCorrect="False" Description="「班級名稱」長度必須小於10個文字。 " ErrorType="Error" Validator="文字10" When="" />
+		</Field>
+
+		<!-- 新增學年度 -->
+		<Field DataType="Integer" Name="學年度">
+			<Validate AutoCorrect="False" Description="「學年度」不得為空白。" ErrorType="Error" Validator="必填檢查" When="" />
+			<Validate AutoCorrect="False" Description="「學年度」必須是數字且在合理範圍內。" ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+
+		<!-- 新增學期 -->
+		<Field DataType="Integer" Name="學期">
+			<Validate AutoCorrect="False" Description="「學期」不得為空白。" ErrorType="Error" Validator="必填檢查" When="" />
+			<Validate AutoCorrect="False" Description="「學期」必須是數字且在合理範圍內。" ErrorType="Error" Validator="合理數字資料" When="" />
+		</Field>
+
+		<Field DataType="String" Name="班導師">
+			<Validate AutoCorrect="False" Description="「班導師」必須存在於系統中。 " ErrorType="Error" Validator="合法教師驗證" When="" />
+		</Field>
+		<Field DataType="String" Name="年級">
+			<Validate AutoCorrect="False" Description="「年級」資料錯誤。資料庫無法儲存過大數字。 " ErrorType="Error" Validator="合理數字資料" When="年級有資料" />
+			<Validate AutoCorrect="False" Description="「年級」資料可能有錯誤，通常是 1 到 6。 " ErrorType="Warning" Validator="合理年級驗證" When="年級有資料" />
+		</Field>
+		<!--\t\t\t\t\t\t<Field DataType="String" Name="科別">\t\t\t\t\t\t\t<Validate AutoCorrect="False" Description="「科別」必須存在於系統中。 " ErrorType="Error" Validator="合法科別驗證" When="" />\t\t\t\t\t\t</Field>\t\t\t\t\t\t\t-->
+		<Field DataType="String" Name="課程規劃">
+			<Validate AutoCorrect="False" Description="「課程規劃」必須存在於系統中。 " ErrorType="Error" Validator="合法課程規劃驗證" When="" />
+		</Field>
+		<Field DataType="String" Name="計算規則">
+			<Validate AutoCorrect="False" Description="「計算規則」必須存在於系統中。 " ErrorType="Error" Validator="合法計算規則驗證" When="" />
+		</Field>
+		<Field DataType="String" Name="排列序號">
+			<Validate AutoCorrect="False" Description="「排列序號」必須是數字。 " ErrorType="Error" Validator="數字最大極限" When="排列序號有資料" />
+		</Field>
+		<Field DataType="String" Name="班級名稱規則" />
+		<Field DataType="String" Name="班級編號">
+			<!--<Validate AutoCorrect="False" Description="「班級編號」不可重覆。 " ErrorType="Error" Validator="Uniq" When="班級編號非空白"/>-->
+		</Field>
+	</FieldList>
+	<ValidatorList>
+		<FieldValidator Name="數字型態" Type="Type">
+			<Type>Integer</Type>
+		</FieldValidator>
+		<FieldValidator Name="合理數字資料" Type="Integer">
+			<MinValue>0</MinValue>
+			<MaxValue>20000</MaxValue>
+		</FieldValidator>
+		<FieldValidator Name="數字最大極限" Type="Integer">
+			<MinValue>0</MinValue>
+			<MaxValue>2000000000</MaxValue>
+		</FieldValidator>
+		<FieldValidator Name="合理年級驗證" Type="Integer">
+			<MinValue>1</MinValue>
+			<MaxValue>6</MaxValue>
+		</FieldValidator>
+		<FieldValidator Name="文字10" Type="String">
+			<MinLength>0</MinLength>
+			<MaxLength>10</MaxLength>
+		</FieldValidator>
+		<!-- 新增必填檢查驗證器 -->
+		<FieldValidator Name="必填檢查" Type="String">
+			<MinLength>1</MinLength>
+			<MaxLength>10</MaxLength>
+		</FieldValidator>
+		<FieldValidator Name="合法教師驗證" SkipEmpty="True" Type="TeacherLookup">
+			<ActivatorField>班導師</ActivatorField>
+		</FieldValidator>
+		<!--\t\t\t\t\t\t<FieldValidator Name="合法科別驗
 證" SkipEmpty="True" Type="DeptLookup">\t\t\t\t\t\t\t<ActivatorField>科別</ActivatorField>\t\t\t\t\t\t</FieldValidator>\t\t\t\t\t\t\t-->
-      <FieldValidator Name="合法課程規劃驗證" SkipEmpty="True" Type="GPLookup">
-        <ActivatorField>課程規劃</ActivatorField>
-      </FieldValidator>
-      <FieldValidator Name="合法計算規則驗證" SkipEmpty="True" Type="SCRLookup">
-        <ActivatorField>計算規則</ActivatorField>
-      </FieldValidator>
-      <RowValidator Name="新增匯入唯一性欄位檢查" Type="InsertDBUnique" />
-      <RowValidator Name="新增匯入工作表唯一性欄位檢查" Type="InsertSheetUnique" />
-      <RowValidator Name="更新匯入ShiftCheck" Type="ShiftCheck" />
-      <RowValidator Name="更新匯入識別欄檢查" Type="UpdateIdentify" />
-      <RowValidator Name="更新匯入唯一性欄位檢查" Type="UpdateUnique" />
-    </ValidatorList>
-  <RowValidate>
-    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入唯一性欄位檢查" When="" />
-    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入工作表唯一性欄位檢查" When="" />
-    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入ShiftCheck" When="" />
-    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入識別欄檢查" When="" />
-    <Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入唯一性欄位檢查" When="" />
-  </RowValidate>
-  <ConditionList>
-    <Condition Name="年級有資料">
-      <Match Field="年級" Operator="!=" Value="" />
-    </Condition>
-    <Condition Name="排列序號有資料">
-      <Match Field="排列序號" Operator="!=" Value="" />
-    </Condition>
-  </ConditionList>
+		<FieldValidator Name="合法課程規劃驗證" SkipEmpty="True" Type="GPLookup">
+			<ActivatorField>課程規劃</ActivatorField>
+		</FieldValidator>
+		<FieldValidator Name="合法計算規則驗證" SkipEmpty="True" Type="SCRLookup">
+			<ActivatorField>計算規則</ActivatorField>
+		</FieldValidator>
+		<RowValidator Name="新增匯入唯一性欄位檢查" Type="InsertDBUnique" />
+		<RowValidator Name="新增匯入工作表唯一性欄位檢查" Type="InsertSheetUnique" />
+		<RowValidator Name="更新匯入ShiftCheck" Type="ShiftCheck" />
+		<RowValidator Name="更新匯入識別欄檢查" Type="UpdateIdentify" />
+		<RowValidator Name="更新匯入唯一性欄位檢查" Type="UpdateUnique" />
+	</ValidatorList>
+	<RowValidate>
+		<Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入唯一性欄位檢查" When="" />
+		<Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="新增匯入工作表唯一性欄位檢查" When="" />
+		<Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入ShiftCheck" When="" />
+		<Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入識別欄檢查" When="" />
+		<Validate AutoCorrect="False" Description="" ErrorType="Error" Validator="更新匯入唯一性欄位檢查" When="" />
+	</RowValidate>
+	<ConditionList>
+		<Condition Name="年級有資料">
+			<Match Field="年級" Operator="!=" Value="" />
+		</Condition>
+		<Condition Name="排列序號有資料">
+			<Match Field="排列序號" Operator="!=" Value="" />
+		</Condition>
+	</ConditionList>
 </ValidateRule>

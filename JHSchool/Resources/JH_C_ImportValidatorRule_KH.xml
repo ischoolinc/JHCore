@@ -7,6 +7,17 @@
       <Validate AutoCorrect="False" Description="「班級名稱」長度必須小於10個文字。 " ErrorType="Error" Validator="文字10" When="" />
       <Validate AutoCorrect="False" Description="「班級名稱」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
     </Field>
+	  <!-- 新增學年度 -->
+	  <Field DataType="Integer" Name="學年度">
+		  <Validate AutoCorrect="False" Description="「學年度」不得為空白。" ErrorType="Error" Validator="必填檢查" When="" />
+		  <Validate AutoCorrect="False" Description="「學年度」必須是數字且在合理範圍內。" ErrorType="Error" Validator="合理數字資料" When="" />
+	  </Field>
+
+	  <!-- 新增學期 -->
+	  <Field DataType="Integer" Name="學期">
+		  <Validate AutoCorrect="False" Description="「學期」不得為空白。" ErrorType="Error" Validator="必填檢查" When="" />
+		  <Validate AutoCorrect="False" Description="「學期」必須是數字且在合理範圍內。" ErrorType="Error" Validator="合理數字資料" When="" />
+	  </Field>
     <Field DataType="String" Name="班導師">
       <Validate AutoCorrect="False" Description="「班導師」必須存在於系統中。 " ErrorType="Error" Validator="合法教師驗證" When="" />
       <Validate AutoCorrect="False" Description="「班導師」不允許空白。" ErrorType="Error" Validator="不可空白" When=""/>
@@ -50,6 +61,11 @@
         <MinLength>0</MinLength>
         <MaxLength>10</MaxLength>
       </FieldValidator>
+	  <!-- 新增必填檢查驗證器 -->
+	  <FieldValidator Name="必填檢查" Type="String">
+		  <MinLength>1</MinLength>
+		  <MaxLength>10</MaxLength>
+	  </FieldValidator>
       <FieldValidator Name="合法教師驗證" SkipEmpty="True" Type="TeacherLookup">
         <ActivatorField>班導師</ActivatorField>
       </FieldValidator>
