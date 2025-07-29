@@ -23,7 +23,7 @@ namespace JHSchool.Legacy.ImportSupport.Lookups
                 string nick = each.SelectSingleNode("Nickname").InnerText;
                 string Id = each.GetAttribute("ID");
 
-                string fullName = string.Format("{0}:{1}", name, nick);
+                string fullName = string.IsNullOrEmpty(nick) ? name : string.Format("{0}({1})", name, nick);
                 _teachers.Add(fullName, Id);
             }
         }
@@ -38,10 +38,10 @@ namespace JHSchool.Legacy.ImportSupport.Lookups
 
                 string name = m.Groups["Name"].Value.Trim();
                 string nickname = m.Groups["Nickname"].Value.Trim();
-                fullName = string.Format("{0}:{1}", name, nickname);
+                fullName = string.IsNullOrEmpty(nickname) ? name : string.Format("{0}({1})", name, nickname);
             }
             else
-                fullName = string.Format("{0}:{1}", teacherName, "");
+                fullName = teacherName.Trim();
 
             if (_teachers.ContainsKey(fullName))
                 return _teachers[fullName];

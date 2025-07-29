@@ -106,10 +106,11 @@ namespace JHSchool.CourseExtendControls.Ribbon.CourseImportWizardControls
             Dictionary<string, string> dup = new Dictionary<string, string>();
             foreach (string each in fields)
             {
-                if (dup.ContainsKey(rowSource.GetFieldData(each)))
+                var value = rowSource.GetFieldData(each)?.Trim() ?? "";
+                if (dup.ContainsKey(value))
                     return false;
 
-                dup.Add(rowSource.GetFieldData(each), each);
+                dup.Add(value, each);
             }
 
             return true;
