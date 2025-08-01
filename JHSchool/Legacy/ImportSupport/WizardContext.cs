@@ -82,5 +82,6 @@ namespace JHSchool.Legacy.ImportSupport
             get { return _exts; }
         }
 
+        public string EntityType { get; set; }
     }
 }

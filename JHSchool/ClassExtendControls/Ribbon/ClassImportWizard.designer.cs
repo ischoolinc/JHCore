@@ -131,8 +131,8 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.chkContinue = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.lblWarning = new DevComponents.DotNetBar.LabelX();
             this.lblError = new DevComponents.DotNetBar.LabelX();
-            this.btnViewResult = new DevComponents.DotNetBar.ButtonX();
             this.btnValidate = new DevComponents.DotNetBar.ButtonX();
+            this.btnViewResult = new DevComponents.DotNetBar.ButtonX();
             this.lnkCancelValid = new System.Windows.Forms.LinkLabel();
             this.lblValidMsg = new System.Windows.Forms.Label();
             this.pgValidProgress = new DevComponents.DotNetBar.Controls.ProgressBarX();
@@ -184,8 +184,8 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.ImportWizard.FooterStyle.Class = "";
             this.ImportWizard.FooterStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.ImportWizard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(57)))), ((int)(((byte)(129)))));
-            this.ImportWizard.HeaderCaptionFont = new System.Drawing.Font("微軟正黑體", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ImportWizard.HeaderDescriptionFont = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ImportWizard.HeaderCaptionFont = new System.Drawing.Font("Microsoft JhengHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ImportWizard.HeaderDescriptionFont = new System.Drawing.Font("Microsoft JhengHei", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ImportWizard.HeaderDescriptionIndent = 16;
             this.ImportWizard.HeaderImage = ((System.Drawing.Image)(resources.GetObject("ImportWizard.HeaderImage")));
             this.ImportWizard.HeaderImageSize = new System.Drawing.Size(30, 30);
@@ -307,7 +307,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             this.txtSourceFile.Border.Class = "TextBoxBorder";
             this.txtSourceFile.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.txtSourceFile.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.txtSourceFile.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.txtSourceFile.Location = new System.Drawing.Point(18, 32);
             this.txtSourceFile.Name = "txtSourceFile";
             this.txtSourceFile.Size = new System.Drawing.Size(345, 23);
@@ -318,7 +318,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label8.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label8.Location = new System.Drawing.Point(6, 119);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(125, 20);
@@ -329,7 +329,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.label7.Font = new System.Drawing.Font("Microsoft JhengHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.label7.Location = new System.Drawing.Point(5, 7);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(199, 20);
@@ -340,7 +340,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             this.btnSelectFile.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.btnSelectFile.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnSelectFile.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnSelectFile.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnSelectFile.Location = new System.Drawing.Point(369, 32);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(29, 22);
@@ -471,7 +471,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.cboValidateField.DisplayMember = "Text";
             this.cboValidateField.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboValidateField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboValidateField.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cboValidateField.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cboValidateField.FormattingEnabled = true;
             this.cboValidateField.ItemHeight = 18;
             this.cboValidateField.Location = new System.Drawing.Point(68, 183);
@@ -494,7 +494,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.cboIdField.DisplayMember = "Text";
             this.cboIdField.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboIdField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboIdField.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cboIdField.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cboIdField.FormattingEnabled = true;
             this.cboIdField.ItemHeight = 18;
             this.cboIdField.Location = new System.Drawing.Point(67, 35);
@@ -574,6 +574,7 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.lvSourceFieldList.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSourceFieldList.CheckBoxes = true;
             this.lvSourceFieldList.FullRowSelect = true;
+            this.lvSourceFieldList.HideSelection = false;
             listViewItem1.StateImageIndex = 0;
             listViewItem2.StateImageIndex = 0;
             listViewItem3.StateImageIndex = 0;
@@ -839,17 +840,6 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.lblError.TabIndex = 16;
             this.lblError.Text = "錯誤數量：";
             // 
-            // btnViewResult
-            // 
-            this.btnViewResult.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.btnViewResult.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.btnViewResult.Location = new System.Drawing.Point(177, 199);
-            this.btnViewResult.Name = "btnViewResult";
-            this.btnViewResult.Size = new System.Drawing.Size(75, 23);
-            this.btnViewResult.TabIndex = 14;
-            this.btnViewResult.Text = "檢視結果";
-            this.btnViewResult.Click += new System.EventHandler(this.btnViewResult_Click);
-            // 
             // btnValidate
             // 
             this.btnValidate.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
@@ -860,6 +850,17 @@ namespace JHSchool.ClassExtendControls.Ribbon
             this.btnValidate.TabIndex = 15;
             this.btnValidate.Text = "開始驗證";
             this.btnValidate.Click += new System.EventHandler(this.btnValidate_Click);
+            // 
+            // btnViewResult
+            // 
+            this.btnViewResult.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.btnViewResult.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.btnViewResult.Location = new System.Drawing.Point(177, 199);
+            this.btnViewResult.Name = "btnViewResult";
+            this.btnViewResult.Size = new System.Drawing.Size(75, 23);
+            this.btnViewResult.TabIndex = 14;
+            this.btnViewResult.Text = "檢視結果";
+            this.btnViewResult.Click += new System.EventHandler(this.btnViewResult_Click);
             // 
             // lnkCancelValid
             // 
@@ -879,10 +880,10 @@ namespace JHSchool.ClassExtendControls.Ribbon
             // 
             this.lblValidMsg.AutoSize = true;
             this.lblValidMsg.BackColor = System.Drawing.Color.Transparent;
-            this.lblValidMsg.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblValidMsg.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lblValidMsg.Location = new System.Drawing.Point(98, 37);
             this.lblValidMsg.Name = "lblValidMsg";
-            this.lblValidMsg.Size = new System.Drawing.Size(80, 16);
+            this.lblValidMsg.Size = new System.Drawing.Size(79, 16);
             this.lblValidMsg.TabIndex = 12;
             this.lblValidMsg.Text = "檢查資料進度";
             this.lblValidMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

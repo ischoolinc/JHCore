@@ -45,6 +45,7 @@ namespace JHSchool.TeacherExtendControls.Ribbon
 
             //SmartSchool.Common.SkillSchool.SetConnection("smartschool@dev", "admin", "1234");
             _context = new WizardContext();
+            _context.EntityType = "教師";
             _data_source = new ImportDataAccess();
             _context.DataSource = _data_source;
         }

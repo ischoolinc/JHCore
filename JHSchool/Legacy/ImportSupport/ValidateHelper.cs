@@ -38,58 +38,61 @@ namespace JHSchool.Legacy.ImportSupport
             _validator.RowValidatorList.AddValidatorFactory(_valid_factory);
         }
 
+        /// <summary>
+        /// 執行資料驗證，根據 WizardContext.EntityType 決定驗證規則。
+        /// </summary>
         public CellCommentManager Validate(SheetHelper sheet)
         {
-            // 判斷匯入來源
-            string importType = "教師";
-            if (_context.Extensions.ContainsKey("TeacherLookup"))
-                importType = "課程"; // 課程匯入
-            else if (_context.Extensions.ContainsKey("ClassLookup"))
-                importType = "班級"; // 班級匯入
-
+            // 依據 WizardContext.EntityType 判斷匯入來源
+            string entityType = _context.EntityType;
 
             // 可於此行加上 log 或 debug 用於追蹤
-            // 例如: Console.WriteLine($"[DEBUG] 匯入來源: {importType}");
+            // 例如: Console.WriteLine($"[DEBUG] 匯入來源: {entityType}");
             //int t1 = Environment.TickCount;
             _valid_factory.UpdateUnique = new UpdateUniqueRowValidator(_context, sheet);
 
             XmlElement xmlRule;
 
-            // 2018/4/17 穎驊註解，因應客服#5944 反應，檢查匯入班級機制，發現其驗證規則為抓取Severice 回傳的xml
+            // 2018/4/17 註解，因應客服#5944 反應，檢查匯入班級機制，發現其驗證規則為抓取Severice 回傳的xml
             // 經過與恩正、均泰、耀明的討論後，決定將舊的程式碼註解，將其設定存在程式碼中(JH_C_ImportValidatorRule)，直接抓取使用，方便日後維護。
             //XmlElement xmlRule = _context.DataSource.GetValidateFieldRule();
 
-            //2018/12/21 穎驊 完成高雄項目 [10-03][??] 局端夠查詢學校班級有調整”導師”的功能 
+            //2018/12/21 註解，完成高雄項目 [10-03][??] 局端夠查詢學校班級有調整”導師”的功能 
             // 有載入高雄自動編班模組的 ， 其匯入規則 載Local 的設定KH版本(班級名稱、班導師 不得空白) 
             IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
-            if (item != null)
+            if (item != null && entityType == "班級")
             {
                 //讀取XML欄位描述
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule_KH);
                 xmlRule = doc.DocumentElement;
             }
-            else
+            else if (entityType == "班級")
             {
                 //讀取XML欄位描述
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
                 xmlRule = doc.DocumentElement;
             }
-
-            if (importType == "課程")
+            else if (entityType == "課程")
             {
                 //讀取XML欄位描述
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(Properties.Resources.JH_Course_FieldValidationRule);
                 xmlRule = doc.DocumentElement;
             }
-
-            if (importType == "教師")
+            else if (entityType == "教師")
             {
                 //讀取XML欄位描述
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(Properties.Resources.JH_T_FieldValidationRule);
+                xmlRule = doc.DocumentElement;
+            }
+            else
+            {
+                // 預設 fallback
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(Properties.Resources.JH_C_ImportValidatorRule);
                 xmlRule = doc.DocumentElement;
             }
 

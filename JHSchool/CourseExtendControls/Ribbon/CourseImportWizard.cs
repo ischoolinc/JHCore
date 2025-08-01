@@ -51,6 +51,7 @@ namespace JHSchool.CourseExtendControls.Ribbon
             #endregion
             //SmartSchool.Common.SkillSchool.SetConnection("smartschool@dev", "admin", "1234");
             _context = new WizardContext();
+            _context.EntityType = "課程";
             _data_source = new ImportDataAccess();
             eh = FISCA.InteractionService.PublishEvent(EventCode);
             _context.DataSource = _data_source;
