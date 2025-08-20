@@ -131,44 +131,172 @@ namespace JHSchool
         private void btnSave_Click(object sender, EventArgs e)
         {
 
-            SchoolInfoEnt.ChineseAddress = txtSchoolChsAddress.Text;
-            SchoolInfoEnt.ChinsesName = txtSchoolChsName.Text;
-            SchoolInfoEnt.Code = txtSchoolCode.Text; //學校代碼
+            StringBuilder sb_log = new StringBuilder();
 
-            SchoolInfoEnt.Telephone = txtPhone.Text;
-            SchoolInfoEnt.EnglishAddress = txtSchoolEngAddess.Text;
-            SchoolInfoEnt.EnglishName = txtSchoolEngName.Text;
-            SchoolInfoEnt.Fax = txtFax.Text;
-            SchoolInfoEnt.SchoolYear = intSchoolYear.Text;
-            SchoolInfoEnt.Semester = intSemester.Text;
+            // 學校基本資料變更記錄
+            if (SchoolInfoEnt.ChineseAddress != txtSchoolChsAddress.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校中文地址", SchoolInfoEnt.ChineseAddress, txtSchoolChsAddress.Text));
+                SchoolInfoEnt.ChineseAddress = txtSchoolChsAddress.Text;
+            }
 
-            SchoolInfoEnt.ChancellorChsName = txtChancellorChsName.Text;
-            SchoolInfoEnt.ChancellorEngName = txtChancellorEngName.Text;
-            SchoolInfoEnt.ChancellorCellPhone = txtChancellorCellPhone.Text;
-            SchoolInfoEnt.ChancellorEmail = txtChancellorEmail.Text;
+            if (SchoolInfoEnt.ChinsesName != txtSchoolChsName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校中文名稱", SchoolInfoEnt.ChinsesName, txtSchoolChsName.Text));
+                SchoolInfoEnt.ChinsesName = txtSchoolChsName.Text;
+            }
 
-            SchoolInfoEnt.EduDirectorName = txtEduDirectorName.Text;
-            SchoolInfoEnt.EduDirectorCellPhone = txtEduDirectorCellPhone.Text;
-            SchoolInfoEnt.EduDirectorEmail = txtEduDirectorEmail.Text;
+            if (SchoolInfoEnt.Code != txtSchoolCode.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校代碼", SchoolInfoEnt.Code, txtSchoolCode.Text));
+                SchoolInfoEnt.Code = txtSchoolCode.Text;
+            }
 
-            SchoolInfoEnt.StuDirectorName = txtStuDirectorName.Text;
-            SchoolInfoEnt.StuDirectorCellPhone = txtStuDirectorCellPhone.Text;
-            SchoolInfoEnt.StuDirectorEmail = txtStuDirectorEmail.Text;
+            if (SchoolInfoEnt.Telephone != txtPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校電話", SchoolInfoEnt.Telephone, txtPhone.Text));
+                SchoolInfoEnt.Telephone = txtPhone.Text;
+            }
 
-            SchoolInfoEnt.AssociatedWithName = txtAssociatedWithName.Text;
-            SchoolInfoEnt.AssociatedWithCellPhone = txtAssociatedWithCellPhone.Text;
-            SchoolInfoEnt.AssociatedWithEmail = txtAssociatedWithEmail.Text;
+            if (SchoolInfoEnt.EnglishAddress != txtSchoolEngAddess.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校英文地址", SchoolInfoEnt.EnglishAddress, txtSchoolEngAddess.Text));
+                SchoolInfoEnt.EnglishAddress = txtSchoolEngAddess.Text;
+            }
 
-            SchoolInfoEnt.OtherTitle = txtOtherTitle.Text;
-            SchoolInfoEnt.OtherName = txtOtherName.Text;
-            SchoolInfoEnt.OtherCellPhone = txtOtherCellPhone.Text;
-            SchoolInfoEnt.OtherEmail = txtOtherEmail.Text;
+            if (SchoolInfoEnt.EnglishName != txtSchoolEngName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校英文名稱", SchoolInfoEnt.EnglishName, txtSchoolEngName.Text));
+                SchoolInfoEnt.EnglishName = txtSchoolEngName.Text;
+            }
+
+            if (SchoolInfoEnt.Fax != txtFax.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學校傳真", SchoolInfoEnt.Fax, txtFax.Text));
+                SchoolInfoEnt.Fax = txtFax.Text;
+            }
+
+            if (SchoolInfoEnt.SchoolYear != intSchoolYear.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學年度", SchoolInfoEnt.SchoolYear, intSchoolYear.Text));
+                SchoolInfoEnt.SchoolYear = intSchoolYear.Text;
+            }
+
+            if (SchoolInfoEnt.Semester != intSemester.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學期", SchoolInfoEnt.Semester, intSemester.Text));
+                SchoolInfoEnt.Semester = intSemester.Text;
+            }
+
+            if (SchoolInfoEnt.ChancellorChsName != txtChancellorChsName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "校長中文姓名", SchoolInfoEnt.ChancellorChsName, txtChancellorChsName.Text));
+                SchoolInfoEnt.ChancellorChsName = txtChancellorChsName.Text;
+            }
+
+            if (SchoolInfoEnt.ChancellorEngName != txtChancellorEngName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "校長英文姓名", SchoolInfoEnt.ChancellorEngName, txtChancellorEngName.Text));
+                SchoolInfoEnt.ChancellorEngName = txtChancellorEngName.Text;
+            }
+
+            if (SchoolInfoEnt.ChancellorCellPhone != txtChancellorCellPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "校長手機", SchoolInfoEnt.ChancellorCellPhone, txtChancellorCellPhone.Text));
+                SchoolInfoEnt.ChancellorCellPhone = txtChancellorCellPhone.Text;
+            }
+
+            if (SchoolInfoEnt.ChancellorEmail != txtChancellorEmail.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "校長電子信箱", SchoolInfoEnt.ChancellorEmail, txtChancellorEmail.Text));
+                SchoolInfoEnt.ChancellorEmail = txtChancellorEmail.Text;
+            }
+
+            if (SchoolInfoEnt.EduDirectorName != txtEduDirectorName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "教務主任姓名", SchoolInfoEnt.EduDirectorName, txtEduDirectorName.Text));
+                SchoolInfoEnt.EduDirectorName = txtEduDirectorName.Text;
+            }
+
+            if (SchoolInfoEnt.EduDirectorCellPhone != txtEduDirectorCellPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "教務主任手機", SchoolInfoEnt.EduDirectorCellPhone, txtEduDirectorCellPhone.Text));
+                SchoolInfoEnt.EduDirectorCellPhone = txtEduDirectorCellPhone.Text;
+            }
+
+            if (SchoolInfoEnt.EduDirectorEmail != txtEduDirectorEmail.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "教務主任電子信箱", SchoolInfoEnt.EduDirectorEmail, txtEduDirectorEmail.Text));
+                SchoolInfoEnt.EduDirectorEmail = txtEduDirectorEmail.Text;
+            }
+
+            if (SchoolInfoEnt.StuDirectorName != txtStuDirectorName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學務主任姓名", SchoolInfoEnt.StuDirectorName, txtStuDirectorName.Text));
+                SchoolInfoEnt.StuDirectorName = txtStuDirectorName.Text;
+            }
+
+            if (SchoolInfoEnt.StuDirectorCellPhone != txtStuDirectorCellPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學務主任手機", SchoolInfoEnt.StuDirectorCellPhone, txtStuDirectorCellPhone.Text));
+                SchoolInfoEnt.StuDirectorCellPhone = txtStuDirectorCellPhone.Text;
+            }
+
+            if (SchoolInfoEnt.StuDirectorEmail != txtStuDirectorEmail.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "學務主任電子信箱", SchoolInfoEnt.StuDirectorEmail, txtStuDirectorEmail.Text));
+                SchoolInfoEnt.StuDirectorEmail = txtStuDirectorEmail.Text;
+            }
+
+            if (SchoolInfoEnt.AssociatedWithName != txtAssociatedWithName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "聯絡人姓名", SchoolInfoEnt.AssociatedWithName, txtAssociatedWithName.Text));
+                SchoolInfoEnt.AssociatedWithName = txtAssociatedWithName.Text;
+            }
+
+            if (SchoolInfoEnt.AssociatedWithCellPhone != txtAssociatedWithCellPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "聯絡人手機", SchoolInfoEnt.AssociatedWithCellPhone, txtAssociatedWithCellPhone.Text));
+                SchoolInfoEnt.AssociatedWithCellPhone = txtAssociatedWithCellPhone.Text;
+            }
+
+            if (SchoolInfoEnt.AssociatedWithEmail != txtAssociatedWithEmail.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "聯絡人電子信箱", SchoolInfoEnt.AssociatedWithEmail, txtAssociatedWithEmail.Text));
+                SchoolInfoEnt.AssociatedWithEmail = txtAssociatedWithEmail.Text;
+            }
+
+            if (SchoolInfoEnt.OtherTitle != txtOtherTitle.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "其他職稱", SchoolInfoEnt.OtherTitle, txtOtherTitle.Text));
+                SchoolInfoEnt.OtherTitle = txtOtherTitle.Text;
+            }
+
+            if (SchoolInfoEnt.OtherName != txtOtherName.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "其他姓名", SchoolInfoEnt.OtherName, txtOtherName.Text));
+                SchoolInfoEnt.OtherName = txtOtherName.Text;
+            }
+
+            if (SchoolInfoEnt.OtherCellPhone != txtOtherCellPhone.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "其他手機", SchoolInfoEnt.OtherCellPhone, txtOtherCellPhone.Text));
+                SchoolInfoEnt.OtherCellPhone = txtOtherCellPhone.Text;
+            }
+
+            if (SchoolInfoEnt.OtherEmail != txtOtherEmail.Text)
+            {
+                sb_log.AppendLine(string.Format("「{0}」已由「{1}」修改為「{2}」", "其他電子信箱", SchoolInfoEnt.OtherEmail, txtOtherEmail.Text));
+                SchoolInfoEnt.OtherEmail = txtOtherEmail.Text;
+            }
 
 
             setSchoolInfoData(SchoolInfoEnt);
             MessageBox.Show("資料儲存完成");
-            PermRecLogProcess prlp = new PermRecLogProcess();
-            prlp.SaveLog("核心", "修改", "修改學校基本資料.");
+
+
+            FISCA.LogAgent.ApplicationLog.Log("管理學校基本資料", "修改", sb_log.ToString());
+
             this.Close();
         }
 

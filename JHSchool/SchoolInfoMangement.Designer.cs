@@ -1064,9 +1064,9 @@
             this.labelX1.ForeColor = System.Drawing.Color.Red;
             this.labelX1.Location = new System.Drawing.Point(32, 496);
             this.labelX1.Name = "labelX1";
-            this.labelX1.Size = new System.Drawing.Size(300, 21);
+            this.labelX1.Size = new System.Drawing.Size(280, 20);
             this.labelX1.TabIndex = 26;
-            this.labelX1.Text = "(當校務軟體有重大通知時,會優先通知資訊連繫人)";
+            this.labelX1.Text = "(當校務軟體有重大通知時,會優先通知 系統管理師)";
             // 
             // txtOtherTitle
             // 
@@ -1113,7 +1113,7 @@
             this.Controls.Add(this.lbSchoolYear);
             this.Controls.Add(this.lbHelp1);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Microsoft JhengHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Name = "SchoolInfoMangement";
             this.Text = "管理學校基本資料";
             this.Load += new System.EventHandler(this.SchoolInfoMangement_Load);
