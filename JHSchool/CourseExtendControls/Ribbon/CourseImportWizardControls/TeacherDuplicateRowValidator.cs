@@ -103,16 +103,13 @@ namespace JHSchool.CourseExtendControls.Ribbon.CourseImportWizardControls
 
         private static bool IsValid(List<string> fields, IRowSource rowSource)
         {
-            Dictionary<string, string> dup = new Dictionary<string, string>();
-            foreach (string each in fields)
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var field in fields)
             {
-                var value = rowSource.GetFieldData(each)?.Trim() ?? "";
-                if (dup.ContainsKey(value))
-                    return false;
-
-                dup.Add(value, each);
+                var value = (rowSource.GetFieldData(field) ?? "").Trim();
+                if (value == "") continue;          // allow empty
+                if (!seen.Add(value)) return false; // duplicate non-empty value
             }
-
             return true;
         }
 
@@ -127,27 +124,30 @@ namespace JHSchool.CourseExtendControls.Ribbon.CourseImportWizardControls
 
         private static bool IsValid(List<string> fields, Record record, IRowSource rowSource)
         {
-            Dictionary<string, string> teachers = new Dictionary<string, string>();
-            teachers.Add("授課教師一", string.Empty);
-            teachers.Add("授課教師二", string.Empty);
-            teachers.Add("授課教師三", string.Empty);
+            var seen = new HashSet<string>(StringComparer.Ordinal);
 
-            foreach (string each in new string[] { "授課教師一", "授課教師二", "授課教師三" })
-                teachers[each] = record[_field_map[each]];
-
-            foreach (string each in fields)
-                teachers[each] = rowSource.GetFieldData(each);
-
-            Dictionary<string, string> dup = new Dictionary<string, string>();
-            foreach (string each in teachers.Values)
+            // Start with DB snapshot
+            var teachers = new[]
             {
-                if (dup.ContainsKey(each))
-                    return false;
+                (record[_field_map["授課教師一"]] ?? "").Trim(),
+                (record[_field_map["授課教師二"]] ?? "").Trim(),
+                (record[_field_map["授課教師三"]] ?? "").Trim()
+            };
 
-                if (!string.IsNullOrEmpty(each))
-                    dup.Add(each, each);
+            // Overlay incoming row values
+            foreach (var field in fields)
+            {
+                var value = (rowSource.GetFieldData(field) ?? "").Trim();
+                if (field == "授課教師一") teachers[0] = value;
+                if (field == "授課教師二") teachers[1] = value;
+                if (field == "授課教師三") teachers[2] = value;
             }
 
+            foreach (var name in teachers)
+            {
+                if (name == "") continue;       // allow empty
+                if (!seen.Add(name)) return false;
+            }
             return true;
         }
         #endregion
