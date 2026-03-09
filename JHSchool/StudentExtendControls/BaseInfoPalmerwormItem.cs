@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -18,7 +18,7 @@ using System.Net.Http;
 namespace JHSchool.StudentExtendControls
     
 {
-    [FCode("JHSchool.Student.Detail0000", "°ò¥»¸ê®Æ")]
+    [FCode("JHSchool.Student.Detail0000", "åŸºæœ¬è³‡æ–™")]
     internal partial class BaseInfoPalmerwormItem : FISCA.Presentation.DetailContent
     {
         private bool _isInitialized = false;
@@ -32,10 +32,10 @@ namespace JHSchool.StudentExtendControls
         private bool load_completed = false;
         private string cboNationality_ori = "";
 
-        // ¤J¾Ç·Ó¤ù
+        // å…¥å­¸ç…§ç‰‡
         private string _FreshmanPhotoStr = string.Empty;
 
-        // ²¦·~·Ó¤ù
+        // ç•¢æ¥­ç…§ç‰‡
         private string _GraduatePhotoStr = string.Empty;
 
         private ChangeListener _DataListener { get; set; }
@@ -44,7 +44,7 @@ namespace JHSchool.StudentExtendControls
         public BaseInfoPalmerwormItem()
         {
             InitializeComponent();
-            Group = "°ò¥»¸ê®Æ";
+            Group = "åŸºæœ¬è³‡æ–™";
             _DataListener = new ChangeListener();
             _DataListener.Add(new TextBoxSource(txtName));
             _DataListener.Add(new TextBoxSource(txtSSN));
@@ -122,18 +122,18 @@ namespace JHSchool.StudentExtendControls
 
             SetFormDataToDALRec();
 
-            // ÀË¬d¥Í¤é
+            // æª¢æŸ¥ç”Ÿæ—¥
 
             
-            // ÀË¬d©Ê§O
+            // æª¢æŸ¥æ€§åˆ¥
             List<string> checkGender = new List<string>();
-            checkGender.Add("¨k");
+            checkGender.Add("ç”·");
             checkGender.Add("");
-            checkGender.Add("¤k");
+            checkGender.Add("å¥³");
 
             if (!checkGender.Contains(cboGender.Text))
             {
-                _errors.SetError(cboGender, "©Ê§O¿ù»~¡A½Ğ½T»{¸ê®Æ¡C");
+                _errors.SetError(cboGender, "æ€§åˆ¥éŒ¯èª¤ï¼Œè«‹ç¢ºèªè³‡æ–™ã€‚");
                 return;            
             }
 
@@ -143,7 +143,7 @@ namespace JHSchool.StudentExtendControls
             {
                 if (!DateTime.TryParse(txtBirthDate.Text, out dt))
                 {
-                    _errors.SetError(txtBirthDate, "¤é´Á¿ù»~¡A½Ğ½T»{¸ê®Æ¡C");
+                    _errors.SetError(txtBirthDate, "æ—¥æœŸéŒ¯èª¤ï¼Œè«‹ç¢ºèªè³‡æ–™ã€‚");
                     return;
                 }
             }
@@ -166,7 +166,7 @@ namespace JHSchool.StudentExtendControls
                 {
                     if (_defaultLoginID != _StudRec.SALoginName)
                     {
-                        _errors.SetError(txtLoginID, "¾Ç¥Íµn¤J±b¸¹­«ÂĞ¡A½Ğ½T»{¸ê®Æ¡C");
+                        _errors.SetError(txtLoginID, "å­¸ç”Ÿç™»å…¥å¸³è™Ÿé‡è¦†ï¼Œè«‹ç¢ºèªè³‡æ–™ã€‚");
                         return;
                     }
                 }
@@ -175,7 +175,7 @@ namespace JHSchool.StudentExtendControls
                 {
                     if (_defaultIDNumber != _StudRec.IDNumber)
                     {
-                        _errors.SetError(txtSSN, "¨­¤ÀÃÒ¸¹­«ÂĞ¡A½Ğ½T»{¸ê®Æ¡C");
+                        _errors.SetError(txtSSN, "èº«åˆ†è­‰è™Ÿé‡è¦†ï¼Œè«‹ç¢ºèªè³‡æ–™ã€‚");
                         return;
                     }
                 }
@@ -200,7 +200,7 @@ namespace JHSchool.StudentExtendControls
             string newValue = "";
             foreach (KeyValuePair<string, string> each in prlp.GetBeforeSaveText())
             {
-                if (each.Key == "µn¤J±b¸¹") //µn¤J±b¸¹
+                if (each.Key == "ç™»å…¥å¸³è™Ÿ") //ç™»å…¥å¸³è™Ÿ
                 {
                     oldValue = each.Value;
                 }
@@ -208,7 +208,7 @@ namespace JHSchool.StudentExtendControls
 
             foreach (KeyValuePair<string, string> each in prlp.GetAfterSaveText())
             {
-                if (each.Key == "µn¤J±b¸¹") //µn¤J±b¸¹
+                if (each.Key == "ç™»å…¥å¸³è™Ÿ") //ç™»å…¥å¸³è™Ÿ
                 {
                     newValue = each.Value;                  
                 }
@@ -228,13 +228,13 @@ namespace JHSchool.StudentExtendControls
                 HttpClient client = new HttpClient();
                 HttpResponseMessage rsp = await client.GetAsync(url);
                 if (rsp.IsSuccessStatusCode)
-                    Console.WriteLine("Greening±b¸¹¦P¨B¦¨¥\¡C");
+                    Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥æˆåŠŸã€‚");
                 else
-                    Console.WriteLine("Greening±b¸¹¦P¨B¥¢±Ñ¡C");
+                    Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥å¤±æ•—ã€‚");
             }
             catch
             {
-                Console.WriteLine("Greening±b¸¹¦P¨B¥¢±Ñ¡C");
+                Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥å¤±æ•—ã€‚");
             }
         }
 
@@ -292,7 +292,7 @@ namespace JHSchool.StudentExtendControls
                 _BGWorker.RunWorkerAsync();
         }
 
-        //±Nµe­±²MªÅ
+        //å°‡ç•«é¢æ¸…ç©º
         private void ClearFormValue()
         {
             txtEmail.Text=txtBirthDate.Text = txtBirthPlace.Text = txtEngName.Text = txtLoginID.Text = txtName.Text = txtSSN.Text = cboAccountType.Text = cboGender.Text = cboNationality.Text = string.Empty;           
@@ -300,7 +300,7 @@ namespace JHSchool.StudentExtendControls
         
         private void BindDataToForm()
         {
-            // ¥D­n¥[·í¾Ç¥Í³Q§R°£®ÉÀË¬d
+            // ä¸»è¦åŠ ç•¶å­¸ç”Ÿè¢«åˆªé™¤æ™‚æª¢æŸ¥
             if (_StudRec != null)
             {
                 _DataListener.SuspendListen();
@@ -321,47 +321,47 @@ namespace JHSchool.StudentExtendControls
 
         private void SetBeforeEditLog()
         {
-            prlp.SetBeforeSaveText("©m¦W", txtName.Text);
-            prlp.SetBeforeSaveText("¨­¤ÀÃÒ¸¹", txtSSN.Text);
-            prlp.SetBeforeSaveText("¥Í¤é", txtBirthDate.Text);
-            prlp.SetBeforeSaveText("©Ê§O", cboGender.Text);
-            prlp.SetBeforeSaveText("°êÄy", cboNationality.Text);
-            prlp.SetBeforeSaveText("¥X¥Í¦a", txtBirthPlace.Text);
-            prlp.SetBeforeSaveText("­^¤å©m¦W", txtEngName.Text);
-            prlp.SetBeforeSaveText("µn¤J±b¸¹", txtLoginID.Text);
-            prlp.SetBeforeSaveText("±b¸¹Ãş«¬", cboAccountType.Text);
-            prlp.SetBeforeSaveText("¹q¤l«H½c", txtEmail.Text);
+            prlp.SetBeforeSaveText("å§“å", txtName.Text);
+            prlp.SetBeforeSaveText("èº«åˆ†è­‰è™Ÿ", txtSSN.Text);
+            prlp.SetBeforeSaveText("ç”Ÿæ—¥", txtBirthDate.Text);
+            prlp.SetBeforeSaveText("æ€§åˆ¥", cboGender.Text);
+            prlp.SetBeforeSaveText("åœ‹ç±", cboNationality.Text);
+            prlp.SetBeforeSaveText("å‡ºç”Ÿåœ°", txtBirthPlace.Text);
+            prlp.SetBeforeSaveText("è‹±æ–‡å§“å", txtEngName.Text);
+            prlp.SetBeforeSaveText("ç™»å…¥å¸³è™Ÿ", txtLoginID.Text);
+            prlp.SetBeforeSaveText("å¸³è™Ÿé¡å‹", cboAccountType.Text);
+            prlp.SetBeforeSaveText("é›»å­ä¿¡ç®±", txtEmail.Text);
         }
 
         private void SetAfterEditLog()
         {
-            prlp.SetAfterSaveText("©m¦W", txtName.Text.Trim());
-            prlp.SetAfterSaveText("¨­¤ÀÃÒ¸¹", txtSSN.Text.Trim());
-            prlp.SetAfterSaveText("¥Í¤é", txtBirthDate.Text);
-            prlp.SetAfterSaveText("©Ê§O", cboGender.Text);
-            prlp.SetAfterSaveText("°êÄy", cboNationality.Text);
-            prlp.SetAfterSaveText("¥X¥Í¦a", txtBirthPlace.Text);
-            prlp.SetAfterSaveText("­^¤å©m¦W", txtEngName.Text);
-            prlp.SetAfterSaveText("µn¤J±b¸¹", txtLoginID.Text.Trim());
-            prlp.SetAfterSaveText("±b¸¹Ãş«¬", cboAccountType.Text);
-            prlp.SetAfterSaveText("¹q¤l«H½c", txtEmail.Text.Trim());
-            prlp.SetActionBy("¾ÇÄy", "¾Ç¥Í°ò¥»¸ê®Æ");
-            prlp.SetAction("­×§ï¾Ç¥Í°ò¥»¸ê®Æ");
-            prlp.SetDescTitle("©m¦W:"+_StudRec.Name+",¾Ç¸¹:"+_StudRec.StudentNumber +",");
+            prlp.SetAfterSaveText("å§“å", txtName.Text.Trim());
+            prlp.SetAfterSaveText("èº«åˆ†è­‰è™Ÿ", txtSSN.Text.Trim());
+            prlp.SetAfterSaveText("ç”Ÿæ—¥", txtBirthDate.Text);
+            prlp.SetAfterSaveText("æ€§åˆ¥", cboGender.Text);
+            prlp.SetAfterSaveText("åœ‹ç±", cboNationality.Text);
+            prlp.SetAfterSaveText("å‡ºç”Ÿåœ°", txtBirthPlace.Text);
+            prlp.SetAfterSaveText("è‹±æ–‡å§“å", txtEngName.Text);
+            prlp.SetAfterSaveText("ç™»å…¥å¸³è™Ÿ", txtLoginID.Text.Trim());
+            prlp.SetAfterSaveText("å¸³è™Ÿé¡å‹", cboAccountType.Text);
+            prlp.SetAfterSaveText("é›»å­ä¿¡ç®±", txtEmail.Text.Trim());
+            prlp.SetActionBy("å­¸ç±", "å­¸ç”ŸåŸºæœ¬è³‡æ–™");
+            prlp.SetAction("ä¿®æ”¹å­¸ç”ŸåŸºæœ¬è³‡æ–™");
+            prlp.SetDescTitle("å§“å:"+_StudRec.Name+",å­¸è™Ÿ:"+_StudRec.StudentNumber +",");
            // prlp.SaveLog("", "", "Student", PrimaryKey);    
         }
 
         private void SaveLog()
         {
-            //prlp.SetActionBy("¾ÇÄy", "¾Ç¥Í°ò¥»¸ê®Æ");
-            //prlp.SetAction("­×§ï¾Ç¥Í°ò¥»¸ê®Æ");
-            //prlp.SetDescTitle("©m¦W:" + _StudRec.Name + ",¾Ç¸¹:" + _StudRec.StudentNumber + ",");
+            //prlp.SetActionBy("å­¸ç±", "å­¸ç”ŸåŸºæœ¬è³‡æ–™");
+            //prlp.SetAction("ä¿®æ”¹å­¸ç”ŸåŸºæœ¬è³‡æ–™");
+            //prlp.SetDescTitle("å§“å:" + _StudRec.Name + ",å­¸è™Ÿ:" + _StudRec.StudentNumber + ",");
             prlp.SaveLog("", "", "Student", PrimaryKey);
         }
 
         private void LoadDALDataToForm()
         {
-            //2017/4/19 ¿o÷~·s¼W  ©|¥¼¸ü¤J§¹²¦¡AÁ×§KÄ²µocboNationality_TextChanged()
+            //2017/4/19 ç©é©Šæ–°å¢  å°šæœªè¼‰å…¥å®Œç•¢ï¼Œé¿å…è§¸ç™¼cboNationality_TextChanged()
             load_completed = false;
 
             if(_StudRec.Birthday.HasValue )
@@ -376,9 +376,9 @@ namespace JHSchool.StudentExtendControls
             cboGender.Text = _StudRec.Gender;
             cboNationality.Text = _StudRec.Nationality;
             txtEmail.Text = _StudRec.EMail;
-            //2017/4/19 ¿o÷~·s¼W °O¿ı­ì­ì°êÄy¡A§@¬°»P·s¿é¤J¤ñ¸û¨Ï¥Î
+            //2017/4/19 ç©é©Šæ–°å¢ è¨˜éŒ„åŸåŸåœ‹ç±ï¼Œä½œç‚ºèˆ‡æ–°è¼¸å…¥æ¯”è¼ƒä½¿ç”¨
             cboNationality_ori = _StudRec.Nationality;
-            // ¸ÑªR
+            // è§£æ
             try
             {
                              
@@ -409,13 +409,26 @@ namespace JHSchool.StudentExtendControls
         private void Initialize()
         {
             if (_isInitialized) return;
-            //¸ü¤J°ê®a¦Cªí
+            //è¼‰å…¥åœ‹å®¶åˆ—è¡¨
             try
             {
-                List<string> dataList = new List<string>();
-                foreach (string item in Utility.GetNationalityMappingDict().Keys)
-                    dataList.Add(item);
-                cboNationality.Items.AddRange(dataList.ToArray());
+                BackgroundWorker bkw = new BackgroundWorker();
+                bkw.DoWork += delegate(object sender, DoWorkEventArgs e)
+                {
+                    List<string> dataList = new List<string>();
+                    foreach (string item in Utility.GetNationalityMappingDict().Keys)
+                        dataList.Add(item);
+                    e.Result = dataList;
+                };
+                bkw.RunWorkerCompleted += delegate(object sender, RunWorkerCompletedEventArgs e)
+                {
+                    if (e.Error == null && e.Result != null)
+                    {
+                        List<string> dataList = (List<string>)e.Result;
+                        cboNationality.Items.AddRange(dataList.ToArray());
+                    }
+                };
+                bkw.RunWorkerAsync();
             }
             catch (Exception ex)
             {
@@ -426,40 +439,40 @@ namespace JHSchool.StudentExtendControls
             
 
 
-            //this.cboNationality.Items.Add("¤¤µØ¥Á°ê");
-            //this.cboNationality.Items.Add("¤¤µØ¤H¥Á¦@¦X°ê");
-            //this.cboNationality.Items.Add("©s¥[©Ô");
-            //this.cboNationality.Items.Add("½q¨l");
-            //this.cboNationality.Items.Add("¦L¥§");
-            //this.cboNationality.Items.Add("¤é¥»");
-            //this.cboNationality.Items.Add("Áú°ê");
-            //this.cboNationality.Items.Add("°¨¨Ó¦è¨È");
-            //this.cboNationality.Items.Add("µá«ß»«");
-            //this.cboNationality.Items.Add("·s¥[©Y");
-            //this.cboNationality.Items.Add("®õ°ê");
-            //this.cboNationality.Items.Add("¶V«n");
-            //this.cboNationality.Items.Add("¨ZµÜ");
-            //this.cboNationality.Items.Add("¿D¤j§Q¨È");
-            //this.cboNationality.Items.Add("¯Ã¦èÄõ");
-            //this.cboNationality.Items.Add("®J¤Î");
-            //this.cboNationality.Items.Add("«n«D");
-            //this.cboNationality.Items.Add("ªk°ê");
-            //this.cboNationality.Items.Add("¸q¤j§Q");
-            //this.cboNationality.Items.Add("·ç¨å");
-            //this.cboNationality.Items.Add("­^°ê");
-            //this.cboNationality.Items.Add("¼w°ê");
-            //this.cboNationality.Items.Add("¥[®³¤j");
-            //this.cboNationality.Items.Add("­ô´µ¤j¾¤¥[");
-            //this.cboNationality.Items.Add("¥Ê¦a°¨©Ô");
-            //this.cboNationality.Items.Add("¬ü°ê");
-            //this.cboNationality.Items.Add("ªü®Ú§Ê");
-            //this.cboNationality.Items.Add("¤Ú¦è");
-            //this.cboNationality.Items.Add("­ô­Û¤ñ¨È");
-            //this.cboNationality.Items.Add("¤Ú©Ô¦c");
-            //this.cboNationality.Items.Add("¯Q©Ô¦c");
-            //this.cboNationality.Items.Add("¨ä¥L");
+            //this.cboNationality.Items.Add("ä¸­è¯æ°‘åœ‹");
+            //this.cboNationality.Items.Add("ä¸­è¯äººæ°‘å…±åˆåœ‹");
+            //this.cboNationality.Items.Add("å­ŸåŠ æ‹‰");
+            //this.cboNationality.Items.Add("ç·¬ç”¸");
+            //this.cboNationality.Items.Add("å°å°¼");
+            //this.cboNationality.Items.Add("æ—¥æœ¬");
+            //this.cboNationality.Items.Add("éŸ“åœ‹");
+            //this.cboNationality.Items.Add("é¦¬ä¾†è¥¿äº");
+            //this.cboNationality.Items.Add("è²å¾‹è³“");
+            //this.cboNationality.Items.Add("æ–°åŠ å¡");
+            //this.cboNationality.Items.Add("æ³°åœ‹");
+            //this.cboNationality.Items.Add("è¶Šå—");
+            //this.cboNationality.Items.Add("æ±¶èŠ");
+            //this.cboNationality.Items.Add("æ¾³å¤§åˆ©äº");
+            //this.cboNationality.Items.Add("ç´è¥¿è˜­");
+            //this.cboNationality.Items.Add("åŸƒåŠ");
+            //this.cboNationality.Items.Add("å—é");
+            //this.cboNationality.Items.Add("æ³•åœ‹");
+            //this.cboNationality.Items.Add("ç¾©å¤§åˆ©");
+            //this.cboNationality.Items.Add("ç‘å…¸");
+            //this.cboNationality.Items.Add("è‹±åœ‹");
+            //this.cboNationality.Items.Add("å¾·åœ‹");
+            //this.cboNationality.Items.Add("åŠ æ‹¿å¤§");
+            //this.cboNationality.Items.Add("å“¥æ–¯å¤§é»åŠ ");
+            //this.cboNationality.Items.Add("ç“œåœ°é¦¬æ‹‰");
+            //this.cboNationality.Items.Add("ç¾åœ‹");
+            //this.cboNationality.Items.Add("é˜¿æ ¹å»·");
+            //this.cboNationality.Items.Add("å·´è¥¿");
+            //this.cboNationality.Items.Add("å“¥å€«æ¯”äº");
+            //this.cboNationality.Items.Add("å·´æ‹‰åœ­");
+            //this.cboNationality.Items.Add("çƒæ‹‰åœ­");
+            //this.cboNationality.Items.Add("å…¶ä»–");
 
-            cboGender.Items.AddRange(new string[] { "¨k", "¤k" });
+            cboGender.Items.AddRange(new string[] { "ç”·", "å¥³" });
           
 
 
@@ -471,7 +484,7 @@ namespace JHSchool.StudentExtendControls
         private void buttonItem1_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
-            od.Filter = "©Ò¦³¼v¹³(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
+            od.Filter = "æ‰€æœ‰å½±åƒ(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
             if (od.ShowDialog() == DialogResult.OK)
             {
                 FileStream fs = null;
@@ -497,7 +510,7 @@ namespace JHSchool.StudentExtendControls
         private void buttonItem3_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
-            od.Filter = "©Ò¦³¼v¹³(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
+            od.Filter = "æ‰€æœ‰å½±åƒ(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
             if (od.ShowDialog() == DialogResult.OK)
             {
                 FileStream fs = null;
@@ -533,13 +546,13 @@ namespace JHSchool.StudentExtendControls
             return Convert.ToBase64String(bytes);
         }
 
-        //¥t¦s·Ó¤ù
+        //å¦å­˜ç…§ç‰‡
         private void buttonItem2_Click(object sender, EventArgs e)
         {
             SavePicture(_FreshmanPhotoStr);
         }
 
-        //¥t¦s·Ó¤ù
+        //å¦å­˜ç…§ç‰‡
         private void buttonItem4_Click(object sender, EventArgs e)
         {
             SavePicture(_GraduatePhotoStr);
@@ -551,7 +564,7 @@ namespace JHSchool.StudentExtendControls
                 return;
 
             SaveFileDialog sd = new SaveFileDialog();
-            sd.Filter = "PNG ¼v¹³|*.png;";
+            sd.Filter = "PNG å½±åƒ|*.png;";
             sd.FileName = txtSSN.Text + ".png";
 
             if (sd.ShowDialog() == DialogResult.OK)
@@ -576,7 +589,7 @@ namespace JHSchool.StudentExtendControls
             _errors.SetError(txtBirthDate, string.Empty);
 
             if (!txtBirthDate.IsValid)
-                _errors.SetError(txtBirthDate, "½Ğ¿é¤J yyyy/mm/dd ²Å¦X¤é´Á®æ¦¡¤å¦r");
+                _errors.SetError(txtBirthDate, "è«‹è¼¸å…¥ yyyy/mm/dd ç¬¦åˆæ—¥æœŸæ ¼å¼æ–‡å­—");
         }
 
         private void txtSSN_Validating(object sender, CancelEventArgs e)
@@ -589,7 +602,7 @@ namespace JHSchool.StudentExtendControls
             ValidateLoginID();
         }
 
-        // ÀË¬d
+        // æª¢æŸ¥
         private void ValidateIDNumber()
         {
             _errors.SetError(txtSSN, string.Empty);
@@ -601,7 +614,7 @@ namespace JHSchool.StudentExtendControls
             }
 
             if (QueryStudent.IDNumberExists(PrimaryKey, txtSSN.Text.Trim()))
-                _errors.SetError(txtSSN, "¨­¤ÀÃÒ¸¹­«ÂĞ¡A½Ğ½T»{¸ê®Æ¡C");           
+                _errors.SetError(txtSSN, "èº«åˆ†è­‰è™Ÿé‡è¦†ï¼Œè«‹ç¢ºèªè³‡æ–™ã€‚");           
                 
         }
 
@@ -616,14 +629,14 @@ namespace JHSchool.StudentExtendControls
             }
 
             if (QueryStudent.LoginIDExists(txtLoginID.Text.Trim(), PrimaryKey))
-                _errors.SetError(txtLoginID, "±b¸¹­«ÂĞ¡A½Ğ­«·s¿ï¾Ü¡C");
+                _errors.SetError(txtLoginID, "å¸³è™Ÿé‡è¦†ï¼Œè«‹é‡æ–°é¸æ“‡ã€‚");
         }
 
-        #region ²M°£·Ó¤ù
-        //²M°£·s¥Í·Ó¤ù
+        #region æ¸…é™¤ç…§ç‰‡
+        //æ¸…é™¤æ–°ç”Ÿç…§ç‰‡
         private void buttonItem5_Click(object sender, EventArgs e)
         {
-            if (FISCA.Presentation.Controls.MsgBox.Show("±z½T©w­n²M°£¦¹¾Ç¥Íªº·Ó¤ù¶Ü¡H", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
+            if (FISCA.Presentation.Controls.MsgBox.Show("æ‚¨ç¢ºå®šè¦æ¸…é™¤æ­¤å­¸ç”Ÿçš„ç…§ç‰‡å—ï¼Ÿ", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
 
             try
             {
@@ -637,10 +650,10 @@ namespace JHSchool.StudentExtendControls
             }
         }
 
-        //²M°£²¦·~·Ó¤ù
+        //æ¸…é™¤ç•¢æ¥­ç…§ç‰‡
         private void buttonItem6_Click(object sender, EventArgs e)
         {
-            if (FISCA.Presentation.Controls.MsgBox.Show("±z½T©w­n²M°£¦¹¾Ç¥Íªº·Ó¤ù¶Ü¡H", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
+            if (FISCA.Presentation.Controls.MsgBox.Show("æ‚¨ç¢ºå®šè¦æ¸…é™¤æ­¤å­¸ç”Ÿçš„ç…§ç‰‡å—ï¼Ÿ", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
 
             try
             {
@@ -685,12 +698,12 @@ namespace JHSchool.StudentExtendControls
             //if (!nation_name_list.Contains(cboNationality.Text) && cboNationality.Text!="")
             //{
             //    errorProvider1.Icon = SystemIcons.Warning;
-            //    errorProvider1.SetError(cboNationality, "¦¹°êÄy¦WºÙ¡A¤£¦s¦b©ó±Ğ°È§@·~>¹ï·Ó/¥N½X>°êÄy¤¤­^¤å¹ï·Óªí ªº³]©w¤¤¡A«ØÄ³ÀË¹î¡C");                        
+            //    errorProvider1.SetError(cboNationality, "æ­¤åœ‹ç±åç¨±ï¼Œä¸å­˜åœ¨æ–¼æ•™å‹™ä½œæ¥­>å°ç…§/ä»£ç¢¼>åœ‹ç±ä¸­è‹±æ–‡å°ç…§è¡¨ çš„è¨­å®šä¸­ï¼Œå»ºè­°æª¢å¯Ÿã€‚");                        
             //}
 
         }
 
-        //2017/4/19 ¿o÷~·s¼W ºÊÅ¥ °êÄyÄæ¦ì ¤º®e§ïÅÜ¨Æ¥ó
+        //2017/4/19 ç©é©Šæ–°å¢ ç›£è½ åœ‹ç±æ¬„ä½ å…§å®¹æ”¹è®Šäº‹ä»¶
         private void cboNationality_TextChanged(object sender, EventArgs e)
         {           
             errorProvider1.SetError(cboNationality, string.Empty);
@@ -711,7 +724,7 @@ namespace JHSchool.StudentExtendControls
                     
                     //errorProvider1.Icon = new Icon(SystemIcons.Warning, 8 ,8);
 
-                    errorProvider1.SetError(cboNationality, "¦¹°êÄy¦WºÙ¡A¤£¦s¦b©ó±Ğ°È§@·~>¹ï·Ó/¥N½X>°êÄy¤¤­^¤å¹ï·Óªí ªº³]©w¤¤¡A«ØÄ³ÀË¹î¡C");
+                    errorProvider1.SetError(cboNationality, "æ­¤åœ‹ç±åç¨±ï¼Œä¸å­˜åœ¨æ–¼æ•™å‹™ä½œæ¥­>å°ç…§/ä»£ç¢¼>åœ‹ç±ä¸­è‹±æ–‡å°ç…§è¡¨ çš„è¨­å®šä¸­ï¼Œå»ºè­°æª¢å¯Ÿã€‚");
                 }                        
             }            
         }

@@ -12,10 +12,21 @@ namespace JHSchool.StudentExtendControls
 {
     public partial class GradeYear_Class_View : NavView
     {
+        // 防止初始載入時多次重建樹狀結構的防抖計時器
+        private System.Windows.Forms.Timer _debounceTimer;
+
         public GradeYear_Class_View()
         {
             InitializeComponent();
             NavText = "班級檢視";
+
+            _debounceTimer = new System.Windows.Forms.Timer();
+            _debounceTimer.Interval = 300; // 300ms 防抖
+            _debounceTimer.Tick += (s, ev) =>
+            {
+                _debounceTimer.Stop();
+                Layout(mPrimaryKeys);
+            };
 
             Class.Instance.ItemUpdated += new EventHandler<ItemUpdatedEventArgs>(Instance_ItemUpdated);
             SourceChanged += new EventHandler(GradeYear_Class_View_SourceChanged);
@@ -28,7 +39,9 @@ namespace JHSchool.StudentExtendControls
 
         void Instance_ItemUpdated(object sender, ItemUpdatedEventArgs e)
         {
-            Layout(mPrimaryKeys);
+            // 使用防抖，合併快速連續的更新事件
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
         }
 
         #region NavView 成員

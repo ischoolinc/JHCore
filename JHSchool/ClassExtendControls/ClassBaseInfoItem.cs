@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -10,10 +10,10 @@ using FCode = Framework.Security.FeatureCodeAttribute;
 
 namespace JHSchool.ClassExtendControls
 {
-    [FCode("JHSchool.Class.Detail0010", "¯Z¯Å°ò¥»¸ê®Æ")]
+    [FCode("JHSchool.Class.Detail0010", "ç­ç´šåŸºæœ¬è³‡æ–™")]
     internal partial class ClassBaseInfoItem : FISCA.Presentation.DetailContent
     {
-        //¦~¯Å²M³æ
+        //å¹´ç´šæ¸…å–®
         List<string> _gradeYearList = new List<string>();
         //?
         private ErrorProvider epTeacher = new ErrorProvider();
@@ -32,11 +32,11 @@ namespace JHSchool.ClassExtendControls
         //?
         private string _NamingRule = "";
 
-        //«Øºc¤l
+        //å»ºæ§‹å­
         public ClassBaseInfoItem()
         {
             InitializeComponent();
-            Group = "¯Z¯Å°ò¥»¸ê®Æ";
+            Group = "ç­ç´šåŸºæœ¬è³‡æ–™";
             _DataListener = new ChangeListener();
             _DataListener.Add(new TextBoxSource(txtClassName));
             _DataListener.Add(new TextBoxSource(txtSortOrder));
@@ -84,21 +84,21 @@ namespace JHSchool.ClassExtendControls
         {
             if (!IsValid())
             {
-                FISCA.Presentation.Controls.MsgBox.Show("¿é¤J¸ê®Æ¥¼³q¹LÅçÃÒ¡A½Ğ­×¥¿«á¦A¦æÀx¦s");
+                FISCA.Presentation.Controls.MsgBox.Show("è¼¸å…¥è³‡æ–™æœªé€šéé©—è­‰ï¼Œè«‹ä¿®æ­£å¾Œå†è¡Œå„²å­˜");
                 return;
             }
 
             
             _ClassRecord.NamingRule = _NamingRule;
             _ClassRecord.ClassNumber = txtClassNumber.Text;
-            // ¦~¯Å
+            // å¹´ç´š
             int GrYear;
             if (int.TryParse(cboGradeYear.Text, out GrYear))
                 _ClassRecord.GradeYear = GrYear;
             else
                 _ClassRecord.GradeYear = null;
             
-            // ¯Z¦WÂà«¬
+            // ç­åè½‰å‹
             if (ValidateNamingRule(_NamingRule))
                 _ClassRecord.Name = ParseClassName(_NamingRule, GrYear);
             else
@@ -110,7 +110,7 @@ namespace JHSchool.ClassExtendControls
             }
 
             _ClassRecord.RefTeacherID = "";
-            // ±Ğ®v
+            // æ•™å¸«
             foreach (KeyValuePair<string, string> val in _TeacherNameDic)
                 if (val.Value == cboTeacher.Text)
                     _ClassRecord.RefTeacherID = val.Key;
@@ -119,15 +119,15 @@ namespace JHSchool.ClassExtendControls
             SaveButtonVisible = false;
             CancelButtonVisible = false;
             // Log
-            prlp.SetAfterSaveText("¯Z¯Å¦WºÙ", txtClassName.Text);
-            prlp.SetAfterSaveText("¯Z¯Å©R¦W³W«h", _ClassRecord.NamingRule);
-            prlp.SetAfterSaveText("¦~¯Å", cboGradeYear.Text);
-            prlp.SetAfterSaveText("¯Z¾É®v", cboTeacher.Text);
-            prlp.SetAfterSaveText("±Æ¦C§Ç¸¹", txtSortOrder.Text);
-            prlp.SetAfterSaveText("¯Z¯Å½s¸¹", txtClassNumber.Text);
-            prlp.SetActionBy("¾ÇÄy", "¯Z¯Å°ò¥»¸ê®Æ");
-            prlp.SetAction("­×§ï¯Z¯Å°ò¥»¸ê®Æ");
-            prlp.SetDescTitle("¯Z¯Å¦WºÙ:" + _ClassRecord.Name+",");
+            prlp.SetAfterSaveText("ç­ç´šåç¨±", txtClassName.Text);
+            prlp.SetAfterSaveText("ç­ç´šå‘½åè¦å‰‡", _ClassRecord.NamingRule);
+            prlp.SetAfterSaveText("å¹´ç´š", cboGradeYear.Text);
+            prlp.SetAfterSaveText("ç­å°å¸«", cboTeacher.Text);
+            prlp.SetAfterSaveText("æ’åˆ—åºè™Ÿ", txtSortOrder.Text);
+            prlp.SetAfterSaveText("ç­ç´šç·¨è™Ÿ", txtClassNumber.Text);
+            prlp.SetActionBy("å­¸ç±", "ç­ç´šåŸºæœ¬è³‡æ–™");
+            prlp.SetAction("ä¿®æ”¹ç­ç´šåŸºæœ¬è³‡æ–™");
+            prlp.SetDescTitle("ç­ç´šåç¨±:" + _ClassRecord.Name+",");
             prlp.SaveLog("", "", "class", PrimaryKey);
             JHClass.Update(_ClassRecord);
             Class.Instance.SyncDataBackground(PrimaryKey);
@@ -159,10 +159,10 @@ namespace JHSchool.ClassExtendControls
 
         private void LoadDefaultDataToForm()
         {
-            // ¦~¯Å
+            // å¹´ç´š
             LoadGradeYearToForm();
 
-            // ±Ğ®v
+            // æ•™å¸«
             LoadTeacherNameToForm();
         }
 
@@ -201,18 +201,18 @@ namespace JHSchool.ClassExtendControls
         {
 
             _DataListener.SuspendListen();
-            // ¹w³]­È
+            // é è¨­å€¼
             LoadDefaultDataToForm();
             LoadDALDefaultDataToForm();
 
             // Before log
-            prlp.SetBeforeSaveText("¯Z¯Å¦WºÙ", txtClassName.Text);
-            prlp.SetBeforeSaveText("¦~¯Å", cboGradeYear.Text);
-            prlp.SetBeforeSaveText("¯Z¾É®v", cboTeacher.Text);
-            prlp.SetBeforeSaveText("±Æ¦C§Ç¸¹", txtSortOrder.Text);
-            prlp.SetBeforeSaveText("¯Z¯Å½s¸¹", txtClassNumber.Text);
+            prlp.SetBeforeSaveText("ç­ç´šåç¨±", txtClassName.Text);
+            prlp.SetBeforeSaveText("å¹´ç´š", cboGradeYear.Text);
+            prlp.SetBeforeSaveText("ç­å°å¸«", cboTeacher.Text);
+            prlp.SetBeforeSaveText("æ’åˆ—åºè™Ÿ", txtSortOrder.Text);
+            prlp.SetBeforeSaveText("ç­ç´šç·¨è™Ÿ", txtClassNumber.Text);
             if (_ClassRecord !=null )
-                prlp.SetBeforeSaveText("¯Z¯Å©R¦W³W«h", _ClassRecord.NamingRule);
+                prlp.SetBeforeSaveText("ç­ç´šå‘½åè¦å‰‡", _ClassRecord.NamingRule);
             _DataListener.Reset();
             _DataListener.ResumeListen();
             this.Loading = false;
@@ -222,7 +222,7 @@ namespace JHSchool.ClassExtendControls
         }
 
 
-        // ±N DAL ¸ê®Æ©ñ¨ì Form
+        // å°‡ DAL è³‡æ–™æ”¾åˆ° Form
         private void LoadDALDefaultDataToForm()
         {
             if (_ClassRecord != null)
@@ -250,11 +250,11 @@ namespace JHSchool.ClassExtendControls
             _ClassRecord = JHClass.SelectByID(PrimaryKey);
             _AllClassRecList = JHClass.SelectAll();
             
-            // ±Ğ®v¦WºÙ¯Á¤Ş
+            // æ•™å¸«åç¨±ç´¢å¼•
             _TeacherNameDic.Clear();
             foreach (JHTeacherRecord TRec in JHTeacher.SelectAll())
             {
-                if (TRec.Status == K12.Data.TeacherRecord.TeacherStatus.§R°£)
+                if (TRec.Status == K12.Data.TeacherRecord.TeacherStatus.åˆªé™¤)
                     continue;
 
                 if (string.IsNullOrEmpty(TRec.Nickname))
@@ -327,7 +327,7 @@ namespace JHSchool.ClassExtendControls
 
         public bool IsValid()
         {
-            // ¯Z¯Å¦WºÙÅçÃÒ
+            // ç­ç´šåç¨±é©—è­‰
             bool valid = true;
             foreach (Control ctrl in this.Controls)
             {
@@ -352,7 +352,7 @@ namespace JHSchool.ClassExtendControls
 
             if (!string.IsNullOrEmpty(cboTeacher.Text) && id == "")
             {
-                epTeacher.SetError(cboTeacher, "¬dµL¦¹±Ğ®v");
+                epTeacher.SetError(cboTeacher, "æŸ¥ç„¡æ­¤æ•™å¸«");
                 cboTeacher.Tag = "error";
                 return;
             }
@@ -380,7 +380,7 @@ namespace JHSchool.ClassExtendControls
             int i;
             if (!string.IsNullOrEmpty(text) && !int.TryParse(text, out i))
             {
-                epDisplayOrder.SetError(txtSortOrder, "½Ğ¿é¤J¾ã¼Æ");
+                epDisplayOrder.SetError(txtSortOrder, "è«‹è¼¸å…¥æ•´æ•¸");
                 txtSortOrder.Tag = "error";
                 return;
             }
@@ -399,14 +399,14 @@ namespace JHSchool.ClassExtendControls
             int i;
             if (!string.IsNullOrEmpty(text) && !int.TryParse(text, out i))
             {                
-                epGradeYear.SetError(cboGradeYear, "¦~¯Å¥²¶·¬°¼Æ¦r");
+                epGradeYear.SetError(cboGradeYear, "å¹´ç´šå¿…é ˆç‚ºæ•¸å­—");
                 cboGradeYear.Tag = "error";
                 return;
             }
 
             if (!string.IsNullOrEmpty(text) && !hasGradeYear)
             {             
-                epGradeYear.SetError(cboGradeYear, "µL¦¹¦~¯Å");
+                epGradeYear.SetError(cboGradeYear, "ç„¡æ­¤å¹´ç´š");
                 cboGradeYear.Tag = null;
             }
             else
@@ -424,10 +424,10 @@ namespace JHSchool.ClassExtendControls
             return namingRule.IndexOf('{') < namingRule.IndexOf('}');
         }
 
-        // ÀË¬d¯Z¯Å©R¦W³W«h
+        // æª¢æŸ¥ç­ç´šå‘½åè¦å‰‡
         private string ParseClassName(string namingRule, int gradeYear)
         {
-            // ·í¦~¯Å¬O7,8,9
+            // ç•¶å¹´ç´šæ˜¯7,8,9
             if (gradeYear >= 6)
                 gradeYear -= 6;
 
@@ -439,7 +439,7 @@ namespace JHSchool.ClassExtendControls
 
             string tmp_convert = namingRule;
 
-            // §ä¥X"{"¤§«e¤å¦r ¨Ã©ñ¤J classlist_firstname , ¨Ã°£¥h"{"
+            // æ‰¾å‡º"{"ä¹‹å‰æ–‡å­— ä¸¦æ”¾å…¥ classlist_firstname , ä¸¦é™¤å»"{"
             if (tmp_convert.IndexOf('{') > 0)
             {
                 classlist_firstname = tmp_convert.Substring(0, tmp_convert.IndexOf('{'));
@@ -447,7 +447,7 @@ namespace JHSchool.ClassExtendControls
             }
             else tmp_convert = tmp_convert.TrimStart('{');
 
-            // §ä¥X } ¤§«á¤å¦r classlist_lastname , ¨Ã°£¥h"}"
+            // æ‰¾å‡º } ä¹‹å¾Œæ–‡å­— classlist_lastname , ä¸¦é™¤å»"}"
             if (tmp_convert.IndexOf('}') > 0 && tmp_convert.IndexOf('}') < tmp_convert.Length - 1)
             {
                 classlist_lastname = tmp_convert.Substring(tmp_convert.IndexOf('}') + 1, tmp_convert.Length - (tmp_convert.IndexOf('}') + 1));
@@ -455,11 +455,11 @@ namespace JHSchool.ClassExtendControls
             }
             else tmp_convert = tmp_convert.TrimEnd('}');
 
-            // , ¦s¤J array
+            // , å­˜å…¥ array
             string[] listArray = new string[tmp_convert.Split(',').Length];
             listArray = tmp_convert.Split(',');
 
-            // ÀË¬d¬O§_¦b²M³æ½d³ò
+            // æª¢æŸ¥æ˜¯å¦åœ¨æ¸…å–®ç¯„åœ
             if (gradeYear >= 0 && gradeYear < listArray.Length)
             {
                 tmp_convert = classlist_firstname + listArray[gradeYear] + classlist_lastname;
@@ -471,7 +471,7 @@ namespace JHSchool.ClassExtendControls
             return tmp_convert;
         }
 
-        // ÀË¬d¯Z¯Å¦WºÙ¬O§_­«½Æ
+        // æª¢æŸ¥ç­ç´šåç¨±æ˜¯å¦é‡è¤‡
         private bool ValidClassName(string classid, string className)
         {            
             if (string.IsNullOrEmpty(className)) return false;
@@ -491,7 +491,7 @@ namespace JHSchool.ClassExtendControls
 
                 if (string.IsNullOrEmpty(txtClassName.Text))
                 {
-                    epClassName.SetError(txtClassName, "¯Z¯Å¦WºÙ¤£¥iªÅ¥Õ");
+                    epClassName.SetError(txtClassName, "ç­ç´šåç¨±ä¸å¯ç©ºç™½");
                     txtClassName.Tag = "error";
                     _DataListener.Reset();
                     _DataListener.ResumeListen();
@@ -500,7 +500,7 @@ namespace JHSchool.ClassExtendControls
                 }
                 if (ValidClassName(PrimaryKey, txtClassName.Text)==false)
                 {
-                    epClassName.SetError(txtClassName, "¯Z¯Å¤£¥i»P¨ä¥¦¯Z¯Å­«ÂĞ");
+                    epClassName.SetError(txtClassName, "ç­ç´šä¸å¯èˆ‡å…¶å®ƒç­ç´šé‡è¦†");
                     txtClassName.Tag = "error";
                     _DataListener.Reset();
                     _DataListener.ResumeListen();

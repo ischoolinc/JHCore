@@ -29,6 +29,10 @@ namespace JHSchool
 
         private SemesterInfo FiltedSemester = new SemesterInfo() { SchoolYear = Framework.Int.Parse(School.DefaultSchoolYear), Semester = Framework.Int.Parse(School.DefaultSemester) };
 
+        // 目前已載入的學年度學期，用來判斷是否需要重新從伺服器載入
+        private bool _hasLoadedSemester = false;
+        private SemesterInfo _loadedSemester;
+
         public new void AddDetailBulider(IDetailBulider item)
         {
             DetailContent content = item.GetContent();
@@ -338,7 +342,17 @@ namespace JHSchool
                         if (mb.Checked)
                         {
                             FiltedSemester = (SemesterInfo)mb.Tag;
-                            SetSource();
+                            // 如果切換到尚未載入的學期，重新從伺服器載入該學期資料
+                            if (!_hasLoadedSemester || _loadedSemester != FiltedSemester)
+                            {
+                                _loadedSemester = FiltedSemester;
+                                _hasLoadedSemester = true;
+                                this.SyncAllBackground();
+                            }
+                            else
+                            {
+                                SetSource();
+                            }
                         }
                     };
                 }
@@ -366,7 +380,13 @@ namespace JHSchool
         protected override Dictionary<string, CourseRecord> GetAllData()
         {
             Dictionary<string, CourseRecord> items = new Dictionary<string, CourseRecord>();
-            foreach (var item in Feature.QueryCourse.GetAllCourses())
+
+            // 使用已設定的學期篩選，僅載入該學期課程
+            var semester = _hasLoadedSemester ? _loadedSemester : FiltedSemester;
+            _loadedSemester = semester;
+            _hasLoadedSemester = true;
+
+            foreach (var item in Feature.QueryCourse.GetAllCourses(semester.SchoolYear, semester.Semester))
             {
                 items.Add(item.ID, item);
             }

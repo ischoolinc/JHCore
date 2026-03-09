@@ -59,19 +59,18 @@ namespace JHSchool.TeacherExtendControls
 
             TeacherTag.Instance.SyncData(PrimaryKeys);
 
-            List<JHSchool.Data.JHTeacherRecord> TeacherRecs= JHSchool.Data.JHTeacher.SelectAll();
-            
-            List<string> DeletedTeacherIDList = new List<string> ();
-            foreach (JHSchool.Data.JHTeacherRecord tr in TeacherRecs)
+            // 使用記憶體快取取代 DB 查詢，取得已刪除教師 ID
+            HashSet<string> DeletedTeacherIDSet = new HashSet<string>();
+            foreach (var tr in Teacher.Instance.Items)
             {
-                if (tr.Status == K12.Data.TeacherRecord.TeacherStatus.刪除)
-                    DeletedTeacherIDList.Add(tr.ID);
+                if (tr.Status == "刪除")
+                    DeletedTeacherIDSet.Add(tr.ID);
             }
 
             foreach (var key in PrimaryKeys)
             {
                 // 過濾刪除教師
-                if (DeletedTeacherIDList.Contains(key))
+                if (DeletedTeacherIDSet.Contains(key))
                 {
                     DelPrefixNoCategoryNode["刪除教師"].PrimaryKeys.Add(key);
                     continue;

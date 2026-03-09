@@ -49,13 +49,14 @@ namespace JHSchool.TeacherExtendControls
             advTree1.Nodes.Clear();
             items.Clear();
 
-            // 取得刪除教師 ID
-            List<string> DeletedTeacheIDList = new List<string>();
+            // 使用記憶體快取取代 DB 查詢，取得已刪除教師 ID
+            HashSet<string> DeletedTeacheIDSet = new HashSet<string>();
             List<string> checkDeletedTeacheIDList = new List<string>();
-            List<JHSchool.Data.JHTeacherRecord> TeacherRecs = JHSchool.Data.JHTeacher.SelectAll();
-            foreach (JHSchool.Data.JHTeacherRecord tr in TeacherRecs)
-                if (tr.Status == K12.Data.TeacherRecord.TeacherStatus.刪除)
-                    DeletedTeacheIDList.Add(tr.ID);
+            foreach (var tr in Teacher.Instance.Items)
+            {
+                if (tr.Status == "刪除")
+                    DeletedTeacheIDSet.Add(tr.ID);
+            }
 
             SortedList<int?, List<string>> gradeYearList = new SortedList<int?, List<string>>();
             List<string> noGradYearList = new List<string>();
@@ -66,8 +67,8 @@ namespace JHSchool.TeacherExtendControls
 
             foreach (var key in PrimaryKeys)
             {
-                // 過濾刪除教師
-                if (DeletedTeacheIDList.Contains(key))
+                // 過濾刪除教師（使用 HashSet O(1) 查詢）
+                if (DeletedTeacheIDSet.Contains(key))
                 {
                     checkDeletedTeacheIDList.Add(key);
                     continue;
@@ -127,13 +128,12 @@ namespace JHSchool.TeacherExtendControls
                 rootNode.Nodes.Add(gyearNode);
             }
 
-            List<string> tmp = new List<string>();
+            HashSet<string> tmp = new HashSet<string>();
 
             foreach (List<string > strList in gradeYearList.Values)
             {
                 foreach (string str in strList)
-                    if (!tmp.Contains(str))
-                        tmp.Add(str);
+                    tmp.Add(str);
             }
 
            
@@ -165,7 +165,7 @@ namespace JHSchool.TeacherExtendControls
                 teacherKeys.Add(str);
             // 無年級
             foreach (string str in noGradYearList)
-                if (!teacherKeys.Contains(str))
+                if (!tmp.Contains(str))
                     teacherKeys.Add(str);
 
             TotalCount = teacherKeys.Count;
@@ -195,21 +195,19 @@ namespace JHSchool.TeacherExtendControls
             }
 
             // 非班導師
-            // 是班導師ID
-
-            List<string> isClassTeacherID = new List<string>();
+            // 使用記憶體快取取代 DB 查詢
+            HashSet<string> isClassTeacherID = new HashSet<string>();
             List<string> NotClassTeacherID = new List<string>();
-            foreach (JHSchool.Data.JHClassRecord classRec in JHSchool.Data.JHClass.SelectAll())
+            foreach (var classRec in Class.Instance.Items)
             {
-                    isClassTeacherID.Add(classRec.RefTeacherID);
+                isClassTeacherID.Add(classRec.RefTeacherID);
             }
 
-            foreach (JHSchool.Data.JHTeacherRecord teachRec in JHSchool.Data.JHTeacher.SelectAll())
+            foreach (var teachRec in Teacher.Instance.Items)
             {
-                
                 if (!isClassTeacherID.Contains(teachRec.ID))
                 {
-                    if(teachRec.Status == K12.Data.TeacherRecord.TeacherStatus.一般 )
+                    if (teachRec.Status == "一般")
                         NotClassTeacherID.Add(teachRec.ID);
                 }
             }

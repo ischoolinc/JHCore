@@ -396,11 +396,13 @@ namespace JHSchool
                 lock (_TeacherSupervised)
                 {
                     _TeacherSupervised.Clear();
+                    _ClassTeacherMap.Clear();
                     foreach (var item in Items)
                     {
                         if (!_TeacherSupervised.ContainsKey(item.RefTeacherID))
                             _TeacherSupervised.Add(item.RefTeacherID, new List<ClassRecord>());
                         _TeacherSupervised[item.RefTeacherID].Add(item);
+                        _ClassTeacherMap[item.ID] = item.RefTeacherID;
                     }
                 }
             };
@@ -408,23 +410,19 @@ namespace JHSchool
             {
                 lock (_TeacherSupervised)
                 {
-                    List<string> keys = new List<string>(e.PrimaryKeys);
-                    keys.Sort();
-                    foreach (var tid in _TeacherSupervised.Keys)
+                    // 使用反向索引快速移除已更新的班級（O(1) per class）
+                    foreach (var key in e.PrimaryKeys)
                     {
-                        List<ClassRecord> removeItems = new List<ClassRecord>();
-                        foreach (var item in _TeacherSupervised[tid])
+                        if (_ClassTeacherMap.TryGetValue(key, out string oldTeacherId))
                         {
-                            if (keys.BinarySearch(item.ID) >= 0)
+                            if (_TeacherSupervised.ContainsKey(oldTeacherId))
                             {
-                                removeItems.Add(item);
+                                _TeacherSupervised[oldTeacherId].RemoveAll(c => c.ID == key);
                             }
-                        }
-                        foreach (var item in removeItems)
-                        {
-                            _TeacherSupervised[tid].Remove(item);
+                            _ClassTeacherMap.Remove(key);
                         }
                     }
+                    // 重新加入已更新的班級
                     foreach (var key in e.PrimaryKeys)
                     {
                         var item = Items[key];
@@ -433,6 +431,7 @@ namespace JHSchool
                             if (!_TeacherSupervised.ContainsKey(item.RefTeacherID))
                                 _TeacherSupervised.Add(item.RefTeacherID, new List<ClassRecord>());
                             _TeacherSupervised[item.RefTeacherID].Add(item);
+                            _ClassTeacherMap[item.ID] = item.RefTeacherID;
                         }
                     }
                 }
@@ -487,6 +486,8 @@ namespace JHSchool
 
         private bool _Initilized = false;
         private Dictionary<string, List<ClassRecord>> _TeacherSupervised = new Dictionary<string, List<ClassRecord>>();
+        // 反向索引：classID → teacherID，加速 ItemUpdated 查詢
+        private Dictionary<string, string> _ClassTeacherMap = new Dictionary<string, string>();
         public List<ClassRecord> GetTecaherSupervisedClass(TeacherRecord teacher)
         {
             lock (_TeacherSupervised)
@@ -502,7 +503,6 @@ namespace JHSchool
 
         protected override void FillFilter()
         {
-            //資料載入中或資料未載入或畫面沒有設定完成就什麼都不做
             if (!_Initilized || !Loaded) return;
 
             List<string> primaryKeys = new List<string>();

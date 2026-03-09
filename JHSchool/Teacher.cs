@@ -495,32 +495,27 @@ namespace JHSchool
 
         protected override void FillFilter()
         {
-            //資料載入中或資料未載入或畫面沒有設定完成就什麼都不做
             if (!_Initilized || !Loaded) return;
 
-            // old
-            //List<string> primaryKeys = new List<string>();
-            //foreach (var item in Items)
-            //{
-            //    primaryKeys.Add(item.ID);
-            //}
-
             // New add
-            List<string> primaryKeys = new List<string>();
-            List<string> filters = new List<string>();
+            HashSet<string> filters = new HashSet<string>();
 
             foreach (string each in AllStatus)
-                if (FilterMenu[each].Checked)
-                    filters.Add(each);
-
-
-            foreach (JHSchool.Data.JHTeacherRecord item in JHSchool.Data.JHTeacher.SelectAll())
             {
-                string str = item.Status.ToString();
-                if (filters.Contains(str))
-                    if (!primaryKeys.Contains(item.ID))
-                        primaryKeys.Add(item.ID);
+                if (FilterMenu[each].Checked)
+                {
+                    filters.Add(each);
+                }
+            }
 
+            List<string> primaryKeys = new List<string>();
+
+            foreach (var item in Items)
+            {
+                if (filters.Contains(item.Status))
+                {
+                    primaryKeys.Add(item.ID);
+                }
             }
 
             Present.SetFilteredSource(primaryKeys);

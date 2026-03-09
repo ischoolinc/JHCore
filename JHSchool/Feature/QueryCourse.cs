@@ -11,10 +11,8 @@ namespace JHSchool.Feature
     [AutoRetryOnWebException()]
     public static class QueryCourse
     {
-        public static List<CourseRecord> GetAllCourses()
+        private static DSXmlHelper CreateCourseFieldHelper()
         {
-
-            DSRequest dsreq = new DSRequest();
             DSXmlHelper helper = new DSXmlHelper("GetDetailListRequest");
             helper.AddElement("Field");
             helper.AddElement("Field", "ID");
@@ -23,15 +21,43 @@ namespace JHSchool.Feature
             helper.AddElement("Field", "Semester");
             helper.AddElement("Field", "Period");
             helper.AddElement("Field", "Credit");
-            //helper.AddElement("Field", "IsRequired");
-            //helper.AddElement("Field", "RequiredBy");
             helper.AddElement("Field", "RefExamTemplateID");
             helper.AddElement("Field", "RefClassID");
             helper.AddElement("Field", "Subject");
             helper.AddElement("Field", "Domain");
             helper.AddElement("Field", "CourseNumber");
             helper.AddElement("Field", "ScoreCalcFlag");
+            return helper;
+        }
+
+        public static List<CourseRecord> GetAllCourses()
+        {
+            DSRequest dsreq = new DSRequest();
+            DSXmlHelper helper = CreateCourseFieldHelper();
             helper.AddElement("Condition");
+            helper.AddElement("Order");
+            helper.AddElement("Order", "ID");
+            helper.AddElement("Order", "Sequence");
+            dsreq.SetContent(helper);
+            DSResponse dsrsp = DSAServices.CallService("SmartSchool.Course.GetDetailList", dsreq);
+            List<CourseRecord> result = new List<CourseRecord>();
+            foreach (XmlElement var in dsrsp.GetContent().GetElements("Course"))
+            {
+                result.Add(new CourseRecord(var));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 依學年度學期取得課程資料，避免載入歷史學期資料。
+        /// </summary>
+        public static List<CourseRecord> GetAllCourses(int schoolYear, int semester)
+        {
+            DSRequest dsreq = new DSRequest();
+            DSXmlHelper helper = CreateCourseFieldHelper();
+            helper.AddElement("Condition");
+            helper.AddElement("Condition", "SchoolYear", schoolYear.ToString());
+            helper.AddElement("Condition", "Semester", semester.ToString());
             helper.AddElement("Order");
             helper.AddElement("Order", "ID");
             helper.AddElement("Order", "Sequence");

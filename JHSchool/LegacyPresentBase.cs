@@ -206,6 +206,9 @@ namespace JHSchool
         protected bool UseFilter { get { return _UseFilter; } set { _UseFilter = value; FilterMenu.Visible = value; } }
         private void SetSource()
         {
+            // 資料尚未載入時不需要執行 FillFilter，避免不必要的迭代
+            if (!Loaded) return;
+
             if (_UseFilter)
                 FillFilter();
             else

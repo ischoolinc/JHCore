@@ -26,13 +26,9 @@ namespace JHSchool
             SmartSchool.ePaper.DispatcherProvider.Register("ischool", new DispatcherImp(), true);
 
             Class.Instance.SyncAllBackground();
-            Class.Instance.WaitLoadingComplete();
             Student.Instance.SyncAllBackground();
-            Student.Instance.WaitLoadingComplete();
             Teacher.Instance.SyncAllBackground();
-            Teacher.Instance.WaitLoadingComplete();
             Course.Instance.SyncAllBackground();
-            Course.Instance.WaitLoadingComplete();
 
             //K12.Student.Instance.AddView(new ShowAllStudentsView());
             //1.1 秒
@@ -42,23 +38,25 @@ namespace JHSchool
             Course.Instance.SetupPresentation(); //課程的類別已調整
             //K12.Course.Instance.AddView(new ShowAllStudentsView());
 
-            //設定 ASPOSE 元件的 License。
-            System.IO.Stream stream = new System.IO.MemoryStream(Resources.Aspose_Total);
+            //設定 ASPOSE 元件的 License（移至背景執行緒，避免阻塞啟動流程）。
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                System.IO.Stream stream = new System.IO.MemoryStream(Resources.Aspose_Total);
 
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
-            new Aspose.Words.License().SetLicense(stream);
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+                new Aspose.Words.License().SetLicense(stream);
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
 
-            // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，
-            //另外詢問耀明後，補充此段程式碼Aspose 已在別的地方做認證，不需要重覆做。
+                // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法，
+                //另外詢問耀明後，補充此段程式碼Aspose 已在別的地方做認證，不需要重覆做。
 
-            //new Aspose.Cells.License().SetLicense(stream);
+                //new Aspose.Cells.License().SetLicense(stream);
 
-
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
-            new Aspose.BarCode.License().SetLicense(stream);
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
-            new Aspose.Pdf.License().SetLicense(stream);
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+                new Aspose.BarCode.License().SetLicense(stream);
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+                new Aspose.Pdf.License().SetLicense(stream);
+            });
 
             FISCA.LogAgent.ApplicationLog.Log("[特殊歷程]", "登入", string.Format("使用者{0}已登入系統", FISCA.Authentication.DSAServices.UserAccount));
 

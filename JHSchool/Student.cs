@@ -79,6 +79,8 @@ namespace JHSchool
         //private List<StudentControls.DetailContent> _DetialContents = new List<K12.StudentControls.DetailContent>();
 
         private Dictionary<string, List<StudentRecord>> _ClassStudents = new Dictionary<string, List<StudentRecord>>();
+        // 反向索引：studentID → classID，加速 ItemUpdated 查詢
+        private Dictionary<string, string> _StudentClassMap = new Dictionary<string, string>();
 
         private Student(NLDPanel present)
             : base(present)
@@ -88,6 +90,7 @@ namespace JHSchool
                 lock (_ClassStudents)
                 {
                     _ClassStudents.Clear();
+                    _StudentClassMap.Clear();
                     foreach (var item in this.Items)
                     {
                         if (item.Status == "一般" || item.Status == "輟學")
@@ -95,6 +98,7 @@ namespace JHSchool
                             if (!_ClassStudents.ContainsKey(item.RefClassID))
                                 _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
                             _ClassStudents[item.RefClassID].Add(item);
+                            _StudentClassMap[item.ID] = item.RefClassID;
                         }
                     }
                 }
@@ -103,31 +107,28 @@ namespace JHSchool
             {
                 lock (_ClassStudents)
                 {
-                    List<string> keys = new List<string>(e.PrimaryKeys);
-                    keys.Sort();
-                    foreach (var cid in _ClassStudents.Keys)
+                    // 使用反向索引快速移除已更新的學生（O(1) per student）
+                    foreach (var key in e.PrimaryKeys)
                     {
-                        List<StudentRecord> removeItems = new List<StudentRecord>();
-                        foreach (var item in _ClassStudents[cid])
+                        if (_StudentClassMap.TryGetValue(key, out string oldClassId))
                         {
-                            if (keys.BinarySearch(item.ID) >= 0)
+                            if (_ClassStudents.ContainsKey(oldClassId))
                             {
-                                removeItems.Add(item);
+                                _ClassStudents[oldClassId].RemoveAll(s => s.ID == key);
                             }
-                        }
-                        foreach (var item in removeItems)
-                        {
-                            _ClassStudents[cid].Remove(item);
+                            _StudentClassMap.Remove(key);
                         }
                     }
+                    // 重新加入已更新的學生
                     foreach (var key in e.PrimaryKeys)
                     {
                         var item = Items[key];
-                        if (item != null)
+                        if (item != null && (item.Status == "一般" || item.Status == "輟學"))
                         {
                             if (!_ClassStudents.ContainsKey(item.RefClassID))
                                 _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
                             _ClassStudents[item.RefClassID].Add(item);
+                            _StudentClassMap[item.ID] = item.RefClassID;
                         }
                     }
                 }
@@ -266,19 +267,19 @@ namespace JHSchool
                         string msg = string.Format("確定要刪除「{0}」？", studRec.Name);
                         if (FISCA.Presentation.Controls.MsgBox.Show(msg, "刪除學生", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            // 檢查刪除狀態是否有同學號或身分證號,空白可刪
-                            List<string> tmpSnumList = new List<string>();
-                            List<string> tmpStudIDNumberList = new List<string>();
-                            foreach (JHSchool.Data.JHStudentRecord checkStudRec in JHSchool.Data.JHStudent.SelectAll())
-                                if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
+                            // 檢查刪除狀態是否有同學號或身分證號,空白可刪（使用記憶體快取取代 DB 查詢）
+                            HashSet<string> tmpSnumSet = new HashSet<string>();
+                            HashSet<string> tmpStudIDNumberSet = new HashSet<string>();
+                            foreach (var checkStudRec in Student.Instance.Items)
+                                if (checkStudRec.Status == "刪除")
                                 {
                                     if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
-                                        tmpSnumList.Add(checkStudRec.StudentNumber);
+                                        tmpSnumSet.Add(checkStudRec.StudentNumber);
                                     if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
-                                        tmpStudIDNumberList.Add(checkStudRec.IDNumber);
+                                        tmpStudIDNumberSet.Add(checkStudRec.IDNumber);
                                 }
 
-                            if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
+                            if (tmpSnumSet.Contains(studRec.StudentNumber) || tmpStudIDNumberSet.Contains(studRec.IDNumber))
                             {
                                 MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
                                 return;
@@ -350,7 +351,6 @@ namespace JHSchool
             //    new TaggingMenu("JHSchool.Student.Ribbon0040", "JHSchool.Student.Ribbon0050").MenuOpen);
             #endregion
 
-            // 要放:班級、座號、姓名、性別、學號、聯絡電話、戶籍電話、聯絡地址、戶籍地址、出生年月日、監護人、課程規劃、帳號。
 
             #region List Panel Fields
 
@@ -755,103 +755,38 @@ namespace JHSchool
         {
             try
             {
-                FISCA.Data.QueryHelper _queryHelper = new FISCA.Data.QueryHelper();
-                DataTable dr_1 = _queryHelper.Select("select id,name,student_number,id_number,sa_login_name,father_name,mother_name,custodian_name,english_name from student");
-                Dictionary<string, SearchStudentRecord> studDict_1 = new Dictionary<string, SearchStudentRecord>();
-                List<string> results = new List<string>();
-                foreach (DataRow row_1 in dr_1.Rows)
-                {
-                    string id = "" + row_1[0];
-                    if (!studDict_1.ContainsKey(id))
-                    {
-                        studDict_1.Add(id, new SearchStudentRecord(row_1));
-                    }
-                }
-
-                Regex rx = new Regex(SearEvArgs.Condition, RegexOptions.IgnoreCase);
-
-                // 搜尋父母監護人姓名
-                if (SearchStudentParent.Checked)
-                {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
-                    {
-                        if (rx.Match(each.Father_Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-
-                        if (rx.Match(each.Mother_Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-
-                        if (rx.Match(each.Custodian_Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-                    }
-                }
-
-                if (SearchStudentNumber.Checked)
-                {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
-                    {
-                        if (rx.Match(each.StudentNumber).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-                    }
-                }
-
-                if (SearchStudentIDNumber.Checked)
-                {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
-                    {
-                        if (rx.Match(each.IDNumber).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-                    }
-                }
+                string condition = SearEvArgs.Condition.Replace("'", "''").ToLower();
+                string likeCondition = "%" + condition + "%";
+                List<string> conditions = new List<string>();
 
                 if (SearchName.Checked)
-                {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
-                    {
-                        if (rx.Match(each.Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-                    }
-                }
-
+                    conditions.Add(string.Format("lower(name) like '{0}'", likeCondition));
+                if (SearchStudentNumber.Checked)
+                    conditions.Add(string.Format("lower(student_number) like '{0}'", likeCondition));
+                if (SearchStudentIDNumber.Checked)
+                    conditions.Add(string.Format("lower(id_number) like '{0}'", likeCondition));
                 if (SearchStudentLoginID.Checked)
+                    conditions.Add(string.Format("lower(sa_login_name) like '{0}'", likeCondition));
+                if (SearchEnglishName.Checked)
+                    conditions.Add(string.Format("lower(english_name) like '{0}'", likeCondition));
+                if (SearchStudentParent.Checked)
                 {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
-                    {
-                        if (rx.Match(each.SA_Login_Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
-                    }
+                    conditions.Add(string.Format("lower(father_name) like '{0}'", likeCondition));
+                    conditions.Add(string.Format("lower(mother_name) like '{0}'", likeCondition));
+                    conditions.Add(string.Format("lower(custodian_name) like '{0}'", likeCondition));
                 }
 
-                if (SearchEnglishName.Checked)
+                List<string> results = new List<string>();
+                if (conditions.Count > 0)
                 {
-                    foreach (SearchStudentRecord each in studDict_1.Values)
+                    string sql = "select id from student where " + string.Join(" or ", conditions.ToArray());
+                    FISCA.Data.QueryHelper _queryHelper = new FISCA.Data.QueryHelper();
+                    System.Data.DataTable dr = _queryHelper.Select(sql);
+                    foreach (System.Data.DataRow row in dr.Rows)
                     {
-                        if (rx.Match(each.English_Name).Success)
-                        {
-                            if (!results.Contains(each.ID))
-                                results.Add(each.ID);
-                        }
+                        string id = "" + row[0];
+                        if (!results.Contains(id))
+                            results.Add(id);
                     }
                 }
 
@@ -883,116 +818,23 @@ namespace JHSchool
             //畫面沒有設定完成就什麼都不做
             if (!_Initilized || !Loaded) return;
 
-            List<string> primaryKeys = new List<string>();
             List<string> filters = new List<string>();
 
             foreach (string each in AllStatus)
             {
-                //if (FilterMenu[each].Checked)
-                //    filters.Add(each);
                 if (FilterMenu[each].Checked)
                 {
-
-                    //#region 待刪除畢業及離校
-                    //if (each != "畢業或離校")
                     filters.Add(each);
-                    //#endregion
                 }
             }
 
+            HashSet<string> primaryKeysSet = new HashSet<string>();
             foreach (var item in Items.GetStatusStudents(filters.ToArray()))
-                if (!primaryKeys.Contains(item.ID))
-                    primaryKeys.Add(item.ID);
+            {
+                primaryKeysSet.Add(item.ID);
+            }
 
-
-            //#region 待刪除畢業及離校
-            ////// 加這判斷主要當 click button 會進來2次
-            //bool clickChkeck1 = false;
-            //string GraduatePath1 = "畢業或離校";
-            ////            string NotInGraduateName = "離校(非畢修業)";
-            //FilterMenu[GraduatePath1].Click += delegate
-            //{
-            //    if (clickChkeck1 == false)
-            //    {
-            //        if (FilterMenu[GraduatePath1].Checked == false)
-            //        {
-            //            foreach (string GraduatePath2 in GraduateList)
-            //                FilterMenu[GraduatePath1][GraduatePath2].Checked = true;
-            //            // 加入所有畢業或離校學生
-            //            foreach (string id in GraduateLeaveInfoAll.Keys)
-            //                if (!primaryKeys.Contains(id))
-            //                    primaryKeys.Add(id);
-
-            //            FilterMenu[GraduatePath1].Checked = true;
-            //        }
-
-            //        else
-            //        {
-            //            foreach (string GraduatePath2 in GraduateList)
-            //                FilterMenu[GraduatePath1][GraduatePath2].Checked = false;
-
-            //            FilterMenu[GraduatePath1].Checked = false;
-            //        }
-
-            //        Present.SetFilteredSource(primaryKeys);
-            //        clickChkeck1 = true;
-            //    }
-
-            //};
-
-            //bool chkGrad = true;
-            //foreach (string str in GraduateList)
-            //    if (FilterMenu[GraduatePath1][str].Checked == false)
-            //        chkGrad = false;
-
-            //if (chkGrad == true)
-            //    FilterMenu[GraduatePath1].Checked = true;
-            //else
-            //    FilterMenu[GraduatePath1].Checked = false;
-
-            //string NotInGraduateName = "離校(非畢修業)";
-
-            //// 新加入畢業,修業分開
-            //foreach (string GraduatePath2 in GraduateList)
-            //{
-            //    // 當有選起
-            //    if (FilterMenu[GraduatePath1][GraduatePath2].Checked)
-            //    {
-            //        // 加入畢業                
-            //        if (GraduateLeaveInfoU.ContainsKey(GraduatePath2))
-            //            foreach (string id in GraduateLeaveInfoU[GraduatePath2])
-            //                if (!primaryKeys.Contains(id))
-            //                    primaryKeys.Add(id);
-            //        // 加入修業
-            //        if (GraduateLeaveInfoD.ContainsKey(GraduatePath2))
-            //            foreach (string id in GraduateLeaveInfoD[GraduatePath2])
-            //                if (!primaryKeys.Contains(id))
-            //                    primaryKeys.Add(id);
-            //    }
-            //}
-
-            //// 非畢業
-            //if (FilterMenu[GraduatePath1][NotInGraduateName].Checked)
-            //{
-            //    List<string> checkIDs = new List<string>();
-            //    foreach (List<string> IDs in GraduateLeaveInfoU.Values)
-            //        foreach (string id in IDs)
-            //            checkIDs.Add(id);
-
-            //    foreach (List<string> IDs in GraduateLeaveInfoD.Values)
-            //        foreach (string id in IDs)
-            //            checkIDs.Add(id);
-
-
-            //    foreach (string id in GraduateLeaveInfoAll.Keys)
-            //        if (!checkIDs.Contains(id))
-            //            if (!primaryKeys.Contains(id))
-            //                primaryKeys.Add(id);
-            //}
-
-            //#endregion
-            Present.SetFilteredSource(primaryKeys);
-
+            Present.SetFilteredSource(primaryKeysSet.ToList());
         }
 
 
@@ -1096,10 +938,11 @@ namespace JHSchool
         /// <returns></returns>
         public static List<StudentRecord> GetStatusStudents(this IEnumerable<StudentRecord> students, params string[] status)
         {
+            HashSet<string> statusSet = new HashSet<string>(status);
             List<StudentRecord> result = new List<StudentRecord>();
             foreach (var item in students)
             {
-                if (status.Contains(item.Status))
+                if (statusSet.Contains(item.Status))
                     result.Add(item);
             }
             return result;
