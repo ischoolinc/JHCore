@@ -81,6 +81,45 @@ namespace JHSchool
         private Dictionary<string, List<StudentRecord>> _ClassStudents = new Dictionary<string, List<StudentRecord>>();
         // 反向索引：studentID → classID，加速 ItemUpdated 查詢
         private Dictionary<string, string> _StudentClassMap = new Dictionary<string, string>();
+        
+        // 狀態預先篩選的 Set，加速 FillFilter
+        private Dictionary<string, HashSet<string>> _StatusMaps = new Dictionary<string, HashSet<string>>();
+        private bool _indexBuilt = false;
+
+        private void BuildIndex()
+        {
+            if (_indexBuilt) return;
+            lock (_ClassStudents)
+            {
+                if (_indexBuilt) return;
+                
+                _ClassStudents.Clear();
+                _StudentClassMap.Clear();
+                _StatusMaps.Clear();
+                
+                foreach (string status in AllStatus)
+                {
+                    _StatusMaps[status] = new HashSet<string>();
+                }
+                
+                foreach (var item in this.Items)
+                {
+                    if (item.Status == "一般" || item.Status == "輟學")
+                    {
+                        if (!_ClassStudents.ContainsKey(item.RefClassID))
+                            _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
+                        _ClassStudents[item.RefClassID].Add(item);
+                        _StudentClassMap[item.ID] = item.RefClassID;
+                    }
+                    
+                    if (_StatusMaps.ContainsKey(item.Status))
+                    {
+                        _StatusMaps[item.Status].Add(item.ID);
+                    }
+                }
+                _indexBuilt = true;
+            }
+        }
 
         private Student(NLDPanel present)
             : base(present)
@@ -89,24 +128,15 @@ namespace JHSchool
             {
                 lock (_ClassStudents)
                 {
-                    _ClassStudents.Clear();
-                    _StudentClassMap.Clear();
-                    foreach (var item in this.Items)
-                    {
-                        if (item.Status == "一般" || item.Status == "輟學")
-                        {
-                            if (!_ClassStudents.ContainsKey(item.RefClassID))
-                                _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
-                            _ClassStudents[item.RefClassID].Add(item);
-                            _StudentClassMap[item.ID] = item.RefClassID;
-                        }
-                    }
+                    _indexBuilt = false; // Lazy build on next access
                 }
             };
             this.ItemUpdated += delegate(object sender, ItemUpdatedEventArgs e)
             {
                 lock (_ClassStudents)
                 {
+                    if (!_indexBuilt) return; // if not built yet, we don't need to incrementally update
+
                     // 使用反向索引快速移除已更新的學生（O(1) per student）
                     foreach (var key in e.PrimaryKeys)
                     {
@@ -118,17 +148,32 @@ namespace JHSchool
                             }
                             _StudentClassMap.Remove(key);
                         }
+                        
+                        // Remove from all status maps to be safe, or we'd need a reverse map for status too.
+                        // Since status changes are less frequent and we have only ~5 statuses, we can just remove from all.
+                        foreach (var statusSet in _StatusMaps.Values)
+                        {
+                            statusSet.Remove(key);
+                        }
                     }
                     // 重新加入已更新的學生
                     foreach (var key in e.PrimaryKeys)
                     {
                         var item = Items[key];
-                        if (item != null && (item.Status == "一般" || item.Status == "輟學"))
+                        if (item != null)
                         {
-                            if (!_ClassStudents.ContainsKey(item.RefClassID))
-                                _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
-                            _ClassStudents[item.RefClassID].Add(item);
-                            _StudentClassMap[item.ID] = item.RefClassID;
+                            if (item.Status == "一般" || item.Status == "輟學")
+                            {
+                                if (!_ClassStudents.ContainsKey(item.RefClassID))
+                                    _ClassStudents.Add(item.RefClassID, new List<StudentRecord>());
+                                _ClassStudents[item.RefClassID].Add(item);
+                                _StudentClassMap[item.ID] = item.RefClassID;
+                            }
+                            
+                            if (_StatusMaps.ContainsKey(item.Status))
+                            {
+                                _StatusMaps[item.Status].Add(item.ID);
+                            }
                         }
                     }
                 }
@@ -137,6 +182,7 @@ namespace JHSchool
 
         public List<StudentRecord> GetClassStudents(ClassRecord classRec)
         {
+            BuildIndex();
             lock (_ClassStudents)
             {
                 if (_ClassStudents.ContainsKey(classRec.ID))
@@ -818,6 +864,8 @@ namespace JHSchool
             //畫面沒有設定完成就什麼都不做
             if (!_Initilized || !Loaded) return;
 
+            BuildIndex(); // Ensure index is built
+
             List<string> filters = new List<string>();
 
             foreach (string each in AllStatus)
@@ -829,9 +877,15 @@ namespace JHSchool
             }
 
             HashSet<string> primaryKeysSet = new HashSet<string>();
-            foreach (var item in Items.GetStatusStudents(filters.ToArray()))
+            lock (_ClassStudents)
             {
-                primaryKeysSet.Add(item.ID);
+                foreach (string status in filters)
+                {
+                    if (_StatusMaps.ContainsKey(status))
+                    {
+                        primaryKeysSet.UnionWith(_StatusMaps[status]);
+                    }
+                }
             }
 
             Present.SetFilteredSource(primaryKeysSet.ToList());

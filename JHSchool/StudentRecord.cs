@@ -88,23 +88,33 @@ namespace JHSchool
 
         internal StudentRecord(XmlElement element)
         {
-            DSXmlHelper helper = new DSXmlHelper(element);
-            ID = helper.GetText("@ID");
-            Status = helper.GetText("Status");
-            SeatNo = helper.GetText("SeatNo");
-            Name = helper.GetText("Name");
-            StudentNumber = helper.GetText("StudentNumber");
-            Gender = helper.GetText("Gender");
-            IDNumber = helper.GetText("IDNumber");
-            Birthday = helper.GetText("Birthdate");
-            //OverrideDepartmentID = helper.GetText("OverrideDeptID");
-            //if (OverrideDepartmentID == "") OverrideDepartmentID = null;
-            OverrideProgramPlanID = helper.GetText("RefGraduationPlanID");
-            if (OverrideProgramPlanID == "") OverrideProgramPlanID = null;
-            OverrideScoreCalcRuleID = helper.GetText("RefScoreCalcRuleID");
-            if (OverrideScoreCalcRuleID == "") OverrideScoreCalcRuleID = null;
-            RefClassID = helper.GetText("RefClassID");
-            Nationality = helper.GetText("Nationality");
+            ID = element.GetAttribute("ID");
+            
+            foreach (XmlNode node in element.ChildNodes)
+            {
+                if (node is XmlElement) // Ignore whitespace and text nodes
+                {
+                    string text = node.InnerText;
+                    switch (node.Name)
+                    {
+                        case "Status": Status = text; break;
+                        case "SeatNo": SeatNo = text; break;
+                        case "Name": Name = text; break;
+                        case "StudentNumber": StudentNumber = text; break;
+                        case "Gender": Gender = text; break;
+                        case "IDNumber": IDNumber = text; break;
+                        case "Birthdate": Birthday = text; break;
+                        case "RefGraduationPlanID":
+                            OverrideProgramPlanID = text == "" ? null : text;
+                            break;
+                        case "RefScoreCalcRuleID":
+                            OverrideScoreCalcRuleID = text == "" ? null : text;
+                            break;
+                        case "RefClassID": RefClassID = text; break;
+                        case "Nationality": Nationality = text; break;
+                    }
+                }
+            }
         }
 
         #region IComparable<StudentRecord> 成員

@@ -29,23 +29,35 @@ namespace JHSchool
         internal CourseRecord(XmlElement element)
         {
             ID = element.GetAttribute("ID");
-            DSXmlHelper helper = new DSXmlHelper(element);
-            //RequiredBy = helper.GetText("RequiredBy"); //高中
-            //Required = helper.GetText("IsRequired") == "必"; //高中
-            Name = helper.GetText("CourseName");
-            int i = 0;
-            int.TryParse(helper.GetText("SchoolYear"), out i);
-            SchoolYear = i;
-            i = 0;
-            int.TryParse(helper.GetText("Semester"), out i);
-            Semester = i;
-            Subject = helper.GetText("Subject");
-            Domain = helper.GetText("Domain");
-            Period = helper.GetText("Period");
-            Credit = helper.GetText("Credit");
-            RefClassID = helper.GetText("RefClassID");
-            RefAssessmentSetupID = helper.GetText("RefExamTemplateID");
-            CalculationFlag = helper.GetText("ScoreCalcFlag");
+            
+            foreach (XmlNode node in element.ChildNodes)
+            {
+                if (node is XmlElement)
+                {
+                    string text = node.InnerText;
+                    switch (node.Name)
+                    {
+                        case "CourseName": Name = text; break;
+                        case "SchoolYear": 
+                            int sy = 0;
+                            int.TryParse(text, out sy);
+                            SchoolYear = sy;
+                            break;
+                        case "Semester": 
+                            int sem = 0;
+                            int.TryParse(text, out sem);
+                            Semester = sem;
+                            break;
+                        case "Subject": Subject = text; break;
+                        case "Domain": Domain = text; break;
+                        case "Period": Period = text; break;
+                        case "Credit": Credit = text; break;
+                        case "RefClassID": RefClassID = text; break;
+                        case "RefExamTemplateID": RefAssessmentSetupID = text; break;
+                        case "ScoreCalcFlag": CalculationFlag = text; break;
+                    }
+                }
+            }
         }
         #region IComparable<CourseRecord> 成員
 

@@ -35,18 +35,27 @@ namespace JHSchool
 
         internal TeacherRecord(XmlElement element)
         {
-            DSXmlHelper helper = new DSXmlHelper(element);
-            ID = helper.GetText("@ID");
-            Name = helper.GetText("TeacherName");
-            Nickname = helper.GetText("Nickname");
-            Status = helper.GetText("Status");
-            Gender = helper.GetText("Gender");
-            IDNumber = helper.GetText("IDNumber");
-            ContactPhone = helper.GetText("ContactPhone");
-            Category = helper.GetText("Category");
-            TALoginName = helper.GetText("TALoginName");
-
-            //SuperviseByClassID = helper.GetText("SupervisedByClassID");
+            ID = element.GetAttribute("ID");
+            
+            foreach (XmlNode node in element.ChildNodes)
+            {
+                if (node is XmlElement)
+                {
+                    string text = node.InnerText;
+                    switch (node.Name)
+                    {
+                        case "TeacherName": Name = text; break;
+                        case "Nickname": Nickname = text; break;
+                        case "Status": Status = text; break;
+                        case "Gender": Gender = text; break;
+                        case "IDNumber": IDNumber = text; break;
+                        case "ContactPhone": ContactPhone = text; break;
+                        case "Category": Category = text; break;
+                        case "TALoginName": TALoginName = text; break;
+                        //case "SupervisedByClassID": SuperviseByClassID = text; break;
+                    }
+                }
+            }
         }
 
         #region IComparable<TeacherRecord> 成員

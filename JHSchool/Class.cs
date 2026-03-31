@@ -388,6 +388,32 @@ namespace JHSchool
             e.Result = x.CompareTo(y);
         }
 
+        private bool _indexBuilt = false;
+        private Dictionary<string, List<ClassRecord>> _TeacherSupervised = new Dictionary<string, List<ClassRecord>>();
+        // 反向索引：classID → teacherID，加速 ItemUpdated 查詢
+        private Dictionary<string, string> _ClassTeacherMap = new Dictionary<string, string>();
+
+        private void BuildIndex()
+        {
+            if (_indexBuilt) return;
+            lock (_TeacherSupervised)
+            {
+                if (_indexBuilt) return;
+                
+                _TeacherSupervised.Clear();
+                _ClassTeacherMap.Clear();
+                foreach (var item in Items)
+                {
+                    if (!_TeacherSupervised.ContainsKey(item.RefTeacherID))
+                        _TeacherSupervised.Add(item.RefTeacherID, new List<ClassRecord>());
+                    _TeacherSupervised[item.RefTeacherID].Add(item);
+                    _ClassTeacherMap[item.ID] = item.RefTeacherID;
+                }
+                
+                _indexBuilt = true;
+            }
+        }
+
         private Class(NLDPanel present)
             : base(present)
         {
@@ -395,21 +421,15 @@ namespace JHSchool
             {
                 lock (_TeacherSupervised)
                 {
-                    _TeacherSupervised.Clear();
-                    _ClassTeacherMap.Clear();
-                    foreach (var item in Items)
-                    {
-                        if (!_TeacherSupervised.ContainsKey(item.RefTeacherID))
-                            _TeacherSupervised.Add(item.RefTeacherID, new List<ClassRecord>());
-                        _TeacherSupervised[item.RefTeacherID].Add(item);
-                        _ClassTeacherMap[item.ID] = item.RefTeacherID;
-                    }
+                    _indexBuilt = false;
                 }
             };
             this.ItemUpdated += delegate(object sender, ItemUpdatedEventArgs e)
             {
                 lock (_TeacherSupervised)
                 {
+                    if (!_indexBuilt) return;
+
                     // 使用反向索引快速移除已更新的班級（O(1) per class）
                     foreach (var key in e.PrimaryKeys)
                     {
@@ -485,11 +505,10 @@ namespace JHSchool
 
 
         private bool _Initilized = false;
-        private Dictionary<string, List<ClassRecord>> _TeacherSupervised = new Dictionary<string, List<ClassRecord>>();
-        // 反向索引：classID → teacherID，加速 ItemUpdated 查詢
-        private Dictionary<string, string> _ClassTeacherMap = new Dictionary<string, string>();
+
         public List<ClassRecord> GetTecaherSupervisedClass(TeacherRecord teacher)
         {
+            BuildIndex();
             lock (_TeacherSupervised)
             {
                 if (_TeacherSupervised.ContainsKey(teacher.ID))

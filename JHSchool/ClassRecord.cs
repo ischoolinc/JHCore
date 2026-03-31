@@ -52,15 +52,25 @@ namespace JHSchool
         internal ClassRecord(XmlElement element)
         {
             ID = element.GetAttribute("ID");
-            DSXmlHelper helper = new DSXmlHelper(element);
-            Name = helper.GetText("ClassName");
-            GradeYear = helper.GetText("GradeYear");
-            NamingRule = helper.GetText("NamingRule");
-            RefTeacherID = helper.GetText("RefTeacherID");
-            RefDepartmentID = helper.GetText("RefDepartmentID");
-            RefProgramPlanID = helper.GetText("RefGraduationPlanID");
-            RefScoreCalcRuleID = helper.GetText("RefScoreCalcRuleID");
-            DisplayOrder = helper.GetText("DisplayOrder");
+            
+            foreach (XmlNode node in element.ChildNodes)
+            {
+                if (node is XmlElement)
+                {
+                    string text = node.InnerText;
+                    switch (node.Name)
+                    {
+                        case "ClassName": Name = text; break;
+                        case "GradeYear": GradeYear = text; break;
+                        case "NamingRule": NamingRule = text; break;
+                        case "RefTeacherID": RefTeacherID = text; break;
+                        case "RefDepartmentID": RefDepartmentID = text; break;
+                        case "RefGraduationPlanID": RefProgramPlanID = text; break;
+                        case "RefScoreCalcRuleID": RefScoreCalcRuleID = text; break;
+                        case "DisplayOrder": DisplayOrder = text; break;
+                    }
+                }
+            }
         }
         #region IComparable<ClassRecord> 成員
 
