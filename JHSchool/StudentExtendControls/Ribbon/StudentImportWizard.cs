@@ -209,16 +209,25 @@ namespace JHSchool.StudentExtendControls.Ribbon
             cboValidateField.SelectedItem = null;
             cboValidateField.Items.Clear();
             cboValidateField.DisplayMember = "DisplayText";
-            cboValidateField.Items.Add(Context.EmptyShiftCheckField);
+            BulkColumnOption emptyOption = new BulkColumnOption(
+                Context.EmptyShiftCheckField,
+                Context.EmptyShiftCheckField.DisplayText);
+            cboValidateField.Items.Add(emptyOption);
             cboValidateField.SelectedIndex = 0;
 
             foreach (BulkColumn each in Context.AcceptColumns.Values)
             {
+                string displayText = GetParentAliasDisplayText(each.DisplayText);
+
                 if (each.Identifiable)
-                    cboIdField.Items.Add(each);
+                {
+                    cboIdField.Items.Add(new BulkColumnOption(each, displayText));
+                }
 
                 if (each.ShiftCheckable)
-                    cboValidateField.Items.Add(each);
+                {
+                    cboValidateField.Items.Add(new BulkColumnOption(each, displayText));
+                }
             }
 
             //檢查是否有提供識別欄位。
@@ -241,13 +250,21 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 return;
             }
 
-            BulkColumn column = cboIdField.SelectedItem as BulkColumn;
-            if (column != null)
-                Context.IdentifyField = column.DisplayText;
+            BulkColumnOption idOption = cboIdField.SelectedItem as BulkColumnOption;
+            if (idOption != null && idOption.Column != null)
+                Context.IdentifyField = idOption.Column.DisplayText;
 
-            column = cboValidateField.SelectedItem as BulkColumn;
-            if (column != Context.EmptyShiftCheckField)
-                Context.ShiftCheckField = column.DisplayText;
+            BulkColumnOption validateOption = cboValidateField.SelectedItem as BulkColumnOption;
+            if (validateOption != null &&
+                validateOption.Column != null &&
+                validateOption.Column != Context.EmptyShiftCheckField)
+            {
+                Context.ShiftCheckField = validateOption.Column.DisplayText;
+            }
+            else
+            {
+                Context.ShiftCheckField = string.Empty;
+            }
 
             if (Context.IdentifyField == Context.ShiftCheckField)
             {
@@ -292,14 +309,15 @@ namespace JHSchool.StudentExtendControls.Ribbon
             foreach (ImportItem each in fields.Values)
             {
                 //遮蔽欄位
-                if (avoids.Contains(each.Text)) continue;
+                if (avoids.Contains(each.InternalGroupName)) continue;
 
                 bool hide_column = false;
+                string internalFieldName = each.InternalFieldName;
 
                 if (each.IsGroupColumn)
                 {
-                    if (bfields.ContainsKey(each.Text))
-                        each.CheckAccept(bfields[each.Text]);
+                    if (bfields.ContainsKey(each.InternalGroupName))
+                        each.CheckAccept(bfields[each.InternalGroupName]);
                     else
                     { //不在群組欄位中時。
                         hide_column = true;
@@ -307,22 +325,22 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 }
                 else
                 {//非群欄位時。
-                    if (!Context.AcceptColumns.ContainsKey(each.Text))
+                    if (!Context.AcceptColumns.ContainsKey(internalFieldName))
                     { //不在 AcceptColumns 中時。
                         each.Enabled = false;
                         each.ToolTipText = "系統不提供此欄位匯入。";
                     }
-                    else if (each.Text == Context.IdentifyField)
+                    else if (internalFieldName == Context.IdentifyField)
                     {//「識別欄」不可以匯入。
                         each.Enabled = false;
                         each.ToolTipText = "識別欄不可以當作匯入欄位。";
                     }
-                    else if (each.Text == Context.ShiftCheckField)
+                    else if (internalFieldName == Context.ShiftCheckField)
                     {//「驗證欄」不可以匯入。
                         each.Enabled = false;
                         each.ToolTipText = "驗證欄不可以當作匯入欄位。";
                     }
-                    else if (each.Text == "狀態" && (Context.IdentifyField == "學號" || Context.IdentifyField == "身分證號"))
+                    else if (internalFieldName == "狀態" && (Context.IdentifyField == "學號" || Context.IdentifyField == "身分證號"))
                     {// 狀態欄位只能使用學生系統編號為識別欄位修改
                         each.Enabled = false;
                         each.ToolTipText = "識別欄不可以當作匯入欄位。";
@@ -394,12 +412,46 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     item = fields[each.GroupName];
                 else
                 {
-                    item = new ImportItem(each.GroupName);
+                    item = new ImportItem(GetImportDisplayName(each), each.GroupName);
                     fields.Add(each.GroupName, item);
                 }
 
                 item.AddSheetColumn(each);
             }
+        }
+
+        /// <summary>
+        /// 識別欄／驗證欄下拉選單顯示名稱：父親／母親欄位改為家長1／家長2 用語。
+        /// </summary>
+        private static string GetParentAliasDisplayText(string displayText)
+        {
+            if (string.IsNullOrEmpty(displayText))
+                return displayText;
+
+            if (displayText.StartsWith("父親"))
+                return "家長1" + displayText.Substring("父親".Length);
+
+            if (displayText.StartsWith("母親"))
+                return "家長2" + displayText.Substring("母親".Length);
+
+            return displayText;
+        }
+
+        /// <summary>
+        /// 匯入欄位清單顯示名稱：優先使用 Excel 原始標題（含家長1／家長2 別名）。
+        /// </summary>
+        private static string GetImportDisplayName(SheetColumn column)
+        {
+            if (!column.IsGroupField)
+                return column.DisplayText;
+
+            string groupName = column.GroupName;
+            if (column.SourceName.StartsWith("家長1") && groupName.StartsWith("父親"))
+                return "家長1" + groupName.Substring("父親".Length);
+            if (column.SourceName.StartsWith("家長2") && groupName.StartsWith("母親"))
+                return "家長2" + groupName.Substring("母親".Length);
+
+            return groupName;
         }
 
         private void wpSelectField_NextButtonClick(object sender, CancelEventArgs e)
@@ -447,19 +499,64 @@ namespace JHSchool.StudentExtendControls.Ribbon
             }
         }
 
+        private class BulkColumnOption
+        {
+            private readonly BulkColumn _column;
+            private readonly string _displayText;
+
+            public BulkColumnOption(BulkColumn column, string displayText)
+            {
+                _column = column;
+                _displayText = displayText;
+            }
+
+            public string DisplayText
+            {
+                get { return _displayText; }
+            }
+
+            public BulkColumn Column
+            {
+                get { return _column; }
+            }
+        }
+
         private class ImportItem : ListViewItem
         {
             private SheetColumnCollection _columns;
             private bool _is_group_column;
             private bool _enabled;
             private bool _locked;
+            private string _internal_group_name;
 
-            public ImportItem(string displayName)
+            public ImportItem(string displayName, string internalGroupName)
             {
                 Text = displayName;
+                _internal_group_name = internalGroupName;
                 Enabled = false;
 
                 _columns = new SheetColumnCollection();
+            }
+
+            /// <summary>
+            /// 內部群組／欄位名稱（父親／母親），用於 AcceptColumns 與 BulkDescription 比對。
+            /// </summary>
+            public string InternalGroupName
+            {
+                get { return _internal_group_name; }
+            }
+
+            /// <summary>
+            /// 第一個 SheetColumn 的內部欄位名稱。
+            /// </summary>
+            public string InternalFieldName
+            {
+                get
+                {
+                    foreach (SheetColumn column in _columns.Values)
+                        return column.Name;
+                    return _internal_group_name;
+                }
             }
 
             public void AddSheetColumn(SheetColumn column)

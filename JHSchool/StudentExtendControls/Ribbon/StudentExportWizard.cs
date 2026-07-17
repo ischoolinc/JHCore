@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,7 +32,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         {
             InitializeComponent();
 
-            //#region ¥[¤J¶i¶¥¸òHELP«ö¶s
+            //#region åŠ å…¥é€²éšè·ŸHELPæŒ‰éˆ•
             //advContainer = new ControlContainerItem();
             //advContainer.AllowItemResize = false;
             //advContainer.GlobalItem = false;
@@ -46,7 +46,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             //advButton = new ButtonX();
             //advButton.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            //advButton.Text = "    ¶i¶¥";
+            //advButton.Text = "    é€²éš";
             //advButton.Top = this.wizard1.Controls[1].Controls[0].Top;
             //advButton.Left = 5;
             //advButton.Size = this.wizard1.Controls[1].Controls[0].Size;
@@ -77,7 +77,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             //this.wizard1.Controls[1].Controls.Add(helpButton);
             //#endregion
 
-            #region ³]©wWizard·|¸òµÛStyle¶]
+            #region è¨­å®šWizardæœƒè·Ÿè‘—Styleè·‘
             this.wizard1.HeaderStyle.ApplyStyle((GlobalManager.Renderer as Office2007Renderer).ColorTable.GetClass(ElementStyleClassKeys.RibbonFileMenuBottomContainerKey));
             this.wizard1.FooterStyle.BackColorGradientAngle = -90;
             this.wizard1.FooterStyle.BackColorGradientType = eGradientType.Linear;
@@ -103,13 +103,13 @@ namespace JHSchool.StudentExtendControls.Ribbon
         {
             if (GetSelectedFields().Count == 0)
             {
-                FISCA.Presentation.Controls.MsgBox.Show("¥²¶·¦Ü¤Ö¿ï¾Ü¤@¶µ¶×¥XÄæ¦ì!", "Äæ¦ìªÅ¥Õ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                FISCA.Presentation.Controls.MsgBox.Show("å¿…é ˆè‡³å°‘é¸æ“‡ä¸€é …åŒ¯å‡ºæ¬„ä½!", "æ¬„ä½ç©ºç™½", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk¡A¤ä´©.xlsx ¶×¥X
-            saveFileDialog1.Filter = "Excel (*.xlsx)|*.xlsx|Excel (*.xls)|*.xls|©Ò¦³ÀÉ®× (*.*)|*.*";
-            saveFileDialog1.FileName = "¶×¥X¾Ç¥Í°ò¥»¸ê®Æ";
+            // 2017/8/22 ç©é©Šä¾æ“šé«˜é›„å°çµ„å°ˆæ¡ˆ [03-05][04+] EXCELåŒ¯å…¥æ ¼å¼å¯å¦ä¿®æ­£ç‚ºxlsxä¹Ÿå¯åŒ¯å…¥ï¼Ÿ æ›´æ”¹ç‚ºæ–°ç‰ˆ Aspose.Cells_201402 å¯«æ³•ï¼Œæ”¯æ´.xlsx åŒ¯å‡º
+            saveFileDialog1.Filter = "Excel (*.xlsx)|*.xlsx|Excel (*.xls)|*.xls|æ‰€æœ‰æª”æ¡ˆ (*.*)|*.*";
+            saveFileDialog1.FileName = "åŒ¯å‡ºå­¸ç”ŸåŸºæœ¬è³‡æ–™";
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -117,7 +117,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 foreach (StudentRecord student in Student.Instance.SelectedList)
                 {
                     ec.AddCondition(student.ID);
-                }
+                }                
                 ec.SetSelectedFields(GetSelectedFields());
                 ExportTable table = ec.Export();
 
@@ -127,14 +127,14 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 {
                     output.Save(saveFileDialog1.FileName);
                     PermRecLogProcess prlp = new PermRecLogProcess();
-                    prlp.SaveLog("¾Ç¥Í.¶×¥X¾Ç¥Í°ò¥»¸ê®Æ", "§å¦¸¶×¥X", "¶×¥X" + Student.Instance.SelectedKeys.Count + "µ§¾Ç¥Í¸ê®Æ.");
+                    prlp.SaveLog("å­¸ç”Ÿ.åŒ¯å‡ºå­¸ç”ŸåŸºæœ¬è³‡æ–™", "æ‰¹æ¬¡åŒ¯å‡º", "åŒ¯å‡º" + Student.Instance.SelectedKeys.Count + "ç­†å­¸ç”Ÿè³‡æ–™.");
                 }
                 catch (Exception)
                 {
-                    FISCA.Presentation.Controls.MsgBox.Show("ÀÉ®×Àx¦s¥¢±Ñ, ÀÉ®×¥Ø«e¥i¯à¤w¸g¶}±Ò¡C", "Àx¦s¥¢±Ñ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    FISCA.Presentation.Controls.MsgBox.Show("æª”æ¡ˆå„²å­˜å¤±æ•—, æª”æ¡ˆç›®å‰å¯èƒ½å·²ç¶“é–‹å•Ÿã€‚", "å„²å­˜å¤±æ•—", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                if (FISCA.Presentation.Controls.MsgBox.Show("ÀÉ®×¦sÀÉ§¹¦¨¡A¬O§_¶}±Ò¸ÓÀÉ®×", "¬O§_¶}±Ò", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (FISCA.Presentation.Controls.MsgBox.Show("æª”æ¡ˆå­˜æª”å®Œæˆï¼Œæ˜¯å¦é–‹å•Ÿè©²æª”æ¡ˆ", "æ˜¯å¦é–‹å•Ÿ", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     try
                     {
@@ -142,7 +142,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     }
                     catch (Exception ex)
                     {
-                        FISCA.Presentation.Controls.MsgBox.Show("¶}±ÒÀÉ®×µo¥Í¥¢±Ñ:" + ex.Message, "¿ù»~", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        FISCA.Presentation.Controls.MsgBox.Show("é–‹å•Ÿæª”æ¡ˆç™¼ç”Ÿå¤±æ•—:" + ex.Message, "éŒ¯èª¤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 this.Close();
@@ -155,29 +155,63 @@ namespace JHSchool.StudentExtendControls.Ribbon
             BaseFieldFormater formater = new BaseFieldFormater();
             FieldCollection collection = formater.Format(element);
 
-            //// ¥[¤J¥i¥H¶×¥X¾Ç¥Íª¬ºA
+            //// åŠ å…¥å¯ä»¥åŒ¯å‡ºå­¸ç”Ÿç‹€æ…‹
             //Field fld1 = new Field();
-            //fld1.DisplayText = "ª¬ºA";
+            //fld1.DisplayText = "ç‹€æ…‹";
             //fld1.FieldName = "StudentStatus";
             //collection.Add(fld1);
-            List<string> list = new List<string>(new string[] { "¾Ç¥Í¨t²Î½s¸¹", "©m¦W", "¾Ç¸¹", "¨­¤ÀÃÒ¸¹", "ª¬ºA" });
+            List<string> list = new List<string>(new string[] { "å­¸ç”Ÿç³»çµ±ç·¨è™Ÿ", "å§“å", "å­¸è™Ÿ", "èº«åˆ†è­‰è™Ÿ", "ç‹€æ…‹" });
             
-            //»İ¾B½ªªºÄæ¦ì
-            List<string> avoids = new List<string>(new string[] { "±b¸¹Ãş«¬" });
+            //éœ€é®è”½çš„æ¬„ä½
+            List<string> avoids = new List<string>(new string[] { "å¸³è™Ÿé¡å‹" });
 
             foreach (Field field in collection)
             {
-                //¾B½ªÄæ¦ì
-                if (avoids.Contains(field.DisplayText)) continue;
+                string originalDisplayText = field.DisplayText;
 
-                ListViewItem item = listView.Items.Add(field.DisplayText);
-                if (list.Contains(field.DisplayText))
+                // Use the original field name for filtering.
+                if (avoids.Contains(originalDisplayText))
+                    continue;
+
+                string displayText =
+                    ConvertParentDisplayText(originalDisplayText);
+
+                // Update only the runtime field header.
+                // The XML resource and field identifiers remain unchanged.
+                field.DisplayText = displayText;
+
+                ListViewItem item =
+                    listView.Items.Add(displayText);
+
+                // Preserve the existing required-field highlighting logic.
+                if (list.Contains(originalDisplayText))
                 {
                     item.ForeColor = Color.Red;
                 }
+
                 item.Tag = field;
                 item.Checked = true;
             }
+        }
+
+        private string ConvertParentDisplayText(string displayText)
+        {
+            if (string.IsNullOrEmpty(displayText))
+                return displayText;
+
+            if (displayText.StartsWith("çˆ¶è¦ª"))
+            {
+                return "å®¶é•·1" +
+                    displayText.Substring("çˆ¶è¦ª".Length);
+            }
+
+            if (displayText.StartsWith("æ¯è¦ª"))
+            {
+                return "å®¶é•·2" +
+                    displayText.Substring("æ¯è¦ª".Length);
+            }
+
+            return displayText;
         }
 
         private FieldCollection GetSelectedFields()

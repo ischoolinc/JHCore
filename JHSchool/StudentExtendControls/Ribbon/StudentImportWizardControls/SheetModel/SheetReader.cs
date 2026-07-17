@@ -173,5 +173,45 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
                 }
             }
         }
+
+        /// <summary>
+        /// 將 Excel 家長別名欄位（家長1／家長2）正規化為內部欄位名稱（父親／母親）。
+        /// 必須在 BindSheet 之後、欄位比對與產生 XML 之前呼叫。
+        /// </summary>
+        public void NormalizeParentImportFieldNames()
+        {
+            SheetColumnCollection normalized = new SheetColumnCollection();
+
+            foreach (SheetColumn column in _columns.Values)
+            {
+                string internalName = NormalizeParentImportFieldName(column.Name);
+                column.SetInternalName(internalName);
+
+                if (normalized.ContainsKey(column.Name))
+                    throw new ArgumentException("重覆的欄位名稱：" + column.Name);
+
+                normalized.Add(column.Name, column);
+            }
+
+            _columns = normalized;
+        }
+
+        /// <summary>
+        /// Excel 欄位標題 → 內部匯入欄位名稱。
+        /// 例如：家長1姓名 → 父親姓名、家長2:學歷 → 母親:學歷。
+        /// </summary>
+        public static string NormalizeParentImportFieldName(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                return fieldName;
+
+            if (fieldName.StartsWith("家長1"))
+                return "父親" + fieldName.Substring("家長1".Length);
+
+            if (fieldName.StartsWith("家長2"))
+                return "母親" + fieldName.Substring("家長2".Length);
+
+            return fieldName;
+        }
     }
 }

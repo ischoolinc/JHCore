@@ -130,6 +130,10 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls
             _source_reader = new SheetReader();
             _source_reader.BindSheet(sheet, 0, 0);
 
+            // 將 Excel 家長1／家長2 別名正規化為內部父親／母親欄位名稱。
+            // 必須在欄位比對、驗證與產生 XML 之前執行。
+            _source_reader.NormalizeParentImportFieldNames();
+
             //設定資料讀取器的「識別欄」。
             if (!string.IsNullOrEmpty(IdentifyField))
                 _source_reader.SetKeyColumn(IdentifyField);

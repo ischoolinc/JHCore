@@ -11,6 +11,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
         private Cell _binding_cell;
         private BulkColumn _binding_bulk;
         private string _name;
+        private string _source_name;
 
         // 2017/8/22 穎驊依據高雄小組專案 [03-05][04+] EXCEL匯入格式可否修正為xlsx也可匯入？ 更改為新版 Aspose.Cells_201402 寫法 ，從使用 byte 改為 int
         //private byte _absolute_index, _relatively_index;
@@ -23,11 +24,56 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
 
         public SheetColumn(Cell bindCell, byte relativelyIndex)
         {
+            _source_name = bindCell.StringValue;
             _name = bindCell.StringValue;
             _absolute_index = bindCell.Column;
             _relatively_index = relativelyIndex;
             _binding_cell = bindCell;
 
+            RefreshGroupInfo();
+        }
+
+        /// <summary>
+        /// Excel 原始欄位標題（用於讀取實體欄位與 UI 顯示）。
+        /// </summary>
+        public string SourceName
+        {
+            get { return _source_name; }
+        }
+
+        /// <summary>
+        /// 內部匯入欄位名稱（用於 BulkDescription、驗證與產生 XML）。
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+        }
+
+        /// <summary>
+        /// 匯入畫面顯示用名稱，優先顯示 Excel 原始標題。
+        /// </summary>
+        public string DisplayText
+        {
+            get { return _source_name; }
+        }
+
+        /// <summary>
+        /// 將 Excel 家長別名轉換為內部欄位名稱（父親／母親）。
+        /// </summary>
+        public void SetInternalName(string internalName)
+        {
+            if (string.IsNullOrEmpty(internalName) || internalName == _name)
+                return;
+
+            _name = internalName;
+            RefreshGroupInfo();
+        }
+
+        private void RefreshGroupInfo()
+        {
             if (_name.IndexOf(":") > 0)
             {
                 _is_group_field = true;
@@ -37,14 +83,6 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
             {
                 _is_group_field = false;
                 _group_name = _name;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _name;
             }
         }
 

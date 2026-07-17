@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using FISCA.DSAUtil;
@@ -18,7 +18,7 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
     {
         //private DSConnection _connection;
         private FieldCollection _selectFields;
-        // ¤@©w¦³ ID
+        // ä¸€å®šæœ‰ ID
         private FieldCollection _selectFieldsID;
 
         private List<string> _conditions;
@@ -28,7 +28,7 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
             _conditions = new List<string>();
         }
 
-        #region IExportConnector ¦¨­û
+        #region IExportConnector æˆå“¡
 
         public void SetSelectedFields(FieldCollection fields)
         {
@@ -44,10 +44,10 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
 
         public ExportTable Export()
         {
-            // ¨ú±o¿¤¥«¹ï·Óªí
+            // å–å¾—ç¸£å¸‚å°ç…§è¡¨
             XmlElement schoolLocationList = Config.GetSchoolLocationList().GetContent().BaseElement;
 
-            // ¨ú±o¶×¥X³W«h´y­z
+            // å–å¾—åŒ¯å‡ºè¦å‰‡æè¿°
             XmlElement descElement = StudentBulkProcess.GetExportDescription();
             IFieldFormater fieldFormater = new BaseFieldFormater();
             IResponseFormater responseFormater = new ResponseFormater();
@@ -60,12 +60,21 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
             fieldCollection = FieldUtil.Match(fieldCollection, _selectFields);
             exportFields = FieldUtil.Match(exportFields, _selectFields);
 
-            //// ¦³¿ïª¬ºA®É¥[¤J
-            //if (_selectFields.FindByDisplayText("ª¬ºA") != null)
+            // Rename parent column headers to match the export UI.
+            // çˆ¶è¦ª -> å®¶é•·1, æ¯è¦ª -> å®¶é•·2
+            // Covers simple fields and XmlField leaf headers.
+            // FieldName / RequestName and XML resource stay unchanged.
+            foreach (ExportField field in exportFields)
+            {
+                field.DisplayText = ConvertParentDisplayText(field.DisplayText);
+            }
+
+            //// æœ‰é¸ç‹€æ…‹æ™‚åŠ å…¥
+            //if (_selectFields.FindByDisplayText("ç‹€æ…‹") != null)
             //{
-            //    fieldCollection.Add(_selectFields.FindByDisplayText("ª¬ºA"));
+            //    fieldCollection.Add(_selectFields.FindByDisplayText("ç‹€æ…‹"));
             //    ExportField ex = new ExportField();
-            //    ex.DisplayText = "ª¬ºA";
+            //    ex.DisplayText = "ç‹€æ…‹";
             //    ex.RequestName = "StudentStatus";
             //    ex.ColumnIndex = exportFields.Length;
             //    ex.DataType = "";
@@ -85,12 +94,12 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
             {
                 Field fd1 = new Field();
                 fd1.FieldName = "StudentID";
-                fd1.DisplayText = "¾Ç¥Í¨t²Î½s¸¹";
+                fd1.DisplayText = "å­¸ç”Ÿç³»çµ±ç·¨è™Ÿ";
                 _selectFieldsID.Add(fd1);
             }
             reqGenerator.SetSelectedFields(_selectFieldsID);
 
-            // ¹w³]§ä-1, ¤£µM·|¶Ç¦^©Ò¦³¾Ç¥Í
+            // é è¨­æ‰¾-1, ä¸ç„¶æœƒå‚³å›æ‰€æœ‰å­¸ç”Ÿ
             ICondition condition = new BaseCondition("ID", "-1");
             reqGenerator.AddCondition(condition);
             foreach (string id in _conditions)
@@ -114,7 +123,7 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
             foreach (ExportField field in exportFields)
                 table.AddColumn(field);
 
-            //// ¨ú±o¾Ç¥Íª¬ºA
+            //// å–å¾—å­¸ç”Ÿç‹€æ…‹
             //Dictionary<string, string> StudStatusDic = new Dictionary<string, string>();
             //foreach (JHSchool.Data.JHStudentRecord stud in JHSchool.Data.JHStudent.SelectByIDs(K12.Presentation.NLDPanels.Student.SelectedSource ))
             //    StudStatusDic.Add(stud.ID, stud.Status.ToString());            
@@ -130,11 +139,11 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
 
                     XmlNode cellNode = record.SelectSingleNode(column.XPath);
 
-                    //if(column.DisplayText !="ª¬ºA")
+                    //if(column.DisplayText !="ç‹€æ…‹")
                     //    cellNode = record.SelectSingleNode(column.XPath);
                     // CustodianOtherInfo/CustodianOtherInfo[1]/EducationDegree[1]
 
-                    #region ³o¬qµ{¦¡¬O³B²z¶×¤J/¶×¥Xµ{¦¡¤£¤@­P°İÃD
+                    #region é€™æ®µç¨‹å¼æ˜¯è™•ç†åŒ¯å…¥/åŒ¯å‡ºç¨‹å¼ä¸ä¸€è‡´å•é¡Œ
                     if (column.XPath.StartsWith("CustodianOtherInfo/Custodian"))
                     {
                         if (cellNode == null)
@@ -180,9 +189,9 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
                     {
                         if (column.FieldName == "GraduateSchoolLocationCode")
                             cell.Value = GetCounty(schoolLocationList, cellNode.InnerText);
-                        else if (column.FieldName == "DeptName") //³B²z¬ì§OÄ~©Ó°İÃD¡C
+                        else if (column.FieldName == "DeptName") //è™•ç†ç§‘åˆ¥ç¹¼æ‰¿å•é¡Œã€‚
                         {
-                            //³o­ÓÄæ¦ìªº¸ê®Æ¤@©w·|³Q¦^¶Ç¡A¦]¬°³]©w¤F Mandatory Äİ©Ê¡C
+                            //é€™å€‹æ¬„ä½çš„è³‡æ–™ä¸€å®šæœƒè¢«å›å‚³ï¼Œå› ç‚ºè¨­å®šäº† Mandatory å±¬æ€§ã€‚
                             XmlNode selfDept = record.SelectSingleNode("SelfDeptName");
                             if (string.IsNullOrEmpty(selfDept.InnerText))
                                 cell.Value = cellNode.InnerText;
@@ -197,9 +206,9 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
                             cell.Value = cellNode.InnerText;
                     }
 
-                    //if (column.DisplayText == "ª¬ºA")//record.SelectSingleNode("StudentID")!=null )
+                    //if (column.DisplayText == "ç‹€æ…‹")//record.SelectSingleNode("StudentID")!=null )
                     //{
-                    //    // ¾Ç¥Íª¬ºA
+                    //    // å­¸ç”Ÿç‹€æ…‹
                     //    if (StudStatusDic.ContainsKey(record.SelectSingleNode("StudentID").InnerText))
                     //        cell.Value = StudStatusDic[record.SelectSingleNode("StudentID").InnerText];
                     //}
@@ -210,28 +219,48 @@ namespace JHSchool.Legacy.Export.ResponseHandler.Connector
         }
 
         
-        // ¨ú±o¾Ç¥Íª¬ºA¦WºÙ
+        // å–å¾—å­¸ç”Ÿç‹€æ…‹åç¨±
         private string GetStudStatusStr(string code)
         {
             string retValue = string.Empty;
 
             if (code == "1")
-                retValue = "¤@¯ë";
+                retValue = "ä¸€èˆ¬";
 
             if (code == "4")
-                retValue = "¥ğ¾Ç";
+                retValue = "ä¼‘å­¸";
 
             if (code == "8")
-                retValue = "½ù¾Ç";
+                retValue = "è¼Ÿå­¸";
 
             if (code == "16")
-                retValue = "²¦·~©ÎÂ÷®Õ";
+                retValue = "ç•¢æ¥­æˆ–é›¢æ ¡";
 
             if (code == "256")
-                retValue = "§R°£";
+                retValue = "åˆªé™¤";
 
             return retValue;
         
+        }
+
+        private string ConvertParentDisplayText(string displayText)
+        {
+            if (string.IsNullOrEmpty(displayText))
+                return displayText;
+
+            if (displayText.StartsWith("çˆ¶è¦ª"))
+            {
+                return "å®¶é•·1" +
+                    displayText.Substring("çˆ¶è¦ª".Length);
+            }
+
+            if (displayText.StartsWith("æ¯è¦ª"))
+            {
+                return "å®¶é•·2" +
+                    displayText.Substring("æ¯è¦ª".Length);
+            }
+
+            return displayText;
         }
 
         private string GetCounty(XmlElement list, string code)
