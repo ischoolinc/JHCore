@@ -31,6 +31,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         public StudentExportWizard()
         {
             InitializeComponent();
+            ConfigureFieldListView();
 
             //#region 加入進階跟HELP按鈕
             //advContainer = new ControlContainerItem();
@@ -189,9 +190,27 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     item.ForeColor = Color.Red;
                 }
 
+                item.BackColor = SystemColors.Window;
+                item.Selected = false;
                 item.Tag = field;
                 item.Checked = true;
             }
+        }
+
+        private void ConfigureFieldListView()
+        {
+            listView.HideSelection = true;
+            listView.BackColor = SystemColors.Window;
+            listView.BorderStyle = BorderStyle.FixedSingle;
+            listView.ItemSelectionChanged += FieldListView_ItemSelectionChanged;
+        }
+
+        private void FieldListView_ItemSelectionChanged(
+            object sender,
+            ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+                e.Item.Selected = false;
         }
 
         private string ConvertParentDisplayText(string displayText)

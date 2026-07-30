@@ -29,6 +29,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         public StudentImportWizard()
         {
             InitializeComponent();
+            ConfigureFieldListView();
 
             #region 設定Wizard會跟著Style跑
             (GlobalManager.Renderer as Office2007Renderer).ColorTableChanged += new EventHandler(StudentImportWizard_ColorTableChanged);
@@ -73,6 +74,22 @@ namespace JHSchool.StudentExtendControls.Ribbon
         private WizardContext Context
         {
             get { return _context; }
+        }
+
+        private void ConfigureFieldListView()
+        {
+            lvSourceFieldList.HideSelection = true;
+            lvSourceFieldList.BackColor = SystemColors.Window;
+            lvSourceFieldList.BorderStyle = BorderStyle.FixedSingle;
+            lvSourceFieldList.ItemSelectionChanged += FieldListView_ItemSelectionChanged;
+        }
+
+        private void FieldListView_ItemSelectionChanged(
+            object sender,
+            ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+                e.Item.Selected = false;
         }
 
         #region Select File and Action Page
@@ -350,7 +367,17 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 }
 
                 if (!hide_column)
+                {
+                    // 家長欄位必須使用 Excel「家長1／家長2」標題；舊「父親／母親」不可勾選。
+                    string parentAliasMessage;
+                    if (!TryValidateParentSourceNames(each, out parentAliasMessage))
+                    {
+                        each.Enabled = false;
+                        each.ToolTipText = parentAliasMessage;
+                    }
+
                     lvSourceFieldList.Items.Add(each);
+                }
             }
         }
 
@@ -420,38 +447,87 @@ namespace JHSchool.StudentExtendControls.Ribbon
             }
         }
 
+        private static bool IsFatherField(string fieldName)
+        {
+            return !string.IsNullOrEmpty(fieldName) &&
+                fieldName.StartsWith("父親");
+        }
+
+        private static bool IsMotherField(string fieldName)
+        {
+            return !string.IsNullOrEmpty(fieldName) &&
+                fieldName.StartsWith("母親");
+        }
+
         /// <summary>
-        /// 識別欄／驗證欄下拉選單顯示名稱：父親／母親欄位改為家長1／家長2 用語。
+        /// 內部欄位名稱 → Excel 必須使用的來源標題（家長1／家長2）。
+        /// </summary>
+        private static string GetExpectedParentSourceName(string internalName)
+        {
+            if (IsFatherField(internalName))
+                return "家長1" + internalName.Substring("父親".Length);
+
+            if (IsMotherField(internalName))
+                return "家長2" + internalName.Substring("母親".Length);
+
+            return internalName;
+        }
+
+        /// <summary>
+        /// UI 顯示名稱：父親／母親欄位改為家長1／家長2 用語（不影響內部欄位名稱）。
         /// </summary>
         private static string GetParentAliasDisplayText(string displayText)
         {
             if (string.IsNullOrEmpty(displayText))
                 return displayText;
 
-            if (displayText.StartsWith("父親"))
-                return "家長1" + displayText.Substring("父親".Length);
-
-            if (displayText.StartsWith("母親"))
-                return "家長2" + displayText.Substring("母親".Length);
-
-            return displayText;
+            return GetExpectedParentSourceName(displayText);
         }
 
         /// <summary>
-        /// 匯入欄位清單顯示名稱：優先使用 Excel 原始標題（含家長1／家長2 別名）。
+        /// 檢查 ImportItem 內家長欄位的 Excel 原始標題是否為家長1／家長2。
+        /// </summary>
+        private static bool TryValidateParentSourceNames(
+            ImportItem item,
+            out string message)
+        {
+            message = null;
+            if (item == null)
+                return true;
+
+            foreach (SheetColumn column in item.SheetColumns.Values)
+            {
+                if (!IsFatherField(column.Name) && !IsMotherField(column.Name))
+                    continue;
+
+                string expected = GetExpectedParentSourceName(column.Name);
+                if (string.IsNullOrEmpty(column.SourceName) ||
+                    column.SourceName != expected)
+                {
+                    string actual = string.IsNullOrEmpty(column.SourceName)
+                        ? column.Name
+                        : column.SourceName;
+                    message = "Excel 欄位「" + actual + "」請改為「" + expected + "」";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 匯入欄位清單顯示名稱：父親／母親改為家長1／家長2（僅 UI，不改內部欄位名稱）。
         /// </summary>
         private static string GetImportDisplayName(SheetColumn column)
         {
-            if (!column.IsGroupField)
-                return column.DisplayText;
+            if (column == null)
+                return string.Empty;
 
-            string groupName = column.GroupName;
-            if (column.SourceName.StartsWith("家長1") && groupName.StartsWith("父親"))
-                return "家長1" + groupName.Substring("父親".Length);
-            if (column.SourceName.StartsWith("家長2") && groupName.StartsWith("母親"))
-                return "家長2" + groupName.Substring("母親".Length);
+            string displayText = column.IsGroupField
+                ? column.GroupName
+                : column.DisplayText;
 
-            return groupName;
+            return GetParentAliasDisplayText(displayText);
         }
 
         private void wpSelectField_NextButtonClick(object sender, CancelEventArgs e)
@@ -534,6 +610,8 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 Text = displayName;
                 _internal_group_name = internalGroupName;
                 Enabled = false;
+                BackColor = SystemColors.Window;
+                Selected = false;
 
                 _columns = new SheetColumnCollection();
             }

@@ -1,5 +1,4 @@
 ﻿using FISCA.Presentation.Controls;
-using SmartSchool.Common;
 namespace JHSchool.StudentExtendControls.Ribbon
 {
     partial class StudentExportWizard
@@ -31,7 +30,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentExportWizard));
-            this.listView = new SmartSchool.Common.ListViewEX();
+            this.listView = new System.Windows.Forms.ListView();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.chkSelect = new System.Windows.Forms.CheckBox();
             this.wizard1 = new DevComponents.DotNetBar.Wizard();
@@ -43,15 +42,12 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             // listView
             // 
-            // 
-            // 
-            // 
-            this.listView.Border.Class = "RibbonClientPanel";
-            this.listView.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.listView.BackColor = System.Drawing.SystemColors.Window;
+            this.listView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView.CheckBoxes = true;
             this.listView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listView.HideSelection = false;
+            this.listView.HideSelection = true;
             this.listView.Location = new System.Drawing.Point(0, 28);
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(528, 265);
@@ -198,7 +194,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
         #endregion
 
-        private ListViewEX listView;
+        private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.CheckBox chkSelect;
         private DevComponents.DotNetBar.Wizard wizard1;
