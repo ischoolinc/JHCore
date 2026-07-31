@@ -78,18 +78,10 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
         private void ConfigureFieldListView()
         {
-            lvSourceFieldList.HideSelection = true;
+            lvSourceFieldList.MultiSelect = true;
+            lvSourceFieldList.HideSelection = false;
             lvSourceFieldList.BackColor = SystemColors.Window;
             lvSourceFieldList.BorderStyle = BorderStyle.FixedSingle;
-            lvSourceFieldList.ItemSelectionChanged += FieldListView_ItemSelectionChanged;
-        }
-
-        private void FieldListView_ItemSelectionChanged(
-            object sender,
-            ListViewItemSelectionChangedEventArgs e)
-        {
-            if (e.IsSelected)
-                e.Item.Selected = false;
         }
 
         #region Select File and Action Page

@@ -199,18 +199,10 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
         private void ConfigureFieldListView()
         {
-            listView.HideSelection = true;
+            listView.MultiSelect = true;
+            listView.HideSelection = false;
             listView.BackColor = SystemColors.Window;
             listView.BorderStyle = BorderStyle.FixedSingle;
-            listView.ItemSelectionChanged += FieldListView_ItemSelectionChanged;
-        }
-
-        private void FieldListView_ItemSelectionChanged(
-            object sender,
-            ListViewItemSelectionChangedEventArgs e)
-        {
-            if (e.IsSelected)
-                e.Item.Selected = false;
         }
 
         private string ConvertParentDisplayText(string displayText)
