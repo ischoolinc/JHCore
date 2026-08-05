@@ -157,11 +157,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 /JHSchool/obj
-JHSchool/.vs/JHSchool/FileContentIndex/3b1c4abe-169c-43a7-a54c-bd0500891e24.vsidx
-JHSchool/.vs/JHSchool/FileContentIndex/21e3044e-9cd9-4513-805a-db3a6d1f1ad7.vsidx
-JHSchool/.vs/JHSchool/v18/DocumentLayout.backup.json
-JHSchool/.vs/JHSchool/v18/DocumentLayout.json
-JHSchool/.vs/JHSchool/v18/fileList.bin
+JHSchool/.vs/*
 JHSchool/.claude/commands/opsx/apply.md
 JHSchool/.claude/commands/opsx/archive.md
 JHSchool/.claude/commands/opsx/explore.md
@@ -178,4 +174,4 @@ JHSchool/.gemini/skills/openspec-apply-change/SKILL.md
 JHSchool/.gemini/skills/openspec-archive-change/SKILL.md
 JHSchool/.gemini/skills/openspec-explore/SKILL.md
 JHSchool/.gemini/skills/openspec-propose/SKILL.md
-JHSchool/.vs/JHSchool/FileContentIndex/d31433da-a482-473a-9266-1804bc08d533.vsidx
+
