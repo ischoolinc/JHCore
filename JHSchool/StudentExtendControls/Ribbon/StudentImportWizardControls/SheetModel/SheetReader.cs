@@ -112,20 +112,66 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
 
         public string GetValue(string fieldName)
         {
-            SheetColumn column = Columns[fieldName];
+            SheetColumn column = ResolveColumn(fieldName);
             string retVal = "" + _sheet.Cells[AbsoluteIndex, column.AbsoluteIndex].StringValue;
 
             if (retVal.Contains("\b"))
                 retVal = retVal.Replace("\b", "");            
-
+            
 //            return "" + _sheet.Cells[AbsoluteIndex, column.AbsoluteIndex].StringValue;
             return retVal;
         }
 
         public Cell GetCell(string fieldName)
         {
-            SheetColumn column = Columns[fieldName];
+            SheetColumn column = ResolveColumn(fieldName);
             return _sheet.Cells[AbsoluteIndex, column.AbsoluteIndex];
+        }
+
+        /// <summary>
+        /// 以內部名稱或家長1／家長2 別名解析欄位。找不到時拋出明確例外。
+        /// </summary>
+        public SheetColumn ResolveColumn(string fieldName)
+        {
+            SheetColumn column;
+            if (TryResolveColumn(fieldName, out column))
+                return column;
+
+            throw new ArgumentException(
+                "來源資料中不包含此欄位。(" + fieldName + ")。" +
+                "若為家長欄位，請確認 Excel 標題與內部欄位（家長1↔父親、家長2↔母親）對應正確。");
+        }
+
+        /// <summary>
+        /// 嘗試以內部名稱或家長1／家長2 別名解析欄位。
+        /// </summary>
+        public bool TryResolveColumn(string fieldName, out SheetColumn column)
+        {
+            column = null;
+            if (string.IsNullOrEmpty(fieldName) || _columns == null)
+                return false;
+
+            if (_columns.ContainsKey(fieldName))
+            {
+                column = _columns[fieldName];
+                return column != null;
+            }
+
+            string internalName = NormalizeParentImportFieldName(fieldName);
+            if (internalName != fieldName && _columns.ContainsKey(internalName))
+            {
+                column = _columns[internalName];
+                return column != null;
+            }
+
+            string aliasName = DenormalizeParentImportFieldName(fieldName);
+            if (aliasName != fieldName && _columns.ContainsKey(aliasName))
+            {
+                column = _columns[aliasName];
+                return column != null;
+            }
+
+            return false;
         }
 
         public void Reset()
@@ -177,14 +223,35 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
         /// <summary>
         /// 將 Excel 家長別名欄位（家長1／家長2）正規化為內部欄位名稱（父親／母親）。
         /// 必須在 BindSheet 之後、欄位比對與產生 XML 之前呼叫。
+        /// 同一內部欄位若同時存在新舊 Excel 標題，優先保留家長1／家長2，略過對應的父親／母親舊欄。
         /// </summary>
         public void NormalizeParentImportFieldNames()
         {
             SheetColumnCollection normalized = new SheetColumnCollection();
+            Dictionary<string, bool> preferredInternalNames = new Dictionary<string, bool>();
 
+            // Pass 1：蒐集由家長1／家長2 Excel 欄位對應出的內部欄位名稱。
             foreach (SheetColumn column in _columns.Values)
             {
-                string internalName = NormalizeParentImportFieldName(column.Name);
+                string sourceName = column.Name;
+                if (IsPreferredParentSourceName(sourceName))
+                {
+                    string preferredInternalName = NormalizeParentImportFieldName(sourceName);
+                    if (!preferredInternalNames.ContainsKey(preferredInternalName))
+                        preferredInternalNames.Add(preferredInternalName, true);
+                }
+            }
+
+            // Pass 2：正規化欄位；舊父親／母親欄位僅在沒有對應家長1／家長2 時保留。
+            foreach (SheetColumn column in _columns.Values)
+            {
+                string sourceName = column.Name;
+                string internalName = NormalizeParentImportFieldName(sourceName);
+
+                if (IsLegacyParentSourceName(sourceName) &&
+                    preferredInternalNames.ContainsKey(internalName))
+                    continue;
+
                 column.SetInternalName(internalName);
 
                 if (normalized.ContainsKey(column.Name))
@@ -194,6 +261,22 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
             }
 
             _columns = normalized;
+        }
+
+        private static bool IsPreferredParentSourceName(string sourceName)
+        {
+            if (string.IsNullOrEmpty(sourceName))
+                return false;
+
+            return sourceName.StartsWith("家長1") || sourceName.StartsWith("家長2");
+        }
+
+        private static bool IsLegacyParentSourceName(string sourceName)
+        {
+            if (string.IsNullOrEmpty(sourceName))
+                return false;
+
+            return sourceName.StartsWith("父親") || sourceName.StartsWith("母親");
         }
 
         /// <summary>
@@ -210,6 +293,24 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Shee
 
             if (fieldName.StartsWith("家長2"))
                 return "母親" + fieldName.Substring("家長2".Length);
+
+            return fieldName;
+        }
+
+        /// <summary>
+        /// 內部匯入欄位名稱 → Excel／UI 家長別名。
+        /// 例如：父親姓名 → 家長1姓名、母親:學歷 → 家長2:學歷。
+        /// </summary>
+        public static string DenormalizeParentImportFieldName(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                return fieldName;
+
+            if (fieldName.StartsWith("父親"))
+                return "家長1" + fieldName.Substring("父親".Length);
+
+            if (fieldName.StartsWith("母親"))
+                return "家長2" + fieldName.Substring("母親".Length);
 
             return fieldName;
         }

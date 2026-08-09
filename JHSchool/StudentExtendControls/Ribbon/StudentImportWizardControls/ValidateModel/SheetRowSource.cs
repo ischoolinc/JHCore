@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using DocValidate;
@@ -21,8 +21,9 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
 
             foreach (ValidateColumn each in columns.Values)
             {
-                if (!_reader.Columns.ContainsKey(each.Name))
-                    throw new ArgumentException("¨Ó·½¸ê®Æ¤¤¤£¥]§t¦¹Äæ¦ì¡C(" + each.Name + ")");
+                SheetColumn resolved;
+                if (!_reader.TryResolveColumn(each.Name, out resolved) || resolved == null)
+                    throw new ArgumentException("ä¾†æºè³‡æ–™ä¸­ä¸åŒ…å«æ­¤æ¬„ä½ã€‚(" + each.Name + ")");
             }
         }
 
@@ -58,7 +59,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
             if (_columns.ContainsKey(FieldName))
                 return _reader.GetValue(FieldName).Trim();
             else
-                throw new ArgumentException("«ü©wªºÄæ¦ì¤£¦s¦b¡A©Î¤£¤¹³\Åª¨ú¡C(" + FieldName + ")");
+                throw new ArgumentException("æŒ‡å®šçš„æ¬„ä½ä¸å­˜åœ¨ï¼Œæˆ–ä¸å…è¨±è®€å–ã€‚(" + FieldName + ")");
         }
 
         #endregion
