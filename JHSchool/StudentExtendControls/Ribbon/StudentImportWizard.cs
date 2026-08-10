@@ -654,24 +654,29 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             public void CheckAccept(BulkColumnCollection basis)
             {
-                List<string> missingFields = new List<string>();
-
                 // 以內部欄位名稱比對（家長1／家長2 已正規化為父親／母親）。
+                bool hasMissingField = false;
+
                 foreach (BulkColumn each in basis.Values)
                 {
                     if (!SheetColumns.ContainsKey(each.FullDisplayText))
-                        missingFields.Add(GetParentAliasDisplayText(each.FullDisplayText));
+                    {
+                        hasMissingField = true;
+                        break;
+                    }
                 }
 
-                if (missingFields.Count > 0)
+                if (hasMissingField)
                 {
                     string groupDisplay = GetParentAliasDisplayText(InternalGroupName);
                     StringBuilder msg = new StringBuilder();
                     msg.AppendLine("Excel「" + groupDisplay + "」群組欄位不完整。");
-                    msg.AppendLine("若要匯入此資料，Excel 尚需包含：");
+                    msg.AppendLine("若要匯入此資料，Excel 必須包含完整欄位：");
                     msg.AppendLine();
-                    foreach (string field in missingFields)
-                        msg.AppendLine(field);
+
+                    // 群組不完整時，提示完整 BulkDescription 群組欄位清單（非僅缺漏欄位）。
+                    foreach (BulkColumn each in basis.Values)
+                        msg.AppendLine(GetParentAliasDisplayText(each.FullDisplayText));
 
                     Enabled = false;
                     Checked = false;
