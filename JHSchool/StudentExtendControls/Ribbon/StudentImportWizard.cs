@@ -29,6 +29,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         public StudentImportWizard()
         {
             InitializeComponent();
+            ConfigureFieldListView();
 
             #region 設定Wizard會跟著Style跑
             (GlobalManager.Renderer as Office2007Renderer).ColorTableChanged += new EventHandler(StudentImportWizard_ColorTableChanged);
@@ -73,6 +74,14 @@ namespace JHSchool.StudentExtendControls.Ribbon
         private WizardContext Context
         {
             get { return _context; }
+        }
+
+        private void ConfigureFieldListView()
+        {
+            lvSourceFieldList.MultiSelect = true;
+            lvSourceFieldList.HideSelection = false;
+            lvSourceFieldList.BackColor = SystemColors.Window;
+            lvSourceFieldList.BorderStyle = BorderStyle.FixedSingle;
         }
 
         #region Select File and Action Page
@@ -209,16 +218,25 @@ namespace JHSchool.StudentExtendControls.Ribbon
             cboValidateField.SelectedItem = null;
             cboValidateField.Items.Clear();
             cboValidateField.DisplayMember = "DisplayText";
-            cboValidateField.Items.Add(Context.EmptyShiftCheckField);
+            BulkColumnOption emptyOption = new BulkColumnOption(
+                Context.EmptyShiftCheckField,
+                Context.EmptyShiftCheckField.DisplayText);
+            cboValidateField.Items.Add(emptyOption);
             cboValidateField.SelectedIndex = 0;
 
             foreach (BulkColumn each in Context.AcceptColumns.Values)
             {
+                string displayText = GetParentAliasDisplayText(each.DisplayText);
+
                 if (each.Identifiable)
-                    cboIdField.Items.Add(each);
+                {
+                    cboIdField.Items.Add(new BulkColumnOption(each, displayText));
+                }
 
                 if (each.ShiftCheckable)
-                    cboValidateField.Items.Add(each);
+                {
+                    cboValidateField.Items.Add(new BulkColumnOption(each, displayText));
+                }
             }
 
             //檢查是否有提供識別欄位。
@@ -241,13 +259,21 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 return;
             }
 
-            BulkColumn column = cboIdField.SelectedItem as BulkColumn;
-            if (column != null)
-                Context.IdentifyField = column.DisplayText;
+            BulkColumnOption idOption = cboIdField.SelectedItem as BulkColumnOption;
+            if (idOption != null && idOption.Column != null)
+                Context.IdentifyField = idOption.Column.DisplayText;
 
-            column = cboValidateField.SelectedItem as BulkColumn;
-            if (column != Context.EmptyShiftCheckField)
-                Context.ShiftCheckField = column.DisplayText;
+            BulkColumnOption validateOption = cboValidateField.SelectedItem as BulkColumnOption;
+            if (validateOption != null &&
+                validateOption.Column != null &&
+                validateOption.Column != Context.EmptyShiftCheckField)
+            {
+                Context.ShiftCheckField = validateOption.Column.DisplayText;
+            }
+            else
+            {
+                Context.ShiftCheckField = string.Empty;
+            }
 
             if (Context.IdentifyField == Context.ShiftCheckField)
             {
@@ -292,37 +318,45 @@ namespace JHSchool.StudentExtendControls.Ribbon
             foreach (ImportItem each in fields.Values)
             {
                 //遮蔽欄位
-                if (avoids.Contains(each.Text)) continue;
+                if (avoids.Contains(each.InternalGroupName)) continue;
 
                 bool hide_column = false;
+                string internalFieldName = each.InternalFieldName;
 
-                if (each.IsGroupColumn)
+                // 以 BulkDescription 群組定義為準，不以 Excel 實際欄位數判斷是否為群組。
+                BulkColumnCollection groupColumns = null;
+                bool isBulkGroup =
+                    bfields.TryGetValue(each.InternalGroupName, out groupColumns)
+                    && groupColumns != null
+                    && groupColumns.Count > 1;
+
+                if (isBulkGroup)
                 {
-                    if (bfields.ContainsKey(each.Text))
-                        each.CheckAccept(bfields[each.Text]);
-                    else
-                    { //不在群組欄位中時。
-                        hide_column = true;
-                    }
+                    each.CheckAccept(groupColumns);
+                }
+                else if (each.IsGroupColumn && !bfields.ContainsKey(each.InternalGroupName))
+                {
+                    // Excel 呈現為群組，但系統 BulkDescription 無此群組時隱藏。
+                    hide_column = true;
                 }
                 else
-                {//非群欄位時。
-                    if (!Context.AcceptColumns.ContainsKey(each.Text))
+                {//非群組欄位，或 BulkDescription 僅單一欄位之群組。
+                    if (!Context.AcceptColumns.ContainsKey(internalFieldName))
                     { //不在 AcceptColumns 中時。
                         each.Enabled = false;
                         each.ToolTipText = "系統不提供此欄位匯入。";
                     }
-                    else if (each.Text == Context.IdentifyField)
+                    else if (internalFieldName == Context.IdentifyField)
                     {//「識別欄」不可以匯入。
                         each.Enabled = false;
                         each.ToolTipText = "識別欄不可以當作匯入欄位。";
                     }
-                    else if (each.Text == Context.ShiftCheckField)
+                    else if (internalFieldName == Context.ShiftCheckField)
                     {//「驗證欄」不可以匯入。
                         each.Enabled = false;
                         each.ToolTipText = "驗證欄不可以當作匯入欄位。";
                     }
-                    else if (each.Text == "狀態" && (Context.IdentifyField == "學號" || Context.IdentifyField == "身分證號"))
+                    else if (internalFieldName == "狀態" && (Context.IdentifyField == "學號" || Context.IdentifyField == "身分證號"))
                     {// 狀態欄位只能使用學生系統編號為識別欄位修改
                         each.Enabled = false;
                         each.ToolTipText = "識別欄不可以當作匯入欄位。";
@@ -332,7 +366,17 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 }
 
                 if (!hide_column)
+                {
+                    // 家長欄位必須使用 Excel「家長1／家長2」標題；舊「父親／母親」不可勾選。
+                    string parentAliasMessage;
+                    if (!TryValidateParentSourceNames(each, out parentAliasMessage))
+                    {
+                        each.Enabled = false;
+                        each.ToolTipText = parentAliasMessage;
+                    }
+
                     lvSourceFieldList.Items.Add(each);
+                }
             }
         }
 
@@ -394,12 +438,95 @@ namespace JHSchool.StudentExtendControls.Ribbon
                     item = fields[each.GroupName];
                 else
                 {
-                    item = new ImportItem(each.GroupName);
+                    item = new ImportItem(GetImportDisplayName(each), each.GroupName);
                     fields.Add(each.GroupName, item);
                 }
 
                 item.AddSheetColumn(each);
             }
+        }
+
+        private static bool IsFatherField(string fieldName)
+        {
+            return !string.IsNullOrEmpty(fieldName) &&
+                fieldName.StartsWith("父親");
+        }
+
+        private static bool IsMotherField(string fieldName)
+        {
+            return !string.IsNullOrEmpty(fieldName) &&
+                fieldName.StartsWith("母親");
+        }
+
+        /// <summary>
+        /// 內部欄位名稱 → Excel 必須使用的來源標題（家長1／家長2）。
+        /// </summary>
+        private static string GetExpectedParentSourceName(string internalName)
+        {
+            if (IsFatherField(internalName))
+                return "家長1" + internalName.Substring("父親".Length);
+
+            if (IsMotherField(internalName))
+                return "家長2" + internalName.Substring("母親".Length);
+
+            return internalName;
+        }
+
+        /// <summary>
+        /// UI 顯示名稱：父親／母親欄位改為家長1／家長2 用語（不影響內部欄位名稱）。
+        /// </summary>
+        private static string GetParentAliasDisplayText(string displayText)
+        {
+            if (string.IsNullOrEmpty(displayText))
+                return displayText;
+
+            return GetExpectedParentSourceName(displayText);
+        }
+
+        /// <summary>
+        /// 檢查 ImportItem 內家長欄位的 Excel 原始標題是否為家長1／家長2。
+        /// </summary>
+        private static bool TryValidateParentSourceNames(
+            ImportItem item,
+            out string message)
+        {
+            message = null;
+            if (item == null)
+                return true;
+
+            foreach (SheetColumn column in item.SheetColumns.Values)
+            {
+                if (!IsFatherField(column.Name) && !IsMotherField(column.Name))
+                    continue;
+
+                string expected = GetExpectedParentSourceName(column.Name);
+                if (string.IsNullOrEmpty(column.SourceName) ||
+                    column.SourceName != expected)
+                {
+                    string actual = string.IsNullOrEmpty(column.SourceName)
+                        ? column.Name
+                        : column.SourceName;
+                    message = "Excel 欄位「" + actual + "」請改為「" + expected + "」";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 匯入欄位清單顯示名稱：父親／母親改為家長1／家長2（僅 UI，不改內部欄位名稱）。
+        /// </summary>
+        private static string GetImportDisplayName(SheetColumn column)
+        {
+            if (column == null)
+                return string.Empty;
+
+            string displayText = column.IsGroupField
+                ? column.GroupName
+                : column.DisplayText;
+
+            return GetParentAliasDisplayText(displayText);
         }
 
         private void wpSelectField_NextButtonClick(object sender, CancelEventArgs e)
@@ -447,19 +574,66 @@ namespace JHSchool.StudentExtendControls.Ribbon
             }
         }
 
+        private class BulkColumnOption
+        {
+            private readonly BulkColumn _column;
+            private readonly string _displayText;
+
+            public BulkColumnOption(BulkColumn column, string displayText)
+            {
+                _column = column;
+                _displayText = displayText;
+            }
+
+            public string DisplayText
+            {
+                get { return _displayText; }
+            }
+
+            public BulkColumn Column
+            {
+                get { return _column; }
+            }
+        }
+
         private class ImportItem : ListViewItem
         {
             private SheetColumnCollection _columns;
             private bool _is_group_column;
             private bool _enabled;
             private bool _locked;
+            private string _internal_group_name;
 
-            public ImportItem(string displayName)
+            public ImportItem(string displayName, string internalGroupName)
             {
                 Text = displayName;
+                _internal_group_name = internalGroupName;
                 Enabled = false;
+                BackColor = SystemColors.Window;
+                Selected = false;
 
                 _columns = new SheetColumnCollection();
+            }
+
+            /// <summary>
+            /// 內部群組／欄位名稱（父親／母親），用於 AcceptColumns 與 BulkDescription 比對。
+            /// </summary>
+            public string InternalGroupName
+            {
+                get { return _internal_group_name; }
+            }
+
+            /// <summary>
+            /// 第一個 SheetColumn 的內部欄位名稱。
+            /// </summary>
+            public string InternalFieldName
+            {
+                get
+                {
+                    foreach (SheetColumn column in _columns.Values)
+                        return column.Name;
+                    return _internal_group_name;
+                }
             }
 
             public void AddSheetColumn(SheetColumn column)
@@ -480,22 +654,32 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             public void CheckAccept(BulkColumnCollection basis)
             {
-                StringBuilder msg = new StringBuilder();
-                bool success = true;
+                // 以內部欄位名稱比對（家長1／家長2 已正規化為父親／母親）。
+                bool hasMissingField = false;
 
-                msg.AppendLine("要匯入此欄位，必須下列欄位同時存在：");
                 foreach (BulkColumn each in basis.Values)
                 {
                     if (!SheetColumns.ContainsKey(each.FullDisplayText))
                     {
-                        msg.AppendLine(each.FullDisplayText);
-                        success = false;
+                        hasMissingField = true;
+                        break;
                     }
                 }
 
-                if (success == false)
+                if (hasMissingField)
                 {
+                    string groupDisplay = GetParentAliasDisplayText(InternalGroupName);
+                    StringBuilder msg = new StringBuilder();
+                    msg.AppendLine("Excel「" + groupDisplay + "」群組欄位不完整。");
+                    msg.AppendLine("若要匯入此資料，Excel 必須包含完整欄位：");
+                    msg.AppendLine();
+
+                    // 群組不完整時，提示完整 BulkDescription 群組欄位清單（非僅缺漏欄位）。
+                    foreach (BulkColumn each in basis.Values)
+                        msg.AppendLine(GetParentAliasDisplayText(each.FullDisplayText));
+
                     Enabled = false;
+                    Checked = false;
                     ToolTipText = msg.ToString();
                 }
                 else
@@ -576,9 +760,6 @@ namespace JHSchool.StudentExtendControls.Ribbon
             {
                 bool sepErrors = chkSepErrors.Checked;
 
-                //搜集使用者選擇要匯入的欄位，建立成 ValidateColumn 集合。
-                ValidateColumnCollection validColumns = CreateValidateColumns();
-
                 ProgressMessage("載入資料檢查規則…");
                 DocumentValidate validator = new DocumentValidate();
                 validator.FieldValidatorList.AddValidatorFactory(new FieldValidatorFactory());
@@ -627,7 +808,9 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
                 ProgressMessage("初始化資料來源…");
                 Context.RefreshImportSource();
-                SheetRowSource rowSource = new SheetRowSource(Context.SourceReader, validColumns);
+
+                // 必須在 RefreshImportSource 之後建立，才能綁定最新 SheetColumn（含家長1／家長2 SourceName）。
+                ValidateColumnCollection validColumns = CreateValidateColumns();
 
                 ProgressMessage("初始化錯誤輸出程序…");
                 Dictionary<int, RowMessage> rowMessages = new Dictionary<int, RowMessage>();
@@ -638,6 +821,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                 InitValidStartScreen();
 
                 ProgressMessage("開始檢查資料…");
+                SheetRowSource rowSource = new SheetRowSource(Context.SourceReader, validColumns);
                 rowSource.Reset();
                 while (rowSource.NextRow())
                 {
@@ -841,7 +1025,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
                                         "此資料並不存在於資料庫中，無法更新此筆資料，請確認學號、狀態是否輸入錯誤。");
                                     _error_count++;
                                 }
-                            } 
+                            }
                         }
                         else
                         {
@@ -998,21 +1182,41 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             if (Context.ImportMode == ImportMode.Update)
             {
-                validColumns.Add(Context.IdentifyField,
-                    new ValidateColumn(Context.SourceColumns[Context.IdentifyField], (byte)validColumns.Count));
+                SheetColumn identifyColumn = ResolveSourceColumn(Context.IdentifyField);
+                validColumns.Add(identifyColumn.Name,
+                    new ValidateColumn(identifyColumn, (byte)validColumns.Count));
 
                 if (!string.IsNullOrEmpty(Context.ShiftCheckField))
                 {
-                    validColumns.Add(Context.ShiftCheckField,
-                        new ValidateColumn(Context.SourceColumns[Context.ShiftCheckField], (byte)validColumns.Count));
+                    SheetColumn shiftColumn = ResolveSourceColumn(Context.ShiftCheckField);
+                    validColumns.Add(shiftColumn.Name,
+                        new ValidateColumn(shiftColumn, (byte)validColumns.Count));
                 }
             }
 
             foreach (SheetColumn each in Context.SelectedFields.Values)
-                validColumns.Add(each.Name, new ValidateColumn(each, (byte)validColumns.Count));
+            {
+                SheetColumn column = ResolveSourceColumn(each.Name);
+                validColumns.Add(column.Name, new ValidateColumn(column, (byte)validColumns.Count));
+            }
 
             Context.ValidateColumns = validColumns;
             return validColumns;
+        }
+
+        /// <summary>
+        /// 從目前 SourceColumns 取得最新欄位物件（避免 RefreshImportSource 後仍使用舊 SheetColumn）。
+        /// </summary>
+        private SheetColumn ResolveSourceColumn(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                throw new ArgumentException("欄位名稱不可空白。");
+
+            SheetColumn column;
+            if (Context.SourceReader.TryResolveColumn(fieldName, out column))
+                return column;
+
+            throw new ArgumentException("來源資料中不包含此欄位。(" + fieldName + ")");
         }
 
         private void RefreshValidProgress(int value)
@@ -1373,27 +1577,42 @@ namespace JHSchool.StudentExtendControls.Ribbon
 
             catch (Exception ex)
             {
-                //Console.Write((ex as DSAServerException).WarpedError.Response);
                 ImportMessage("上傳資料失敗");
 
-
-                XElement errElm = XElement.Parse((ex as DSAServerException).WarpedError.Response);
+                XElement errElm = null;
+                DSAServerException dsaEx = ex as DSAServerException;
+                if (dsaEx != null && dsaEx.WarpedError != null && !string.IsNullOrEmpty(dsaEx.WarpedError.Response))
+                {
+                    try
+                    {
+                        errElm = XElement.Parse(dsaEx.WarpedError.Response);
+                    }
+                    catch (Exception ex1)
+                    {
+                        Console.WriteLine(ex1.Message);
+                    }
+                }
 
                 if (errElm != null)
                 {
-                    string msg = errElm.Element("Body").Element("CompleteErrorDetails").LastNode.ToString();
-                    FISCA.Presentation.Controls.MsgBox.Show(msg);
+                    try
+                    {
+                        XElement body = errElm.Element("Body");
+                        XElement details = body != null ? body.Element("CompleteErrorDetails") : null;
+                        if (details != null && details.LastNode != null)
+                            FISCA.Presentation.Controls.MsgBox.Show(details.LastNode.ToString());
+                        else
+                            FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
+                    }
+                    catch
+                    {
+                        FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
+                    }
                 }
                 else
                     FISCA.Presentation.Controls.MsgBox.Show(ex.Message);
 
-                //CurrentUser user = CurrentUser.Instance;
-                //BugReporter.ReportException(user.SystemName, user.SystemVersion, ex, false);
-
                 btnImport.Enabled = true;
-
-
-
             }
         }
 

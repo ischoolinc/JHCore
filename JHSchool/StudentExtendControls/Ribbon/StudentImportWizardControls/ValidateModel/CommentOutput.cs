@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using Aspose.Cells;
@@ -20,7 +20,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
             _columns = reader.Columns;
             _styles = styles;
 
-            _sheet.ClearComments(); //²M°£©Ò¦³µù¸Ñ¡C
+            _sheet.ClearComments(); //ï¿½Mï¿½ï¿½ï¿½Ò¦ï¿½ï¿½ï¿½ï¿½Ñ¡C
 
             ResetSheetStyle();
         }
@@ -34,7 +34,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
 
             Range rng = _sheet.Cells.CreateRange(startRow, startColumn, _sheet.Cells.MaxDataRow, _sheet.Cells.MaxDataColumn + 1);
 
-            // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
+            // 2017/8/22 ï¿½oï¿½~ï¿½Ì¾Ú°ï¿½ï¿½ï¿½ï¿½pï¿½Õ±Mï¿½ï¿½ [03-05][04+] EXCELï¿½×¤Jï¿½æ¦¡ï¿½iï¿½_ï¿½×¥ï¿½ï¿½ï¿½xlsxï¿½]ï¿½iï¿½×¤Jï¿½H ï¿½ï¿½ï¬°ï¿½sï¿½ï¿½ Aspose.Cells_201402 ï¿½gï¿½k ï¿½ASetStyle()
             //rng.Style = _styles.Normal;
 
             rng.SetStyle(_styles.Normal);
@@ -48,10 +48,13 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
             {
                 int row = _reader.AbsoluteIndex;
 
-                // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡A±q¨Ï¥Î byte §ï¬° int
+                // 2017/8/22 ï¿½oï¿½~ï¿½Ì¾Ú°ï¿½ï¿½ï¿½ï¿½pï¿½Õ±Mï¿½ï¿½ [03-05][04+] EXCELï¿½×¤Jï¿½æ¦¡ï¿½iï¿½_ï¿½×¥ï¿½ï¿½ï¿½xlsxï¿½]ï¿½iï¿½×¤Jï¿½H ï¿½ï¿½ï¬°ï¿½sï¿½ï¿½ Aspose.Cells_201402 ï¿½gï¿½k ï¿½Aï¿½qï¿½Ï¥ï¿½ byte ï¿½ï¬° int
                 //byte column = 0;
                 int column = 0;
-                if (_columns.ContainsKey(each.Column ))
+                SheetColumn sheetColumn;
+                if (_reader.TryResolveColumn(each.Column, out sheetColumn) && sheetColumn != null)
+                    column = sheetColumn.AbsoluteIndex;
+                else if (_columns.ContainsKey(each.Column))
                     column = _columns[each.Column].AbsoluteIndex;
 
                 int index = _sheet.Comments.Add(row, column);
@@ -63,17 +66,17 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
                 switch (each.MessageType)
                 {
                     case MessageType.Correct:
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
+                        // 2017/8/22 ï¿½oï¿½~ï¿½Ì¾Ú°ï¿½ï¿½ï¿½ï¿½pï¿½Õ±Mï¿½ï¿½ [03-05][04+] EXCELï¿½×¤Jï¿½æ¦¡ï¿½iï¿½_ï¿½×¥ï¿½ï¿½ï¿½xlsxï¿½]ï¿½iï¿½×¤Jï¿½H ï¿½ï¿½ï¬°ï¿½sï¿½ï¿½ Aspose.Cells_201402 ï¿½gï¿½k ï¿½ASetStyle()
                         //_sheet.Cells[row, column].Style = _styles.Correct;
                         _sheet.Cells[row, column].SetStyle(_styles.Correct); 
                         break;
                     case MessageType.Warning:
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
+                        // 2017/8/22 ï¿½oï¿½~ï¿½Ì¾Ú°ï¿½ï¿½ï¿½ï¿½pï¿½Õ±Mï¿½ï¿½ [03-05][04+] EXCELï¿½×¤Jï¿½æ¦¡ï¿½iï¿½_ï¿½×¥ï¿½ï¿½ï¿½xlsxï¿½]ï¿½iï¿½×¤Jï¿½H ï¿½ï¿½ï¬°ï¿½sï¿½ï¿½ Aspose.Cells_201402 ï¿½gï¿½k ï¿½ASetStyle()
                         //_sheet.Cells[row, column].Style = _styles.Warning;
                         _sheet.Cells[row, column].SetStyle(_styles.Warning);
                         break;
                     case MessageType.Error:
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
+                        // 2017/8/22 ï¿½oï¿½~ï¿½Ì¾Ú°ï¿½ï¿½ï¿½ï¿½pï¿½Õ±Mï¿½ï¿½ [03-05][04+] EXCELï¿½×¤Jï¿½æ¦¡ï¿½iï¿½_ï¿½×¥ï¿½ï¿½ï¿½xlsxï¿½]ï¿½iï¿½×¤Jï¿½H ï¿½ï¿½ï¬°ï¿½sï¿½ï¿½ Aspose.Cells_201402 ï¿½gï¿½k ï¿½ASetStyle()
                         _sheet.Cells[row, column].SetStyle(_styles.Error);
                         break;
                 }

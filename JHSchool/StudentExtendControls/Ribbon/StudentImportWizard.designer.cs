@@ -1,5 +1,4 @@
 ﻿using FISCA.Presentation.Controls;
-using SmartSchool.Common;
 namespace JHSchool.StudentExtendControls.Ribbon
 {
     partial class StudentImportWizard
@@ -76,9 +75,9 @@ namespace JHSchool.StudentExtendControls.Ribbon
             System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem(new string[] {
             "緊急聯絡人"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem(new string[] {
-            "父親姓名"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
+            "家長1姓名"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
-            "母親姓名"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
+            "家長2姓名"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem25 = new System.Windows.Forms.ListViewItem(new string[] {
             "監護人姓名"}, -1, System.Drawing.Color.Blue, System.Drawing.Color.Empty, null);
             System.Windows.Forms.ListViewItem listViewItem26 = new System.Windows.Forms.ListViewItem(new string[] {
@@ -120,7 +119,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
             this.wpSelectField = new DevComponents.DotNetBar.WizardPage();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.btnViewAllField = new DevComponents.DotNetBar.ButtonX();
-            this.lvSourceFieldList = new SmartSchool.Common.ListViewEX();
+            this.lvSourceFieldList = new System.Windows.Forms.ListView();
             this.wpValidation = new DevComponents.DotNetBar.WizardPage();
             this.buttonX1 = new DevComponents.DotNetBar.ButtonX();
             this.chkSepErrors = new DevComponents.DotNetBar.Controls.CheckBoxX();
@@ -579,14 +578,11 @@ namespace JHSchool.StudentExtendControls.Ribbon
             // 
             // lvSourceFieldList
             // 
-            // 
-            // 
-            // 
-            this.lvSourceFieldList.Border.Class = "ListViewBorder";
-            this.lvSourceFieldList.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.lvSourceFieldList.BackColor = System.Drawing.SystemColors.Window;
+            this.lvSourceFieldList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lvSourceFieldList.CheckBoxes = true;
             this.lvSourceFieldList.FullRowSelect = true;
-            this.lvSourceFieldList.HideSelection = false;
+            this.lvSourceFieldList.HideSelection = true;
             listViewItem1.StateImageIndex = 0;
             listViewItem2.StateImageIndex = 0;
             listViewItem3.StateImageIndex = 0;
@@ -1049,7 +1045,7 @@ namespace JHSchool.StudentExtendControls.Ribbon
         private System.Windows.Forms.Label lblIdField;
         private DevComponents.DotNetBar.WizardPage wpSelectField;
         private DevComponents.DotNetBar.WizardPage wpValidation;
-        private ListViewEX lvSourceFieldList;
+        private System.Windows.Forms.ListView lvSourceFieldList;
         private System.Windows.Forms.Panel pUser;
         public DevComponents.DotNetBar.Controls.CheckBoxX chkInsert;
         private System.Windows.Forms.Label label4;

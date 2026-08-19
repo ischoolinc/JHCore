@@ -1,0 +1,539 @@
+## Goal
+
+Fix the validation error in the Student Import Wizard where generating or processing the **「資料修正頁」** may cause:
+
+```text
+並未將物件參考設定為物件的執行個體。
+Object reference not set to an instance of an object.
+```
+
+The issue may be related to the recent field-name changes from:
+
+```text
+父親 → 家長1
+母親 → 家長2
+```
+
+After the modification is completed, document all changes in:
+
+```text
+匯入基本資料調整0807.md
+```
+
+---
+
+# 1. Analyze the validation data flow
+
+Review the complete validation flow related to:
+
+```text
+StudentImportWizard
+ValidateColumn
+ValidateColumnCollection
+SheetReader
+CellMessage
+RowMessage
+CorrectSheetOutput
+```
+
+Especially trace these fields:
+
+```text
+家長1姓名
+家長2姓名
+父親姓名
+母親姓名
+```
+
+Check whether the display/import field names and internal field names are inconsistent during validation.
+
+The expected design is:
+
+```text
+Excel / UI field        Internal XML/data field
+
+家長1姓名               父親姓名
+家長2姓名               母親姓名
+```
+
+Do not change the existing XML storage structure simply because the UI/Excel names were changed.
+
+---
+
+# 2. Check CorrectSheetOutput.Output()
+
+Review this code carefully:
+
+```csharp
+foreach (ValidateColumn each in _columns.Values)
+{
+    Cell cell = _target_sheet.Cells[_new_index, each.Index];
+
+    cell.PutValue(_reader.GetValue(each.Name));
+
+    cell.SetStyle(_styles.Normal);
+
+    _reader.GetCell(each.Name).Formula =
+        "=" + _target_sheet.Name + "!" + cell.Name;
+}
+```
+
+Check whether:
+
+```csharp
+_reader.GetCell(each.Name)
+```
+
+can return `null`.
+
+For example:
+
+```text
+each.Name = 家長1姓名
+```
+
+while `SheetReader` may still contain:
+
+```text
+父親姓名
+```
+
+If so, the following statement will cause `NullReferenceException`:
+
+```csharp
+_reader.GetCell(each.Name).Formula = ...
+```
+
+---
+
+# 3. Check CellMessage column mapping
+
+Review:
+
+```csharp
+byte column = _columns[each.Column].Index;
+```
+
+Check whether:
+
+```csharp
+_columns[each.Column]
+```
+
+can return `null`.
+
+Possible mismatch example:
+
+```text
+CellMessage.Column = 父親姓名
+```
+
+but `ValidateColumnCollection` contains:
+
+```text
+家長1姓名
+```
+
+This may also cause:
+
+```text
+NullReferenceException
+```
+
+when accessing:
+
+```csharp
+.Index
+```
+
+---
+
+# 4. Fix Parent 1 / Parent 2 field mapping
+
+Create or reuse a consistent mapping mechanism instead of directly replacing all internal field names.
+
+The validation process must correctly understand:
+
+```text
+家長1姓名 <-> 父親姓名
+家長2姓名 <-> 母親姓名
+```
+
+If there are other Parent 1 / Parent 2 fields in the same module, inspect them as well and keep the same rule.
+
+Examples may include:
+
+```text
+家長1姓名
+家長1身分證號
+家長1職業
+家長1電話
+...
+
+家長2姓名
+家長2身分證號
+家長2職業
+家長2電話
+...
+```
+
+Only modify fields that actually exist in the current program.
+
+Do not invent new fields.
+
+---
+
+# 5. Keep Excel validation rules correct
+
+The Excel/UI field name must still follow the new naming rule.
+
+For example:
+
+If the Excel contains:
+
+```text
+父親姓名
+```
+
+but does NOT contain:
+
+```text
+家長1姓名
+```
+
+then:
+
+```text
+家長1姓名
+```
+
+must not be treated as an available import field.
+
+The user-visible/import Excel fields should remain:
+
+```text
+家長1
+家長2
+```
+
+while the existing internal XML/data structure should continue using:
+
+```text
+父親
+母親
+```
+
+where required by the original system.
+
+---
+
+# 6. Add null protection to CorrectSheetOutput
+
+Do not allow an unexplained `NullReferenceException`.
+
+Before using:
+
+```csharp
+_reader.GetCell(each.Name)
+```
+
+store and validate the result.
+
+Example concept:
+
+```csharp
+Cell sourceCell = _reader.GetCell(each.Name);
+
+if (sourceCell == null)
+{
+    // Handle or report the actual missing field clearly.
+}
+```
+
+Do the same for:
+
+```csharp
+_columns[each.Column]
+```
+
+The fix should avoid silently ignoring real mapping errors.
+
+If a required mapping cannot be found, provide enough information to identify:
+
+```text
+which field
+which validation column
+which mapping failed
+```
+
+Do not leave only the generic:
+
+```text
+Object reference not set to an instance of an object.
+```
+
+---
+
+# 7. Review 「資料修正頁」 worksheet handling
+
+Also inspect the constructor of:
+
+```text
+CorrectSheetOutput
+```
+
+Current logic uses one large `try/catch` for:
+
+```text
+find worksheet
+clear contents
+create range
+set style
+```
+
+Do not treat every exception as meaning:
+
+```text
+「資料修正頁」does not exist
+```
+
+Separate:
+
+```text
+worksheet lookup
+```
+
+from:
+
+```text
+worksheet cleanup / formatting
+```
+
+because an exception from:
+
+```csharp
+ClearContents()
+CreateRange()
+SetStyle()
+```
+
+must not cause another worksheet named:
+
+```text
+資料修正頁
+```
+
+to be created.
+
+---
+
+# 8. Check empty worksheet handling
+
+Before using:
+
+```csharp
+MaxDataRow
+MaxDataColumn
+```
+
+verify that the worksheet actually contains data.
+
+Avoid invalid ranges such as negative row/column values when clearing an empty worksheet.
+
+The modification must work correctly for:
+
+```text
+first import
+existing 資料修正頁
+empty 資料修正頁
+multiple validation errors
+no validation errors
+```
+
+---
+
+# 9. Preserve existing behavior
+
+Do NOT redesign the Student Import Wizard.
+
+Do NOT change unrelated import logic.
+
+Do NOT change the existing XML structure.
+
+Do NOT change database storage behavior unless absolutely required for the field mapping.
+
+Do NOT modify unrelated validation rules.
+
+Keep the existing architecture and only fix the validation / field mapping / null-reference problem.
+
+---
+
+# 10. Required test cases
+
+Test at least the following cases.
+
+## Case 1
+
+Excel contains:
+
+```text
+家長1姓名
+家長2姓名
+```
+
+Result:
+
+```text
+Validation works normally.
+資料修正頁 can be generated.
+No NullReferenceException.
+```
+
+## Case 2
+
+Excel contains only:
+
+```text
+父親姓名
+母親姓名
+```
+
+but not:
+
+```text
+家長1姓名
+家長2姓名
+```
+
+Result:
+
+```text
+家長1姓名 / 家長2姓名 must not incorrectly become selectable/importable
+based only on 父親姓名 / 母親姓名.
+```
+
+## Case 3
+
+家長1姓名 contains invalid data.
+
+Result:
+
+```text
+資料修正頁 is generated correctly.
+The error comment appears on the correct 家長1姓名 column.
+The original worksheet links to the correct correction cell.
+```
+
+## Case 4
+
+家長2姓名 contains invalid data.
+
+Verify the same behavior.
+
+## Case 5
+
+Both Parent 1 and Parent 2 contain validation errors.
+
+Result:
+
+```text
+Both errors are shown correctly.
+No column mismatch.
+No NullReferenceException.
+```
+
+## Case 6
+
+No validation errors.
+
+Result:
+
+```text
+資料修正頁 should be removed/not retained according to the existing behavior.
+```
+
+## Case 7
+
+A previous 資料修正頁 already exists.
+
+Result:
+
+```text
+Reuse/clean it correctly.
+Do not create duplicate worksheet names.
+```
+
+---
+
+# 11. Search for remaining old/new field-name inconsistencies
+
+Search the related Student Import Wizard project for:
+
+```text
+父親
+母親
+家長1
+家長2
+```
+
+Identify locations related to:
+
+```text
+Excel headers
+UI display
+available import fields
+validation fields
+ValidateColumn
+CellMessage
+SheetReader
+XML read/write
+資料修正頁
+```
+
+Correct only inconsistent mappings.
+
+Do not globally replace `父親` with `家長1` or `母親` with `家長2`.
+
+---
+
+# 12. Completion document
+
+After completing the modification, create/update:
+
+```text
+匯入基本資料調整0807.md
+```
+
+Record:
+
+1. Root cause of the NullReferenceException.
+2. The exact field(s) that caused the problem.
+3. Whether `_reader.GetCell()` or `_columns[]` returned null.
+4. Parent 1 / Parent 2 mapping rules used after the fix.
+5. Files modified.
+6. Methods modified.
+7. Null-protection changes.
+8. 資料修正頁 worksheet handling changes.
+9. Test cases performed.
+10. Test results.
+11. Confirmation that existing XML 父親/母親 structure was not unintentionally changed.
+
+---
+
+# Final Requirement
+
+The final result must satisfy:
+
+```text
+家長1 / 家長2 UI and Excel naming works correctly
+        ↓
+validation mapping is correct
+        ↓
+資料修正頁 is generated correctly
+        ↓
+no NullReferenceException
+        ↓
+existing 父親 / 母親 XML storage behavior remains compatible
+```
+
+Make the smallest safe modification necessary and preserve the existing program architecture.

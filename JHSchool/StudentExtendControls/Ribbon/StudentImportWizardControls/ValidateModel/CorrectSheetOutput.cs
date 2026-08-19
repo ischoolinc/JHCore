@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using Aspose.Cells;
@@ -8,7 +8,7 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
 {
     public class CorrectSheetOutput : IMessageOutput
     {
-        private const string SheetName = "¸ê®Æ­×¥¿­¶";
+        private const string SheetName = "è³‡æ–™ä¿®æ­£é ";
 
         private Worksheet _target_sheet;
         private Workbook _output_book;
@@ -20,68 +20,121 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
         public CorrectSheetOutput(Workbook outputBook, SheetReader reader, TipStyle styles,
             ValidateColumnCollection columns)
         {
+            if (outputBook == null)
+                throw new ArgumentNullException("outputBook");
+            if (reader == null)
+                throw new ArgumentNullException("reader");
+            if (styles == null)
+                throw new ArgumentNullException("styles");
+            if (columns == null)
+                throw new ArgumentNullException("columns");
+
             outputBook.CalculateFormula();
             _output_book = outputBook;
             _reader = reader;
             _reader.ConvertFormulaToValue();
             _styles = styles;
             _new_index = 1;
+            _columns = columns;
 
-            try
-            {
-                _target_sheet = outputBook.Worksheets[SheetName];
-                _target_sheet.Cells.ClearContents(0, 0, _target_sheet.Cells.MaxDataRow, _target_sheet.Cells.MaxDataColumn);
-                Range rng = _target_sheet.Cells.CreateRange(0, 0, _target_sheet.Cells.MaxRow + 1, _target_sheet.Cells.MaxColumn + 1);
-
-                // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                //rng.Style = _styles.Normal;
-
-                rng.SetStyle(_styles.Normal);
-            }
-            catch (Exception)
+            _target_sheet = FindWorksheet(outputBook, SheetName);
+            if (_target_sheet == null)
             {
                 int index = outputBook.Worksheets.Add();
                 _target_sheet = outputBook.Worksheets[index];
                 _target_sheet.Name = SheetName;
             }
-
-            _columns = columns;
+            else
+            {
+                ClearWorksheetSafely(_target_sheet);
+            }
 
             foreach (ValidateColumn each in columns.Values)
             {
-                _target_sheet.Cells[0, each.Index].PutValue(each.Name);
-
-                // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                //_target_sheet.Cells[0, each.Index].Style = _styles.Normal;
-
+                _target_sheet.Cells[0, each.Index].PutValue(each.DisplayName);
                 _target_sheet.Cells[0, each.Index].SetStyle(_styles.Normal);
             }
 
             _target_sheet.ClearComments();
         }
 
+        private static Worksheet FindWorksheet(Workbook book, string sheetName)
+        {
+            try
+            {
+                // Some Aspose versions return null when worksheet is missing.
+                Worksheet sheet = book.Worksheets[sheetName];
+                return sheet;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private void ClearWorksheetSafely(Worksheet sheet)
+        {
+            int maxDataRow = sheet.Cells.MaxDataRow;
+            int maxDataColumn = sheet.Cells.MaxDataColumn;
+
+            // Empty sheet may report MaxDataRow/MaxDataColumn as -1.
+            if (maxDataRow >= 0 && maxDataColumn >= 0)
+                sheet.Cells.ClearContents(0, 0, maxDataRow, maxDataColumn);
+
+            int maxRow = sheet.Cells.MaxRow;
+            int maxColumn = sheet.Cells.MaxColumn;
+            if (maxRow < 0)
+                maxRow = 0;
+            if (maxColumn < 0)
+                maxColumn = 0;
+
+            Range rng = sheet.Cells.CreateRange(0, 0, maxRow + 1, maxColumn + 1);
+            rng.SetStyle(_styles.Normal);
+        }
+
         #region IMessageOutput Members
 
         public void Output(RowMessage message)
         {
+            if (message == null)
+                throw new ArgumentNullException("message");
+
             foreach (ValidateColumn each in _columns.Values)
             {
                 Cell cell = _target_sheet.Cells[_new_index, each.Index];
                 cell.PutValue(_reader.GetValue(each.Name));
-
-                // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                //cell.Style = _styles.Normal;
-
                 cell.SetStyle(_styles.Normal);
 
-                _reader.GetCell(each.Name).Formula = "=" + _target_sheet.Name + "!" + cell.Name;
+                Cell sourceCell = _reader.GetCell(each.Name);
+                if (sourceCell == null)
+                {
+                    throw new InvalidOperationException(
+                        "ç„¡æ³•å»ºç«‹è³‡æ–™ä¿®æ­£é é€£çµï¼šä¾†æºå·¥ä½œè¡¨æ‰¾ä¸åˆ°æ¬„ä½ã€Œ" + each.DisplayName +
+                        "ã€ï¼ˆå…§éƒ¨æ¬„ä½ï¼š" + each.Name + "ï¼‰ã€‚");
+                }
+
+                sourceCell.Formula = "=" + _target_sheet.Name + "!" + cell.Name;
             }
 
             List<CellMessage> messages = message.GetMessages();
             foreach (CellMessage each in messages)
             {
+                ValidateColumn validateColumn;
+                if (!_columns.TryResolveColumn(each.Column, out validateColumn) || validateColumn == null)
+                {
+                    // Parent mapping errors must be reported; other missing columns are skipped.
+                    if (IsParentRelatedField(each.Column))
+                    {
+                        throw new InvalidOperationException(
+                            "ç„¡æ³•è¼¸å‡ºé©—è­‰è¨Šæ¯åˆ°è³‡æ–™ä¿®æ­£é ï¼šæ‰¾ä¸åˆ°é©—è­‰æ¬„ä½å°æ‡‰ã€‚" +
+                            " è¨Šæ¯æ¬„ä½ï¼ã€Œ" + each.Column + "ã€ã€‚" +
+                            " è«‹ç¢ºèªè©²æ¬„ä½å·²åŠ å…¥é©—è­‰æ¬„é›†åˆï¼Œä¸”å®¶é•·1ï¼å®¶é•·2 èˆ‡çˆ¶è¦ªï¼æ¯è¦ªå°æ‡‰ä¸€è‡´ã€‚");
+                    }
+                    continue;
+                }
+
                 int row = _new_index;
-                byte column = _columns[each.Column].Index;
+                byte column = validateColumn.Index;
 
                 int index = _target_sheet.Comments.Add(row, column);
                 Comment objComment = _target_sheet.Comments[index];
@@ -92,27 +145,28 @@ namespace JHSchool.StudentExtendControls.Ribbon.StudentImportWizardControls.Vali
                 switch (each.MessageType)
                 {
                     case MessageType.Correct:
-
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                        //_target_sheet.Cells[row, column].Style = _styles.Correct;
-
                         _target_sheet.Cells[row, column].SetStyle(_styles.Correct);
                         break;
                     case MessageType.Warning:
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                        //_target_sheet.Cells[row, column].Style = _styles.Warning;
-
                         _target_sheet.Cells[row, column].SetStyle(_styles.Warning);
                         break;
                     case MessageType.Error:
-                        // 2017/8/22 ¿o÷~¨Ì¾Ú°ª¶¯¤p²Õ±M®× [03-05][04+] EXCEL¶×¤J®æ¦¡¥i§_­×¥¿¬°xlsx¤]¥i¶×¤J¡H §ó§ï¬°·sª© Aspose.Cells_201402 ¼gªk ¡ASetStyle()
-                        //_target_sheet.Cells[row, column].Style = _styles.Error;
-
                         _target_sheet.Cells[row, column].SetStyle(_styles.Error);
                         break;
                 }
             }
             _new_index++;
+        }
+
+        private static bool IsParentRelatedField(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                return false;
+
+            return fieldName.StartsWith("å®¶é•·1") ||
+                fieldName.StartsWith("å®¶é•·2") ||
+                fieldName.StartsWith("çˆ¶è¦ª") ||
+                fieldName.StartsWith("æ¯è¦ª");
         }
 
         #endregion
