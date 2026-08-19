@@ -31,12 +31,34 @@ namespace JHSchool
             Course.Instance.SyncAllBackground();
 
             //K12.Student.Instance.AddView(new ShowAllStudentsView());
-            //1.1 秒
             Student.Instance.SetupPresentation();
-            Class.Instance.SetupPresentation();
-            Teacher.Instance.SetupPresentation();
-            Course.Instance.SetupPresentation(); //課程的類別已調整
-            //K12.Course.Instance.AddView(new ShowAllStudentsView());
+
+            // Class / Teacher / Course 的 SetupPresentation()（原本在此同步執行，耗時約 1.1 秒）
+            // 延後至訊息迴圈進入 Idle 狀態後才執行，避免延誤視窗顯示。
+            // 若未來新增的程式碼相依於 Class/Teacher/Course SetupPresentation() 執行後的狀態
+            // （例如 Ribbon、DetailBulider），請加入下方 DeferredPanelSetup 委派內，勿加在此處。
+            EventHandler deferredPanelSetup = null;
+            deferredPanelSetup = delegate
+            {
+                System.Windows.Forms.Application.Idle -= deferredPanelSetup;
+
+                Class.Instance.SetupPresentation();
+                Teacher.Instance.SetupPresentation();
+                Course.Instance.SetupPresentation(); //課程的類別已調整
+                //K12.Course.Instance.AddView(new ShowAllStudentsView());
+
+                // 學生>班級資訊覆寫
+                IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
+                if (item != null)
+                {
+                    Class.Instance.AddDetailBulider(item.CreateBasicInfo());
+                }
+                else
+                {
+                    Class.Instance.AddDetailBulider(new DetailBulider<JHSchool.ClassExtendControls.ClassBaseInfoItem>());
+                }
+            };
+            System.Windows.Forms.Application.Idle += deferredPanelSetup;
 
             //設定 ASPOSE 元件的 License（移至背景執行緒，避免阻塞啟動流程）。
             System.Threading.Tasks.Task.Run(() =>
@@ -88,18 +110,6 @@ namespace JHSchool
 
             //設定畫面選取Count
             SelectedListChanged();
-
-
-            // 學生>班級資訊覆寫
-            IClassBaseInfoItemAPI item = FISCA.InteractionService.DiscoverAPI<IClassBaseInfoItemAPI>();
-            if (item != null)
-            {
-                Class.Instance.AddDetailBulider(item.CreateBasicInfo());
-            }
-            else
-            {
-                Class.Instance.AddDetailBulider(new DetailBulider<JHSchool.ClassExtendControls.ClassBaseInfoItem>());
-            }
 
             //new K12.General.Feedback.NewsNotice();
 
