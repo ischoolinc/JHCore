@@ -343,7 +343,15 @@ namespace JHSchool.Feature
                 }
                 req += "</Condition></Student></ChangeStatusRequest>";
                 DSRequest dsreq = new DSRequest(req);
-                DSResponse dsrsp = DSAServices.CallService("SmartSchool.Student.Update", dsreq);
+                try
+                {
+                    DSResponse dsrsp = DSAServices.CallService("SmartSchool.Student.Update", dsreq);
+                }
+                finally
+                {
+                    // 直接呼叫 DSA 不會觸發 K12.Data 的快取清除，需自行清除，避免後續讀到舊狀態
+                    K12.Data.Student.RemoveByIDs(ids);
+                }
             }
         }
     }

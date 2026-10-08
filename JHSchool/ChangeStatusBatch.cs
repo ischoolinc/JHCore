@@ -15,6 +15,7 @@ namespace JHSchool
         private static Dictionary<string, List<string>> _CheckIDNumber = new Dictionary<string, List<string>>();
         private static Dictionary<string, List<string>> _CheckStudNumber = new Dictionary<string, List<string>>();
         private static bool _checkDataError = false;
+        private static string _newStatus = "";
 
         static ChangeStatusBatch()
         {
@@ -96,6 +97,8 @@ namespace JHSchool
 
         static void SetStatus(string newStatus)
         {
+            // 先覆蓋狀態列，避免保留上一次的「變更學生狀態成功」造成誤判
+            FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態...");
             _BKW.RunWorkerAsync(newStatus);
         }
 
@@ -103,9 +106,13 @@ namespace JHSchool
         {
             string newStatus = "" + e.Argument;
 
+            _newStatus = newStatus;
             _checkDataError = false;
             _CheckIDNumber.Clear();
             _CheckStudNumber.Clear();
+            // 清除選取學生的 K12.Data 快取，確保 SelectAll 與 SelectByIDs 取得的是伺服器上最新的狀態
+            // (快取若為舊狀態，會被誤判為狀態相同而略過，或在重複檢查時與自己的舊資料比對到)
+            K12.Data.Student.RemoveByIDs(K12.Presentation.NLDPanels.Student.SelectedSource);
             // 取得檢查資料,所有學生建立 Dict
             List<K12.Data.StudentRecord> allStudentList = K12.Data.Student.SelectAll();
             //List<K12.Data.StudentRecord> studList = K12.Data.Student.SelectByIDs(K12.Presentation.NLDPanels.Student.SelectedSource);           
@@ -228,6 +235,7 @@ namespace JHSchool
                 List<string> errorMsg = (List<string>)e.Result;
                 if (errorMsg.Count > 0)
                 {
+                    FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態未執行");
                     FISCA.Presentation.Controls.MsgBox.Show(string.Join(",", errorMsg.ToArray()));
                     return;
                 }
@@ -235,14 +243,19 @@ namespace JHSchool
 
             if (e.Error != null)
             {
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態發生錯誤");
                 MsgBox.Show("變更狀態發生錯誤，可能有部分學生狀態未修改。\n" + e.Error.Message);
                 return;
             }
             List<string> idlist = (List<string>)e.Result;
             if (idlist.Count > 0)
             {
-                FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態成功");
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態成功，共 " + idlist.Count + " 位學生");
                 Student.Instance.SyncAllBackground();
+            }
+            else
+            {
+                FISCA.Presentation.MotherForm.SetStatusBarMessage("所選學生狀態已是「" + _newStatus + "」，未變更任何學生");
             }
         }
     }
