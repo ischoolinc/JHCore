@@ -28,6 +28,9 @@ namespace JHSchool.ClassExtendControls
         private JHClassRecord _ClassRecord;
         private List<JHClassRecord> _AllClassRecList;
         private Dictionary<string,string> _TeacherNameDic;
+        // 班級清單與教師清單不隨切換班級而改變，只在第一次載入或資料異動後才重新查詢
+        private volatile bool _LookupStale = true;
+        private DetailContentLazyLoader _LazyLoader;
 
         //?
         private string _NamingRule = "";
@@ -47,21 +50,25 @@ namespace JHSchool.ClassExtendControls
             _TeacherNameDic = new Dictionary<string, string>();            
             prlp = new PermRecLogProcess();
             JHClass.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHClass_AfterChange);
+            JHTeacher.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
+            JHTeacher.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
             _BGWorker = new BackgroundWorker();
             _BGWorker.DoWork += new DoWorkEventHandler(_BGWorker_DoWork);
             _BGWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWorker_RunWorkerCompleted);
             Disposed += new EventHandler(ClassBaseInfoItem_Disposed);
-            this.CollapsedChanged += delegate {
-                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
-                {
-                    OnPrimaryKeyChanged(EventArgs.Empty);
-                }
-            };
+            _LazyLoader = new DetailContentLazyLoader(this, () => PrimaryKey, LoadCurrentRecord);
         }
 
         void ClassBaseInfoItem_Disposed(object sender, EventArgs e)
         {
             JHClass.AfterChange -= new EventHandler<K12.Data.DataChangedEventArgs>(JHClass_AfterChange);
+            JHTeacher.AfterChange -= new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
+            JHTeacher.AfterDelete -= new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
+        }
+
+        void JHTeacher_AfterChange(object sender, K12.Data.DataChangedEventArgs e)
+        {
+            _LookupStale = true;
         }
 
         void JHClass_AfterChange(object sender, K12.Data.DataChangedEventArgs e)
@@ -72,6 +79,7 @@ namespace JHSchool.ClassExtendControls
             }
             else
             {
+                _LookupStale = true;
                 if (PrimaryKey != "")
                 {
                     if (!_BGWorker.IsBusy)
@@ -109,6 +117,8 @@ namespace JHSchool.ClassExtendControls
                 _ClassRecord.Name = ParseClassName(_NamingRule, GrYear);
             else
             {
+                // 存檔前取最新的班級清單做重複檢查（快取可能已過時）
+                _AllClassRecList = JHClass.SelectAll();
                 if (ValidClassName(_ClassRecord.ID, txtClassName.Text))
                     _ClassRecord.Name = txtClassName.Text;
                 else
@@ -187,7 +197,7 @@ namespace JHSchool.ClassExtendControls
         {
             cboGradeYear.Items.Clear();
             List<string> GradeYearList = new List<string>();
-            foreach (JHClassRecord classRec in JHClass.SelectAll())
+            foreach (JHClassRecord classRec in _AllClassRecList)
                 if (classRec.GradeYear.HasValue)
                     if (!GradeYearList.Contains(classRec.GradeYear.Value + ""))
                         GradeYearList.Add(classRec.GradeYear.Value + "");
@@ -254,32 +264,42 @@ namespace JHSchool.ClassExtendControls
         void _BGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             _ClassRecord = JHClass.SelectByID(PrimaryKey);
-            _AllClassRecList = JHClass.SelectAll();
-            
-            // 教師名稱索引
-            _TeacherNameDic.Clear();
-            foreach (JHTeacherRecord TRec in JHTeacher.SelectAll())
-            {
-                if (TRec.Status == K12.Data.TeacherRecord.TeacherStatus.刪除)
-                    continue;
 
-                if (string.IsNullOrEmpty(TRec.Nickname))
-                    _TeacherNameDic.Add(TRec.ID, TRec.Name);
-                else
-                    _TeacherNameDic.Add(TRec.ID, TRec.Name + "(" + TRec.Nickname + ")");
+            if (!_LookupStale) return;
+            // 先清除旗標，查詢期間若又有異動會再設回 true，下次載入時重新查詢
+            _LookupStale = false;
+            try
+            {
+                _AllClassRecList = JHClass.SelectAll();
+
+                // 教師名稱索引（建立新字典後再替換，避免 UI 執行緒讀到清空中的字典）
+                Dictionary<string, string> teacherNameDic = new Dictionary<string, string>();
+                foreach (JHTeacherRecord TRec in JHTeacher.SelectAll())
+                {
+                    if (TRec.Status == K12.Data.TeacherRecord.TeacherStatus.刪除)
+                        continue;
+
+                    if (string.IsNullOrEmpty(TRec.Nickname))
+                        teacherNameDic.Add(TRec.ID, TRec.Name);
+                    else
+                        teacherNameDic.Add(TRec.ID, TRec.Name + "(" + TRec.Nickname + ")");
+                }
+                _TeacherNameDic = teacherNameDic;
+            }
+            catch
+            {
+                _LookupStale = true;
+                throw;
             }
         }
 
-        private string _loadedPrimaryKey = "";
-
         protected override void OnPrimaryKeyChanged(EventArgs e)
-        {            
-            if (this.Collapsed)
-            {
-                return;
-            }
-            _loadedPrimaryKey = PrimaryKey;
+        {
+            _LazyLoader.RequestLoad();
+        }
 
+        private void LoadCurrentRecord()
+        {
             epClassName.Clear();
             epDisplayOrder.Clear();
             epGradeYear.Clear();

@@ -29,19 +29,8 @@ namespace JHSchool
 
         public new void AddDetailBulider(IDetailBulider item)
         {
-            DetailContent content = item.GetContent();
-            if (content == null) return;
-
-            if (Attribute.IsDefined(content.GetType(), typeof(FeatureCodeAttribute)))
-            {
-                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
-                if (fca != null)
-                {
-                    if (Framework.Legacy.GlobalOld.Acl[content.GetType()].Viewable)
-                        base.AddDetailBulider(item);
-                }
-            }
-            else base.AddDetailBulider(item);
+            // 權限檢查與基底類別相同，由基底類別處理（以型別判斷，不另外建立面板實體）
+            base.AddDetailBulider(item);
         }
 
 
@@ -263,7 +252,7 @@ namespace JHSchool
             classStudentCountField.GetVariable += delegate(object sender, GetVariableEventArgs e)
             {
                 if (Items[e.Key] != null)
-                    e.Value = Items[e.Key].Students.Count;
+                    e.Value = Student.Instance.GetClassStudentCount(e.Key);
 
             };
             this.AddListPaneField(classStudentCountField);
@@ -308,6 +297,9 @@ namespace JHSchool
             //Class.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<ClassExtendControls.ClassBaseInfoItem>());
 
             Present.NavPaneContexMenu.GetChild("重新整理").Click += delegate { this.SyncAllBackground(); };
+
+            // 「班導師」欄位讀取教師快取，教師資料變更後重繪班級清單即可，不需重新載入班級資料
+            Teacher.Instance.ItemUpdated += delegate { Present.RefillListPane(); };
 
             //Class.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<ClassExtendControls.ClassStudentItem>());
             //電子報表(因相關功能未完成先註)
@@ -392,6 +384,8 @@ namespace JHSchool
         private Dictionary<string, List<ClassRecord>> _TeacherSupervised = new Dictionary<string, List<ClassRecord>>();
         // 反向索引：classID → teacherID，加速 ItemUpdated 查詢
         private Dictionary<string, string> _ClassTeacherMap = new Dictionary<string, string>();
+        // 快取：teacherID → 帶班班級名稱（「、」分隔），供教師清單「帶班班級」欄位使用，索引異動時清除
+        private Dictionary<string, string> _SupervisedClassNames = new Dictionary<string, string>();
 
         private void BuildIndex()
         {
@@ -402,6 +396,7 @@ namespace JHSchool
                 
                 _TeacherSupervised.Clear();
                 _ClassTeacherMap.Clear();
+                _SupervisedClassNames.Clear();
                 foreach (var item in Items)
                 {
                     if (!_TeacherSupervised.ContainsKey(item.RefTeacherID))
@@ -429,6 +424,8 @@ namespace JHSchool
                 lock (_TeacherSupervised)
                 {
                     if (!_indexBuilt) return;
+
+                    _SupervisedClassNames.Clear();
 
                     // 使用反向索引快速移除已更新的班級（O(1) per class）
                     foreach (var key in e.PrimaryKeys)
@@ -508,15 +505,47 @@ namespace JHSchool
 
         public List<ClassRecord> GetTecaherSupervisedClass(TeacherRecord teacher)
         {
+            return GetTeacherSupervisedClass(teacher.ID);
+        }
+
+        /// <summary>
+        /// 取得指定教師帶班的班級（由記憶體索引取得，不查詢後端）。
+        /// </summary>
+        public List<ClassRecord> GetTeacherSupervisedClass(string teacherID)
+        {
             BuildIndex();
             lock (_TeacherSupervised)
             {
-                if (_TeacherSupervised.ContainsKey(teacher.ID))
+                if (_TeacherSupervised.ContainsKey(teacherID))
                 {
-                    return new List<ClassRecord>(_TeacherSupervised[teacher.ID]);
+                    return new List<ClassRecord>(_TeacherSupervised[teacherID]);
                 }
                 else
                     return new List<ClassRecord>();
+            }
+        }
+
+        /// <summary>
+        /// 取得指定教師帶班班級的名稱（以「、」分隔），結果會快取到索引異動為止。
+        /// </summary>
+        public string GetTeacherSupervisedClassNames(string teacherID)
+        {
+            BuildIndex();
+            lock (_TeacherSupervised)
+            {
+                string names;
+                if (_SupervisedClassNames.TryGetValue(teacherID, out names))
+                    return names;
+
+                names = "";
+                List<ClassRecord> classes;
+                if (_TeacherSupervised.TryGetValue(teacherID, out classes))
+                {
+                    foreach (var item in classes)
+                        names += (names == "" ? "" : "、") + item.Name;
+                }
+                _SupervisedClassNames[teacherID] = names;
+                return names;
             }
         }
 

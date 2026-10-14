@@ -111,20 +111,56 @@ namespace JHSchool
 
         public void AddDetailBulider(IDetailBulider item)
         {
-            DetailContent content = item.GetContent();
-            if (content == null) return;
+            Type contentType = GetContentType(item);
+            if (contentType == null) return;
 
-            if (Attribute.IsDefined(content.GetType(), typeof(FeatureCodeAttribute)))
+            if (Attribute.IsDefined(contentType, typeof(FeatureCodeAttribute)))
             {
-                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
+                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(contentType, typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
                 if (fca != null)
                 {
-                    if (Framework.Legacy.GlobalOld.Acl[content.GetType()].Viewable)
-                        Present.AddDetailBulider(item);
+                    if (Framework.Legacy.GlobalOld.Acl[contentType].Viewable)
+                        AddDetailBuliderCore(item, contentType);
                 }
             }
             else
-                Present.AddDetailBulider(item);
+                AddDetailBuliderCore(item, contentType);
+        }
+
+        /// <summary>
+        /// 不做權限檢查，直接把詳細資料項目加入畫面（FISCA 會在此建立面板實體）。
+        /// </summary>
+        protected void AddDetailBuliderCore(IDetailBulider item, Type contentType)
+        {
+            Present.AddDetailBulider(item);
+        }
+
+        /// <summary>
+        /// 取得建構器產生的面板型別，用來做權限檢查。
+        /// </summary>
+        /// <remarks>
+        /// 原本以 item.GetContent() 建立一個面板實體來取得型別，而 FISCA 加入項目時又會再建立一次，
+        /// 多出來的實體從未釋放，且仍掛在 JHStudent/JHTeacher 等靜態事件上。
+        /// 已知的建構器直接由泛型參數取得型別，不建立實體；其他建構器才退回呼叫 GetContent()。
+        /// 回傳 null 表示 GetContent() 傳回 null（不加入）。
+        /// </remarks>
+        protected static Type GetContentType(IDetailBulider item)
+        {
+            Type builderType = item.GetType();
+            if (builderType.IsGenericType)
+            {
+                Type definition = builderType.GetGenericTypeDefinition();
+                if (definition == typeof(DetailBulider<>))
+                    return builderType.GetGenericArguments()[0];
+                // ContentItemBulider 產生的是沒有權限屬性的 DetailContent 外框
+                if (definition == typeof(Legacy.ContentItemBulider<>))
+                    return typeof(DetailContent);
+            }
+            if (builderType == typeof(Legacy.ContentItemBulider))
+                return typeof(DetailContent);
+
+            DetailContent content = item.GetContent();
+            return content == null ? null : content.GetType();
         }
 
         public void PopupDetailPane(string id)

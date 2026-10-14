@@ -31,6 +31,9 @@ namespace JHSchool.StudentExtendControls
 
         private bool load_completed = false;
         private string cboNationality_ori = "";
+        // 國籍中英文對照表名稱（快取，切換學生時清除），避免國籍欄位每輸入一個字就查詢一次
+        private HashSet<string> _nationalityNames;
+        private DetailContentLazyLoader _LazyLoader;
 
         // 入學照片
         private string _FreshmanPhotoStr = string.Empty;
@@ -67,17 +70,13 @@ namespace JHSchool.StudentExtendControls
             JHStudent.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHStudent_AfterChange);
             JHStudent.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHStudent_AfterDelete);
             Disposed += new EventHandler(BaseInfoPalmerwormItem_Disposed); 
-            this.CollapsedChanged += delegate {
-                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
-                {
-                    OnPrimaryKeyChanged(EventArgs.Empty);
-                }
-            };
+            _LazyLoader = new DetailContentLazyLoader(this, () => PrimaryKey, LoadCurrentRecord);
         }
 
         void JHStudent_AfterDelete(object sender, K12.Data.DataChangedEventArgs e)
         {
-            Student.Instance.SyncAllBackground();
+            // 只重新同步被刪除的學生（CacheManager 會將查無資料的鍵值移除），不必重新載入全部學生
+            Student.Instance.SyncDataBackground(e.PrimaryKeys);
         }
 
         void BaseInfoPalmerwormItem_Disposed(object sender, EventArgs e)
@@ -158,17 +157,9 @@ namespace JHSchool.StudentExtendControls
                 _StudRec.Birthday = null;            
             }
 
-            List<string> checkID = new List<string>();
-            List<string> checkSSN = new List<string>();
-
-
-            foreach (JHStudentRecord studRec in JHStudent.SelectAll())
-            {
-                checkID.Add(studRec.SALoginName.ToLower());
-                checkSSN.Add(studRec.IDNumber);
-            }
+            // 重複檢查改為精準查詢，不再下載全校學生資料（條件與原本相同：不分狀態、登入帳號不分大小寫）
             if(!string.IsNullOrEmpty(_StudRec.SALoginName ))
-                if (checkID.Contains(_StudRec.SALoginName.ToLower()))
+                if (StudentFieldExists("lower(sa_login_name)", _StudRec.SALoginName.ToLower()))
                 {
                     if (_defaultLoginID != _StudRec.SALoginName)
                     {
@@ -177,7 +168,7 @@ namespace JHSchool.StudentExtendControls
                     }
                 }
             if(!string.IsNullOrEmpty (_StudRec.IDNumber))
-                if (checkSSN.Contains(_StudRec.IDNumber))
+                if (StudentFieldExists("id_number", _StudRec.IDNumber))
                 {
                     if (_defaultIDNumber != _StudRec.IDNumber)
                     {
@@ -224,6 +215,15 @@ namespace JHSchool.StudentExtendControls
                 needed = true;
             return needed;
         }
+        /// <summary>
+        /// 檢查是否有任何學生（不分狀態）的指定欄位等於指定值。
+        /// </summary>
+        private static bool StudentFieldExists(string columnExpression, string value)
+        {
+            string sql = string.Format("select 1 from student where {0} = '{1}' limit 1", columnExpression, value.Replace("'", "''"));
+            return new FISCA.Data.QueryHelper().Select(sql).Rows.Count > 0;
+        }
+
         public async void SynchronizeGreeningImmediately()
         {
             string dsns = FISCA.Authentication.DSAServices.AccessPoint;
@@ -277,27 +277,30 @@ namespace JHSchool.StudentExtendControls
 
         void _BGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Get Photo
+            // 三個查詢彼此獨立，同時發出，總耗時約為最慢的一個（原本是三者相加）
+            string key = PrimaryKey;
             _FreshmanPhotoStr = _GraduatePhotoStr = string.Empty;
-            _FreshmanPhotoStr = K12.Data.Photo.SelectFreshmanPhoto(PrimaryKey);
-            _GraduatePhotoStr = K12.Data.Photo.SelectGraduatePhoto(PrimaryKey);
+            var freshman = System.Threading.Tasks.Task.Run(() => K12.Data.Photo.SelectFreshmanPhoto(key));
+            var graduate = System.Threading.Tasks.Task.Run(() => K12.Data.Photo.SelectGraduatePhoto(key));
 
             // studentRec
-            _StudRec = JHStudent.SelectByID(PrimaryKey);
+            _StudRec = JHStudent.SelectByID(key);
+
+            // GetResult 會拋出原本的例外（而非 AggregateException），與原本循序執行時相同
+            _FreshmanPhotoStr = freshman.GetAwaiter().GetResult();
+            _GraduatePhotoStr = graduate.GetAwaiter().GetResult();
         }
 
 
         
-        private string _loadedPrimaryKey = "";
-
         protected override void OnPrimaryKeyChanged(EventArgs e)
         {
-            if (this.Collapsed)
-            {
-                return;
-            }
-            _loadedPrimaryKey = PrimaryKey;
+            _LazyLoader.RequestLoad();
+        }
 
+        private void LoadCurrentRecord()
+        {
+            _nationalityNames = null;
             _errors.Clear();
             this.Loading = true;
             if (_BGWorker.IsBusy)
@@ -723,17 +726,16 @@ namespace JHSchool.StudentExtendControls
             errorProvider1.SetError(cboNationality, string.Empty);
             if (load_completed && cboNationality.Text !=cboNationality_ori) 
             {
-                List<string> nation_name_list = new List<string>();
-                List<DAO.UDT_NationalityMapping> nation_list = new List<DAO.UDT_NationalityMapping>();
-                AccessHelper accessHelper = new AccessHelper();
-                nation_list = accessHelper.Select<DAO.UDT_NationalityMapping>();
-
-                foreach (DAO.UDT_NationalityMapping item in nation_list)
+                if (_nationalityNames == null)
                 {
-                    nation_name_list.Add(item.Name);
+                    HashSet<string> names = new HashSet<string>();
+                    AccessHelper accessHelper = new AccessHelper();
+                    foreach (DAO.UDT_NationalityMapping item in accessHelper.Select<DAO.UDT_NationalityMapping>())
+                        names.Add(item.Name);
+                    _nationalityNames = names;
                 }
 
-                if (!nation_name_list.Contains(cboNationality.Text) && cboNationality.Text != "")
+                if (!_nationalityNames.Contains(cboNationality.Text) && cboNationality.Text != "")
                 {
                     
                     //errorProvider1.Icon = new Icon(SystemIcons.Warning, 8 ,8);

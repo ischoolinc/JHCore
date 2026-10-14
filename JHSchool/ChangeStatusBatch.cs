@@ -242,7 +242,8 @@ namespace JHSchool
             if (idlist.Count > 0)
             {
                 FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態成功");
-                Student.Instance.SyncAllBackground();
+                // 只重新同步狀態有變更的學生，不必重新載入全部學生
+                Student.Instance.SyncDataBackground(idlist);
             }
         }
     }

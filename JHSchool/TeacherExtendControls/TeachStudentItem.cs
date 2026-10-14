@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FCode = Framework.Security.FeatureCodeAttribute;
@@ -7,26 +7,36 @@ using FISCA.Presentation;
 
 namespace JHSchool.TeacherExtendControls
 {
-    [FCode("JHSchool.Teacher.Detail0010", "�a�Z�Z��")]
+    [FCode("JHSchool.Teacher.Detail0010", "帶班班級")]
     internal partial class TeachStudentItem : FISCA.Presentation.DetailContent
     {
         private bool _isBGWorkBusy=false;
         private BackgroundWorker _BGWorker;
-        private List<JHClassRecord> _ClassRecList;
+        private List<ClassRow> _ClassRows;
+        private DetailContentLazyLoader _LazyLoader;
+
+        /// <summary>
+        /// 一個帶班班級的顯示資料（在背景執行緒計算，UI 執行緒只負責繫結）。
+        /// </summary>
+        private class ClassRow
+        {
+            public string ID;
+            public string Name;
+            public string GradeYear;
+            public int Total;
+            public int Boys;
+            public int Girls;
+        }
+
         public TeachStudentItem()
         {
             InitializeComponent();
-            Group = "�a�Z�Z��";
+            Group = "帶班班級";
             _BGWorker = new BackgroundWorker();
             _BGWorker.DoWork += new DoWorkEventHandler(_BGWorker_DoWork);
             _BGWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWorker_RunWorkerCompleted);
-            _ClassRecList = new List<JHClassRecord>();
-            this.CollapsedChanged += delegate {
-                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
-                {
-                    OnPrimaryKeyChanged(System.EventArgs.Empty);
-                }
-            };
+            _ClassRows = new List<ClassRow>();
+            _LazyLoader = new DetailContentLazyLoader(this, () => PrimaryKey, LoadCurrentRecord);
         }
 
         void _BGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -46,31 +56,12 @@ namespace JHSchool.TeacherExtendControls
             listView2.Groups.Clear();
             Dictionary<string, ListViewGroup> groups = new Dictionary<string, ListViewGroup>();
 
-            foreach (JHClassRecord classRec in _ClassRecList)
+            foreach (ClassRow row in _ClassRows)
             {
-                string id = classRec.ID;
-                string classname = classRec.Name;
-                byte BoyCot=0,GirlCot=0,TotalCot=0;
-                foreach (JHStudentRecord studRec in classRec.Students)
-                {
-                    // �@��ν���
-                    if (studRec.Status == K12.Data.StudentRecord.StudentStatus.�@�� || studRec.Status == K12.Data.StudentRecord.StudentStatus.����)
-                    {
-                        if (studRec.Gender == "�k")
-                            BoyCot++;
-
-                        if (studRec.Gender == "�k")
-                            GirlCot++;
-
-                        TotalCot++;
-                    }
-                }
-                string gradeYear=" ";
+                string gradeYear = string.IsNullOrEmpty(row.GradeYear) ? " " : row.GradeYear;
                 ListViewGroup group;
-                if (classRec.GradeYear.HasValue)
-                    gradeYear = classRec.GradeYear.Value + "";
 
-                string gKey = gradeYear + "�~��";
+                string gKey = gradeYear + "年級";
                 if (!groups.ContainsKey(gKey))
                 {
                     group = new ListViewGroup(gKey, gKey);
@@ -82,12 +73,12 @@ namespace JHSchool.TeacherExtendControls
 
                 ListViewItem item = listView2.Items.Add(gradeYear);
 
-                item.SubItems.Add(classname);
-                item.SubItems.Add(TotalCot+"");
-                item.SubItems.Add(BoyCot+"");
-                item.SubItems.Add(GirlCot+"");
+                item.SubItems.Add(row.Name);
+                item.SubItems.Add(row.Total+"");
+                item.SubItems.Add(row.Boys+"");
+                item.SubItems.Add(row.Girls+"");
                 item.Group = group;
-                item.Tag = id;
+                item.Tag = row.ID;
             }
             this.Loading = false;
         }
@@ -95,22 +86,34 @@ namespace JHSchool.TeacherExtendControls
 
         void _BGWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            _ClassRecList.Clear();
-            foreach (JHClassRecord classRec in JHClass.SelectAll())
-                if (classRec.RefTeacherID == PrimaryKey)
-                    _ClassRecList.Add(classRec);
-        }
+            // 由記憶體快取取得帶班班級與班級學生，不再每次下載全部班級、再逐班查詢學生。
+            // GetClassStudents 只包含「一般」與「輟學」的學生，與原本的人數計算條件相同。
+            List<ClassRow> rows = new List<ClassRow>();
+            foreach (ClassRecord classRec in Class.Instance.GetTeacherSupervisedClass(PrimaryKey))
+            {
+                ClassRow row = new ClassRow() { ID = classRec.ID, Name = classRec.Name, GradeYear = classRec.GradeYear };
+                foreach (StudentRecord studRec in Student.Instance.GetClassStudents(classRec))
+                {
+                    if (studRec.Gender == "男")
+                        row.Boys++;
 
-        private string _loadedPrimaryKey = "";
+                    if (studRec.Gender == "女")
+                        row.Girls++;
+
+                    row.Total++;
+                }
+                rows.Add(row);
+            }
+            _ClassRows = rows;
+        }
 
         protected override void OnPrimaryKeyChanged(System.EventArgs e)
         {
-            if (this.Collapsed)
-            {
-                return;
-            }
-            _loadedPrimaryKey = PrimaryKey;
+            _LazyLoader.RequestLoad();
+        }
 
+        private void LoadCurrentRecord()
+        {
             this.Loading = true;
             if (_BGWorker.IsBusy)
                 _isBGWorkBusy = true;

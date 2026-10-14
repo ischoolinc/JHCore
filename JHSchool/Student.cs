@@ -39,28 +39,29 @@ namespace JHSchool
 
         public new void AddDetailBulider(IDetailBulider item)
         {
-            DetailContent content = item.GetContent();
-            if (content == null) return;
+            // 以型別判斷權限，不另外建立面板實體（見 LegacyPresentBase.GetContentType）
+            Type contentType = GetContentType(item);
+            if (contentType == null) return;
 
-            if (Attribute.IsDefined(content.GetType(), typeof(FeatureCodeAttribute)))
+            if (Attribute.IsDefined(contentType, typeof(FeatureCodeAttribute)))
             {
-                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
+                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(contentType, typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
                 if (fca != null)
                 {
-                    if (Framework.Legacy.GlobalOld.Acl[content.GetType()].Viewable)
-                        base.AddDetailBulider(item);
+                    if (Framework.Legacy.GlobalOld.Acl[contentType].Viewable)
+                        AddDetailBuliderCore(item, contentType);
                 }
             }
-            else if (Attribute.IsDefined(content.GetType(), typeof(FISCA.Permission.FeatureCodeAttribute)))
+            else if (Attribute.IsDefined(contentType, typeof(FISCA.Permission.FeatureCodeAttribute)))
                 {
-                    FISCA.Permission.FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FISCA.Permission.FeatureCodeAttribute)) as FISCA.Permission.FeatureCodeAttribute;
+                    FISCA.Permission.FeatureCodeAttribute fca = Attribute.GetCustomAttribute(contentType, typeof(FISCA.Permission.FeatureCodeAttribute)) as FISCA.Permission.FeatureCodeAttribute;
                     if (fca != null)
                     {
                         if (FISCA.Permission.UserAcl.Current[fca.Code].Viewable)
-                            base.AddDetailBulider(item);
+                            AddDetailBuliderCore(item, contentType);
                     }
                 }
-            else base.AddDetailBulider(item);
+            else AddDetailBuliderCore(item, contentType);
         }
 
         private static Student _Instance = null;
@@ -177,6 +178,9 @@ namespace JHSchool
                         }
                     }
                 }
+                // 基底類別的 ItemUpdated 處理在本處理之前執行，當時狀態索引尚未更新；
+                // 索引更新後重新套用篩選，狀態變更的學生才會移到正確的篩選結果。
+                FillFilter();
             };
         }
 
@@ -191,6 +195,19 @@ namespace JHSchool
                 }
                 else
                     return new List<StudentRecord>();
+            }
+        }
+
+        /// <summary>
+        /// 取得班級的在籍學生人數（一般、輟學）。不複製學生清單，供清單欄位逐列呼叫。
+        /// </summary>
+        public int GetClassStudentCount(string classID)
+        {
+            BuildIndex();
+            lock (_ClassStudents)
+            {
+                List<StudentRecord> students;
+                return _ClassStudents.TryGetValue(classID, out students) ? students.Count : 0;
             }
         }
 
@@ -823,6 +840,7 @@ namespace JHSchool
                 }
 
                 List<string> results = new List<string>();
+                HashSet<string> resultSet = new HashSet<string>();
                 if (conditions.Count > 0)
                 {
                     string sql = "select id from student where " + string.Join(" or ", conditions.ToArray());
@@ -831,7 +849,7 @@ namespace JHSchool
                     foreach (System.Data.DataRow row in dr.Rows)
                     {
                         string id = "" + row[0];
-                        if (!results.Contains(id))
+                        if (resultSet.Add(id))
                             results.Add(id);
                     }
                 }

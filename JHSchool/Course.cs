@@ -35,19 +35,8 @@ namespace JHSchool
 
         public new void AddDetailBulider(IDetailBulider item)
         {
-            DetailContent content = item.GetContent();
-            if (content == null) return;
-
-            if (Attribute.IsDefined(content.GetType(), typeof(FeatureCodeAttribute)))
-            {
-                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
-                if (fca != null)
-                {
-                    if (Framework.Legacy.GlobalOld.Acl[content.GetType()].Viewable)
-                        base.AddDetailBulider(item);
-                }
-            }
-            else base.AddDetailBulider(item);
+            // 權限檢查與基底類別相同，由基底類別處理（以型別判斷，不另外建立面板實體）
+            base.AddDetailBulider(item);
         }
 
         public void SetupPresentation()
@@ -313,9 +302,19 @@ namespace JHSchool
             //Present.SetDescriptionPaneBulider(new DescriptionPaneBulider<CourseDescription>());
 
             Present.FilterMenu.SupposeHasChildern = true;
+
+            // 課程只載入單一學期，學期選單改由資料庫取得所有有課程的學年度學期（背景查詢並快取）
+            RefreshSemesterListBackground();
+            this.ItemLoaded += delegate { RefreshSemesterListBackground(); };
+
             Present.FilterMenu.PopupOpen += delegate (object sender, PopupOpenEventArgs e)
             {
                 List<SemesterInfo> semesterList = new List<SemesterInfo>();
+                List<SemesterInfo> allSemesters = _AllSemesters;
+                if (allSemesters != null)
+                    semesterList.AddRange(allSemesters);
+                if (!semesterList.Contains(FiltedSemester))
+                    semesterList.Add(FiltedSemester);
                 foreach (var item in Items)
                 {
                     SemesterInfo semester = new SemesterInfo();
@@ -371,6 +370,34 @@ namespace JHSchool
         private SearchEventArgs SearEvArgs = null;
 
         private bool _Initilized = false;
+
+        // 所有有課程資料的學年度學期（由資料庫查詢）；尚未取得時為 null
+        private volatile List<SemesterInfo> _AllSemesters;
+
+        private void RefreshSemesterListBackground()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += delegate (object sender, DoWorkEventArgs e)
+            {
+                List<SemesterInfo> list = new List<SemesterInfo>();
+                System.Data.DataTable table = new FISCA.Data.QueryHelper().Select(
+                    "select distinct school_year, semester from course where school_year is not null and semester is not null");
+                foreach (System.Data.DataRow row in table.Rows)
+                {
+                    int schoolYear, semester;
+                    if (int.TryParse("" + row["school_year"], out schoolYear) && int.TryParse("" + row["semester"], out semester))
+                        list.Add(new SemesterInfo() { SchoolYear = schoolYear, Semester = semester });
+                }
+                e.Result = list;
+            };
+            worker.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
+            {
+                // 查詢失敗時保留原本的清單，選單仍可顯示已載入的學期
+                if (e.Error == null)
+                    _AllSemesters = (List<SemesterInfo>)e.Result;
+            };
+            worker.RunWorkerAsync();
+        }
 
         private Course(NLDPanel present)
             : base(present)

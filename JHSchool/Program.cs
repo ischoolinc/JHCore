@@ -25,6 +25,13 @@ namespace JHSchool
             //電子報表
             SmartSchool.ePaper.DispatcherProvider.Register("ischool", new DispatcherImp(), true);
 
+            // 啟動期間會讀取的使用者組態，以一次查詢預先取回（原本是 6 次同步往返，見 UserConfigPrefetch）。
+            // 放在開始背景同步之前，避免與大量資料查詢競爭伺服器。新增啟動時讀取的組態請一併加入此清單。
+            UserConfigPrefetch.Prefetch(
+                "DefaultFiltersPreference", "StudentSearchOptionPreference",
+                "TeacherDefaultFiltersPreference", "TeacherSearchOptionPreference",
+                "ClassSearchOptionPreference", "CourseSearchOptionPreference");
+
             Class.Instance.SyncAllBackground();
             Student.Instance.SyncAllBackground();
             Teacher.Instance.SyncAllBackground();

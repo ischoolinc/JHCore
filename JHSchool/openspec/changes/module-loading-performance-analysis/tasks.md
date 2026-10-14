@@ -1,8 +1,8 @@
 ## 1. Detail Panel Lazy Loading
 
-- [ ] 1.1 Add expanded/visibility state detection helpers in `PalmerwormItem` and `DetailContentBase`
-- [ ] 1.2 Modify `ContentItemBulider` and `ContentItemBulider<T>` in `PalmerwormItem.cs` to gate `LoadContent()` behind expanded/visibility checks
-- [ ] 1.3 Subscribe to expand/collapse events on detail panels to trigger `LoadContent()` immediately upon user expansion
+- [x] 1.1 Add expanded/visibility state detection helpers in `PalmerwormItem` and `DetailContentBase`（實作為 `DetailContentLazyLoader`：監看外層 `DetailItemContainer`/`ExpandablePanel` 的 `Expanded`，DetailContent 本身沒有收合狀態）
+- [x] 1.2 Modify `ContentItemBulider` and `ContentItemBulider<T>` in `PalmerwormItem.cs` to gate `LoadContent()` behind expanded/visibility checks
+- [x] 1.3 Subscribe to expand/collapse events on detail panels to trigger `LoadContent()` immediately upon user expansion
 
 ## 2. Selection Change Debouncer
 
@@ -12,7 +12,7 @@
 
 ## 3. Cache Reuse and Local Optimization
 
-- [ ] 3.1 Audit `BaseInfoPalmerwormItem.cs`, `ClassBaseInfoItem.cs`, and `TeachCourseItem.cs` to replace direct server queries with global in-memory cache lookups for Classes, Teachers, and Departments
+- [x] 3.1 Audit `BaseInfoPalmerwormItem.cs`, `ClassBaseInfoItem.cs`, and `TeachCourseItem.cs` to replace direct server queries with global in-memory cache lookups for Classes, Teachers, and Departments
 
 ## 4. Verification and Testing
 

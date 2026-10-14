@@ -30,19 +30,8 @@ namespace JHSchool
 
         public new void AddDetailBulider(IDetailBulider item)
         {
-            DetailContent content = item.GetContent();
-            if (content == null) return;
-
-            if (Attribute.IsDefined(content.GetType(), typeof(FeatureCodeAttribute)))
-            {
-                FeatureCodeAttribute fca = Attribute.GetCustomAttribute(content.GetType(), typeof(FeatureCodeAttribute)) as FeatureCodeAttribute;
-                if (fca != null)
-                {
-                    if (Framework.Legacy.GlobalOld.Acl[content.GetType()].Viewable)
-                        base.AddDetailBulider(item);
-                }
-            }
-            else base.AddDetailBulider(item);
+            // 權限檢查與基底類別相同，由基底類別處理（以型別判斷，不另外建立面板實體）
+            base.AddDetailBulider(item);
         }
 
         public void SetupPresentation()
@@ -188,13 +177,7 @@ namespace JHSchool
             ListPaneField superviseClassField = new ListPaneField("帶班班級");
             superviseClassField.GetVariable += delegate(object sender, GetVariableEventArgs e)
             {
-                var superviseClass = "";
-                foreach (var item in Class.Instance.GetTecaherSupervisedClass(Items[e.Key]))
-                {
-                    superviseClass += (superviseClass == "" ? "" : "、") + item.Name;
-                }
-
-                e.Value = superviseClass;
+                e.Value = Class.Instance.GetTeacherSupervisedClassNames(e.Key);
             };
             Teacher.Instance.AddListPaneField(superviseClassField);
 

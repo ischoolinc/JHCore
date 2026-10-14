@@ -333,6 +333,8 @@
     <Compile Include="DAO\UDT_NationalityMapping.cs" />
     <Compile Include="Data\Student_Extensions.cs" />
     <Compile Include="Department.cs" />
+    <Compile Include="DetailContentLazyLoader.cs" />
+    <Compile Include="UserConfigPrefetch.cs" />
     <Compile Include="DepartmentRecord.cs" />
     <Compile Include="DetailContentBase.cs">
       <SubType>UserControl</SubType>

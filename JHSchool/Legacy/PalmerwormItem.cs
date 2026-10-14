@@ -220,26 +220,9 @@ namespace JHSchool.Legacy
             var Tcontent = new T();
             content.Padding = new Padding(0);
 
-            string lastKey = "";
-            string lastLoadedKey = "";
-            content.PrimaryKeyChanged += delegate { 
-                lastKey = content.PrimaryKey;
-                if (!content.Collapsed)
-                {
-                    lastLoadedKey = lastKey;
-                    Tcontent.LoadContent(lastKey);
-                }
-            };
-            content.CollapsedChanged += delegate {
-                if (!content.Collapsed && !string.IsNullOrEmpty(lastKey))
-                {
-                    if (lastLoadedKey != lastKey)
-                    {
-                        lastLoadedKey = lastKey;
-                        Tcontent.LoadContent(lastKey);
-                    }
-                }
-            };
+            // 群組收合時不載入，展開時才載入目前的記錄
+            var lazyLoader = new DetailContentLazyLoader(content, () => content.PrimaryKey, () => Tcontent.LoadContent(content.PrimaryKey));
+            content.PrimaryKeyChanged += delegate { lazyLoader.RequestLoad(); };
 
             Tcontent.SaveButtonVisibleChanged += delegate { content.SaveButtonVisible = Tcontent.SaveButtonVisible; };
             Tcontent.CancelButtonVisibleChanged += delegate { content.CancelButtonVisible = Tcontent.CancelButtonVisible; };
@@ -281,26 +264,9 @@ namespace JHSchool.Legacy
             var Tcontent = (SmartSchool.Customization.PlugIn.ExtendedContent.IContentItem)Seed.Clone();
             content.Padding = new Padding(0);
 
-            string lastKey = "";
-            string lastLoadedKey = "";
-            content.PrimaryKeyChanged += delegate { 
-                lastKey = content.PrimaryKey;
-                if (!content.Collapsed)
-                {
-                    lastLoadedKey = lastKey;
-                    Tcontent.LoadContent(lastKey);
-                }
-            };
-            content.CollapsedChanged += delegate {
-                if (!content.Collapsed && !string.IsNullOrEmpty(lastKey))
-                {
-                    if (lastLoadedKey != lastKey)
-                    {
-                        lastLoadedKey = lastKey;
-                        Tcontent.LoadContent(lastKey);
-                    }
-                }
-            };
+            // 群組收合時不載入，展開時才載入目前的記錄
+            var lazyLoader = new DetailContentLazyLoader(content, () => content.PrimaryKey, () => Tcontent.LoadContent(content.PrimaryKey));
+            content.PrimaryKeyChanged += delegate { lazyLoader.RequestLoad(); };
 
             Tcontent.SaveButtonVisibleChanged += delegate { content.SaveButtonVisible = Tcontent.SaveButtonVisible; };
             Tcontent.CancelButtonVisibleChanged += delegate { content.CancelButtonVisible = Tcontent.CancelButtonVisible; };

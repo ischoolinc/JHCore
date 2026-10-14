@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -14,7 +14,7 @@ using FCode = Framework.Security.FeatureCodeAttribute;
 
 namespace JHSchool.TeacherExtendControls
 {
-    [FCode("JHSchool.Teacher.Detail0000", "±Ğ®v°ò¥»¸ê®Æ")]
+    [FCode("JHSchool.Teacher.Detail0000", "æ•™å¸«åŸºæœ¬è³‡æ–™")]
     internal partial class BaseInfoItem : FISCA.Presentation.DetailContent
     {
         ErrorProvider epName = new ErrorProvider();
@@ -32,11 +32,12 @@ namespace JHSchool.TeacherExtendControls
         Dictionary<string, string> _AllTeacherNumberDict = new Dictionary<string, string>();
         PermRecLogProcess prlp;
         private ChangeListener _DataListener;
+        private DetailContentLazyLoader _LazyLoader;
 
         public BaseInfoItem()
         {
             InitializeComponent();
-            Group = "±Ğ®v°ò¥»¸ê®Æ";
+            Group = "æ•™å¸«åŸºæœ¬è³‡æ–™";
             _BGWork = new BackgroundWorker();
             _BGWork.DoWork += new DoWorkEventHandler(_BGWork_DoWork);
             _BGWork.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWork_RunWorkerCompleted);
@@ -60,17 +61,13 @@ namespace JHSchool.TeacherExtendControls
             JHTeacher.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
             JHTeacher.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterDelete);
             Disposed += new EventHandler(BaseInfoItem_Disposed);
-            this.CollapsedChanged += delegate {
-                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
-                {
-                    OnPrimaryKeyChanged(EventArgs.Empty);
-                }
-            };
+            _LazyLoader = new DetailContentLazyLoader(this, () => PrimaryKey, LoadCurrentRecord);
         }
 
         void JHTeacher_AfterDelete(object sender, K12.Data.DataChangedEventArgs e)
         {
-            Teacher.Instance.SyncAllBackground();
+            // åªé‡æ–°åŒæ­¥è¢«åˆªé™¤çš„æ•™å¸«ï¼ˆCacheManager æœƒå°‡æŸ¥ç„¡è³‡æ–™çš„éµå€¼ç§»é™¤ï¼‰ï¼Œä¸å¿…é‡æ–°è¼‰å…¥å…¨éƒ¨æ•™å¸«
+            Teacher.Instance.SyncDataBackground(e.PrimaryKeys);
         }
 
         void BaseInfoItem_Disposed(object sender, EventArgs e)
@@ -118,7 +115,7 @@ namespace JHSchool.TeacherExtendControls
             DataBindToForm();
         }
 
-        // ¸ü¤J¸ê®Æ¨ìµe­±
+        // è¼‰å…¥è³‡æ–™åˆ°ç•«é¢
         private void DataBindToForm()
         {
             if (_TeacherRec == null)
@@ -152,17 +149,17 @@ namespace JHSchool.TeacherExtendControls
 
 
             // Log
-            prlp.SetBeforeSaveText("©m¦W", txtName.Text);
-            prlp.SetBeforeSaveText("¨­¤ÀÃÒ¸¹", txtIDNumber.Text);
-            prlp.SetBeforeSaveText("©Ê§O", cboGender.Text);
-            prlp.SetBeforeSaveText("¼ÊºÙ", txtNickname.Text);
-            prlp.SetBeforeSaveText("Ápµ¸¹q¸Ü", txtPhone.Text);
-            prlp.SetBeforeSaveText("¹q¤l«H½c", txtEmail.Text);
-            prlp.SetBeforeSaveText("±Ğ®vÃş§O", txtCategory.Text);
-            prlp.SetBeforeSaveText("µn¤J±b¸¹", txtSTLoginAccount.Text);
-            prlp.SetBeforeSaveText("µn¤J±K½X", txtSTLoginPwd.Text);
-            prlp.SetBeforeSaveText("±b¸¹Ãş«¬", cboAccountType.Text);
-            prlp.SetBeforeSaveText("±Ğ®v½s¸¹", txtTeacherNumber.Text);
+            prlp.SetBeforeSaveText("å§“å", txtName.Text);
+            prlp.SetBeforeSaveText("èº«åˆ†è­‰è™Ÿ", txtIDNumber.Text);
+            prlp.SetBeforeSaveText("æ€§åˆ¥", cboGender.Text);
+            prlp.SetBeforeSaveText("æš±ç¨±", txtNickname.Text);
+            prlp.SetBeforeSaveText("è¯çµ¡é›»è©±", txtPhone.Text);
+            prlp.SetBeforeSaveText("é›»å­ä¿¡ç®±", txtEmail.Text);
+            prlp.SetBeforeSaveText("æ•™å¸«é¡åˆ¥", txtCategory.Text);
+            prlp.SetBeforeSaveText("ç™»å…¥å¸³è™Ÿ", txtSTLoginAccount.Text);
+            prlp.SetBeforeSaveText("ç™»å…¥å¯†ç¢¼", txtSTLoginPwd.Text);
+            prlp.SetBeforeSaveText("å¸³è™Ÿé¡å‹", cboAccountType.Text);
+            prlp.SetBeforeSaveText("æ•™å¸«ç·¨è™Ÿ", txtTeacherNumber.Text);
             this.Loading = false;
             SaveButtonVisible = false;
             CancelButtonVisible = false;
@@ -172,6 +169,15 @@ namespace JHSchool.TeacherExtendControls
 
         void _BGWork_DoWork(object sender, DoWorkEventArgs e)
         {
+            // è®€å–æ•™å¸«è³‡æ–™
+            _TeacherRec = JHTeacher.SelectByID(PrimaryKey);
+        }
+
+        /// <summary>
+        /// å»ºç«‹é‡è¤‡æª¢æŸ¥ç”¨çš„ç´¢å¼•ã€‚åªåœ¨å­˜æª”æ™‚å‘¼å«ï¼Œé¿å…æ¯æ¬¡åˆ‡æ›æ•™å¸«éƒ½ä¸‹è¼‰å…¨éƒ¨æ•™å¸«è³‡æ–™ã€‚
+        /// </summary>
+        private void BuildDuplicateCheckIndex()
+        {
             _AllTeacherNameDic.Clear();
             _AllLogIDDic.Clear();
             _AllIDNumberDict.Clear();
@@ -179,36 +185,31 @@ namespace JHSchool.TeacherExtendControls
 
             foreach (JHTeacherRecord TR in JHTeacher.SelectAll())
             {
-                _AllTeacherNameDic.Add(TR.Name + TR.Nickname, TR.ID);
+                if (!_AllTeacherNameDic.ContainsKey(TR.Name + TR.Nickname))
+                    _AllTeacherNameDic.Add(TR.Name + TR.Nickname, TR.ID);
 
                 if (!string.IsNullOrEmpty(TR.TALoginName))
                     if (!_AllLogIDDic.ContainsKey(TR.TALoginName.ToLower()))
                         _AllLogIDDic.Add(TR.TALoginName.ToLower(), TR.ID);
 
-                // ¨­¤ÀÃÒ¸¹ÀË¬d
+                // èº«åˆ†è­‰è™Ÿæª¢æŸ¥
                 if (!string.IsNullOrWhiteSpace(TR.IDNumber))
                     if (!_AllIDNumberDict.ContainsKey(TR.IDNumber))
                         _AllIDNumberDict.Add(TR.IDNumber, TR.ID);
-                // ±Ğ®v½s¸¹ÀË¬d
+                // æ•™å¸«ç·¨è™Ÿæª¢æŸ¥
                 if (!string.IsNullOrWhiteSpace(TR.TeacherNumber))
                     if (!_AllTeacherNumberDict.ContainsKey(TR.TeacherNumber))
                         _AllTeacherNumberDict.Add(TR.TeacherNumber, TR.ID);
             }
-
-            // Åª¨ú±Ğ®v¸ê®Æ
-            _TeacherRec = JHTeacher.SelectByID(PrimaryKey);
         }
-
-        private string _loadedPrimaryKey = "";
 
         protected override void OnPrimaryKeyChanged(EventArgs e)
         {
-            if (this.Collapsed)
-            {
-                return;
-            }
-            _loadedPrimaryKey = PrimaryKey;
+            _LazyLoader.RequestLoad();
+        }
 
+        private void LoadCurrentRecord()
+        {
             this.Loading = true;
             if (_BGWork.IsBusy)
                 _isBGWorkBusy = true;
@@ -221,57 +222,59 @@ namespace JHSchool.TeacherExtendControls
         protected override void OnSaveButtonClick(EventArgs e)
         {
 
-            // ÅçÃÒ¸ê®Æ
+            // é©—è­‰è³‡æ–™
             if (string.IsNullOrEmpty(txtName.Text.Trim()))
             {
-                epName.SetError(txtName, "©m¦W¤£¥iªÅ¥Õ!");
+                epName.SetError(txtName, "å§“åä¸å¯ç©ºç™½!");
                 return;
             }
 
-            // ÀË¬d±b¸¹¬O§_­«½Æ
+            BuildDuplicateCheckIndex();
+
+            // æª¢æŸ¥å¸³è™Ÿæ˜¯å¦é‡è¤‡
             if (_AllLogIDDic.ContainsKey(txtSTLoginAccount.Text.ToLower()))
             {
                 if (_AllLogIDDic[txtSTLoginAccount.Text.ToLower()] != _TeacherRec.ID)
                 {
-                    epLoginName.SetError(txtSTLoginAccount, "µn¤J±b¸¹­«ÂĞ!");
+                    epLoginName.SetError(txtSTLoginAccount, "ç™»å…¥å¸³è™Ÿé‡è¦†!");
                     return;
                 }
             }
 
-            // ÀË¬d©m¦W+¼ÊºÙ¬O§_­«½Æ
+            // æª¢æŸ¥å§“å+æš±ç¨±æ˜¯å¦é‡è¤‡
             string checkName = txtName.Text + txtNickname.Text;
 
             if (_AllTeacherNameDic.ContainsKey(checkName))
             {
                 if (_AllTeacherNameDic[checkName] != _TeacherRec.ID)
                 {
-                    epName.SetError(txtName, "©m¦W+¼ÊºÙ­«ÂĞ¡A½ĞÀË¬d!");
-                    epLoginName.SetError(txtNickname, "©m¦W+¼ÊºÙ­«ÂĞ¡A½ĞÀË¬d!");
+                    epName.SetError(txtName, "å§“å+æš±ç¨±é‡è¦†ï¼Œè«‹æª¢æŸ¥!");
+                    epLoginName.SetError(txtNickname, "å§“å+æš±ç¨±é‡è¦†ï¼Œè«‹æª¢æŸ¥!");
                     return;
                 }
             }
 
-            // ÀË¬d¨­¤ÀÃÒ¸¹¬O§_­«½Æ
+            // æª¢æŸ¥èº«åˆ†è­‰è™Ÿæ˜¯å¦é‡è¤‡
             if (_AllIDNumberDict.ContainsKey(txtIDNumber.Text))
             {
                 if (_TeacherRec.ID != _AllIDNumberDict[txtIDNumber.Text])
                 {
-                    epIDNumber.SetError(txtIDNumber, "¨­¤ÀÃÒ¸¹­«½Æ¡A½ĞÀË¬d!");
+                    epIDNumber.SetError(txtIDNumber, "èº«åˆ†è­‰è™Ÿé‡è¤‡ï¼Œè«‹æª¢æŸ¥!");
                     return;
                 }
             }
 
-            // ÀË¬d±Ğ®v½s¸¹¬O§_­«½Æ
+            // æª¢æŸ¥æ•™å¸«ç·¨è™Ÿæ˜¯å¦é‡è¤‡
             //if (_AllTeacherNumberDict.ContainsKey(txtTeacherNumber.Text))
             //{
             //    if (_TeacherRec.ID != _AllTeacherNumberDict[txtTeacherNumber.Text])
             //    {
-            //        epTeacherNumber.SetError(txtTeacherNumber, "±Ğ®v½s¸¹­«½Æ¡A½ĞÀË¬d!");
+            //        epTeacherNumber.SetError(txtTeacherNumber, "æ•™å¸«ç·¨è™Ÿé‡è¤‡ï¼Œè«‹æª¢æŸ¥!");
             //        return;
             //    }
             //}
 
-            // ¦^¶ñ¨ì DAL
+            // å›å¡«åˆ° DAL
             _TeacherRec.AccountType = cboAccountType.Text;
             _TeacherRec.Category = txtCategory.Text;
             _TeacherRec.ContactPhone = txtPhone.Text;
@@ -284,25 +287,25 @@ namespace JHSchool.TeacherExtendControls
             _TeacherRec.TAPassword = txtSTLoginPwd.Text;
             _TeacherRec.TeacherNumber = txtTeacherNumber.Text;
 
-            // ¦sÀÉ
+            // å­˜æª”
             JHTeacher.Update(_TeacherRec);
 
             // Save Log
-            prlp.SetAfterSaveText("©m¦W", txtName.Text);
-            prlp.SetAfterSaveText("¨­¤ÀÃÒ¸¹", txtIDNumber.Text);
-            prlp.SetAfterSaveText("©Ê§O", cboGender.Text);
-            prlp.SetAfterSaveText("¼ÊºÙ", txtNickname.Text);
-            prlp.SetAfterSaveText("Ápµ¸¹q¸Ü", txtPhone.Text);
-            prlp.SetAfterSaveText("¹q¤l«H½c", txtEmail.Text);
-            prlp.SetAfterSaveText("±Ğ®vÃş§O", txtCategory.Text);
-            prlp.SetAfterSaveText("µn¤J±b¸¹", txtSTLoginAccount.Text);
-            prlp.SetAfterSaveText("µn¤J±K½X", txtSTLoginPwd.Text);
-            prlp.SetAfterSaveText("±b¸¹Ãş«¬", cboAccountType.Text);
-            prlp.SetAfterSaveText("±Ğ®v½s¸¹", txtTeacherNumber.Text);
+            prlp.SetAfterSaveText("å§“å", txtName.Text);
+            prlp.SetAfterSaveText("èº«åˆ†è­‰è™Ÿ", txtIDNumber.Text);
+            prlp.SetAfterSaveText("æ€§åˆ¥", cboGender.Text);
+            prlp.SetAfterSaveText("æš±ç¨±", txtNickname.Text);
+            prlp.SetAfterSaveText("è¯çµ¡é›»è©±", txtPhone.Text);
+            prlp.SetAfterSaveText("é›»å­ä¿¡ç®±", txtEmail.Text);
+            prlp.SetAfterSaveText("æ•™å¸«é¡åˆ¥", txtCategory.Text);
+            prlp.SetAfterSaveText("ç™»å…¥å¸³è™Ÿ", txtSTLoginAccount.Text);
+            prlp.SetAfterSaveText("ç™»å…¥å¯†ç¢¼", txtSTLoginPwd.Text);
+            prlp.SetAfterSaveText("å¸³è™Ÿé¡å‹", cboAccountType.Text);
+            prlp.SetAfterSaveText("æ•™å¸«ç·¨è™Ÿ", txtTeacherNumber.Text);
 
-            prlp.SetDescTitle("±Ğ®v©m¦W¡G" + txtName.Text + ",");
-            prlp.SetActionBy("¾ÇÄy", "±Ğ®v°ò¥»¸ê®Æ");
-            prlp.SetAction("­×§ï±Ğ®v°ò¥»¸ê®Æ");
+            prlp.SetDescTitle("æ•™å¸«å§“åï¼š" + txtName.Text + ",");
+            prlp.SetActionBy("å­¸ç±", "æ•™å¸«åŸºæœ¬è³‡æ–™");
+            prlp.SetAction("ä¿®æ”¹æ•™å¸«åŸºæœ¬è³‡æ–™");
 
             if (IfNeededSynchronize(prlp))
                 SynchronizeGreeningImmediately();
@@ -311,8 +314,9 @@ namespace JHSchool.TeacherExtendControls
             DataBindToForm();
             SaveButtonVisible = false;
             CancelButtonVisible = false;
+            // ç­ç´šæ¸…å–®çš„ã€Œç­å°å¸«ã€æ¬„ä½å³æ™‚è®€å–æ•™å¸«å¿«å–ï¼Œæ•™å¸«è³‡æ–™æ›´æ–°å¾Œç”± Class è‡ªè¡Œé‡ç¹ªæ¸…å–®ï¼Œ
+            // ä¸å¿…é‡æ–°è¼‰å…¥å…¨éƒ¨ç­ç´šã€‚
             Teacher.Instance.SyncDataBackground(PrimaryKey);
-            Class.Instance.SyncAllBackground();
             ClearErrorMessage();
         }
 
@@ -323,7 +327,7 @@ namespace JHSchool.TeacherExtendControls
             string newValue = "";
             foreach (KeyValuePair<string, string> each in prlp.GetBeforeSaveText())
             {
-                if (each.Key == "µn¤J±b¸¹") //µn¤J±b¸¹
+                if (each.Key == "ç™»å…¥å¸³è™Ÿ") //ç™»å…¥å¸³è™Ÿ
                 {
                     oldValue = each.Value;
                 }
@@ -331,7 +335,7 @@ namespace JHSchool.TeacherExtendControls
 
             foreach (KeyValuePair<string, string> each in prlp.GetAfterSaveText())
             {
-                if (each.Key == "µn¤J±b¸¹") //µn¤J±b¸¹
+                if (each.Key == "ç™»å…¥å¸³è™Ÿ") //ç™»å…¥å¸³è™Ÿ
                 {
                     newValue = each.Value;
                 }
@@ -351,13 +355,13 @@ namespace JHSchool.TeacherExtendControls
                 HttpClient client = new HttpClient();
                 HttpResponseMessage rsp = await client.GetAsync(url);
                 if (rsp.IsSuccessStatusCode)
-                    Console.WriteLine("Greening±b¸¹¦P¨B¦¨¥\¡C");
+                    Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥æˆåŠŸã€‚");
                 else
-                    Console.WriteLine("Greening±b¸¹¦P¨B¥¢±Ñ¡C");
+                    Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥å¤±æ•—ã€‚");
             }
             catch
             {
-                Console.WriteLine("Greening±b¸¹¦P¨B¥¢±Ñ¡C");
+                Console.WriteLine("Greeningå¸³è™ŸåŒæ­¥å¤±æ•—ã€‚");
             }
         }
 
@@ -382,7 +386,7 @@ namespace JHSchool.TeacherExtendControls
         private void buttonItem1_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
-            od.Filter = "©Ò¦³¼v¹³(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
+            od.Filter = "æ‰€æœ‰å½±åƒ(*.jpg,*.jpeg,*.gif,*.png)|*.jpg;*.jpeg;*.gif;*.png;";
             if (od.ShowDialog() == DialogResult.OK)
             {
                 FileStream fs = null;
@@ -397,7 +401,7 @@ namespace JHSchool.TeacherExtendControls
 
                     _TeacherRec.Photo = ToBase64String(Photo.Resize(new Bitmap(orgBmp)));
                     JHTeacher.Update(_TeacherRec);
-                    prlp.SaveLog("¾ÇÄy¨t²Î-±Ğ®v°ò¥»¸ê®Æ", "ÅÜ§ó±Ğ®v·Ó¤ù", "teacher", PrimaryKey, "ÅÜ§ó±Ğ®v:" + _TeacherRec.Name + "ªº·Ó¤ù");
+                    prlp.SaveLog("å­¸ç±ç³»çµ±-æ•™å¸«åŸºæœ¬è³‡æ–™", "è®Šæ›´æ•™å¸«ç…§ç‰‡", "teacher", PrimaryKey, "è®Šæ›´æ•™å¸«:" + _TeacherRec.Name + "çš„ç…§ç‰‡");
                     DataBindToForm();
 
                 }
@@ -432,14 +436,14 @@ namespace JHSchool.TeacherExtendControls
 
         private void buttonItem5_Click(object sender, EventArgs e)
         {
-            if (FISCA.Presentation.Controls.MsgBox.Show("±z½T©w­n²M°£¦¹¾Ç¥Íªº·Ó¤ù¶Ü¡H", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
+            if (FISCA.Presentation.Controls.MsgBox.Show("æ‚¨ç¢ºå®šè¦æ¸…é™¤æ­¤å­¸ç”Ÿçš„ç…§ç‰‡å—ï¼Ÿ", "", MessageBoxButtons.YesNo) == DialogResult.No) return;
 
             try
             {
                 _TeacherRec.Photo = string.Empty;
                 pic1.Image = pic1.InitialImage;
                 JHTeacher.Update(_TeacherRec);
-                prlp.SaveLog("¾ÇÄy¨t²Î-±Ğ®v°ò¥»¸ê®Æ", "ÅÜ§ó±Ğ®v·Ó¤ù", "teacher", PrimaryKey, "ÅÜ§ó±Ğ®v:" + _TeacherRec.Name + "ªº·Ó¤ù");
+                prlp.SaveLog("å­¸ç±ç³»çµ±-æ•™å¸«åŸºæœ¬è³‡æ–™", "è®Šæ›´æ•™å¸«ç…§ç‰‡", "teacher", PrimaryKey, "è®Šæ›´æ•™å¸«:" + _TeacherRec.Name + "çš„ç…§ç‰‡");
                 DataBindToForm();
             }
             catch (Exception ex)
@@ -454,7 +458,7 @@ namespace JHSchool.TeacherExtendControls
                 return;
 
             SaveFileDialog sd = new SaveFileDialog();
-            sd.Filter = "PNG ¼v¹³|*.png;";
+            sd.Filter = "PNG å½±åƒ|*.png;";
             sd.FileName = txtIDNumber.Text + ".png";
 
             if (sd.ShowDialog() == DialogResult.OK)
