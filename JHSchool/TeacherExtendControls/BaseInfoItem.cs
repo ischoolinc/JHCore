@@ -60,6 +60,12 @@ namespace JHSchool.TeacherExtendControls
             JHTeacher.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterChange);
             JHTeacher.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHTeacher_AfterDelete);
             Disposed += new EventHandler(BaseInfoItem_Disposed);
+            this.CollapsedChanged += delegate {
+                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
+                {
+                    OnPrimaryKeyChanged(EventArgs.Empty);
+                }
+            };
         }
 
         void JHTeacher_AfterDelete(object sender, K12.Data.DataChangedEventArgs e)
@@ -193,8 +199,16 @@ namespace JHSchool.TeacherExtendControls
             _TeacherRec = JHTeacher.SelectByID(PrimaryKey);
         }
 
+        private string _loadedPrimaryKey = "";
+
         protected override void OnPrimaryKeyChanged(EventArgs e)
         {
+            if (this.Collapsed)
+            {
+                return;
+            }
+            _loadedPrimaryKey = PrimaryKey;
+
             this.Loading = true;
             if (_BGWork.IsBusy)
                 _isBGWorkBusy = true;

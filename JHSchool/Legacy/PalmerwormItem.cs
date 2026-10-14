@@ -219,7 +219,28 @@ namespace JHSchool.Legacy
             var content = new FISCA.Presentation.DetailContent ();
             var Tcontent = new T();
             content.Padding = new Padding(0);
-            content.PrimaryKeyChanged += delegate { Tcontent.LoadContent(content.PrimaryKey); };
+
+            string lastKey = "";
+            string lastLoadedKey = "";
+            content.PrimaryKeyChanged += delegate { 
+                lastKey = content.PrimaryKey;
+                if (!content.Collapsed)
+                {
+                    lastLoadedKey = lastKey;
+                    Tcontent.LoadContent(lastKey);
+                }
+            };
+            content.CollapsedChanged += delegate {
+                if (!content.Collapsed && !string.IsNullOrEmpty(lastKey))
+                {
+                    if (lastLoadedKey != lastKey)
+                    {
+                        lastLoadedKey = lastKey;
+                        Tcontent.LoadContent(lastKey);
+                    }
+                }
+            };
+
             Tcontent.SaveButtonVisibleChanged += delegate { content.SaveButtonVisible = Tcontent.SaveButtonVisible; };
             Tcontent.CancelButtonVisibleChanged += delegate { content.CancelButtonVisible = Tcontent.CancelButtonVisible; };
             content.SaveButtonClick += delegate { Tcontent.Save(); };
@@ -259,7 +280,28 @@ namespace JHSchool.Legacy
             var content = new FISCA.Presentation.DetailContent ();
             var Tcontent = (SmartSchool.Customization.PlugIn.ExtendedContent.IContentItem)Seed.Clone();
             content.Padding = new Padding(0);
-            content.PrimaryKeyChanged += delegate { Tcontent.LoadContent(content.PrimaryKey); };
+
+            string lastKey = "";
+            string lastLoadedKey = "";
+            content.PrimaryKeyChanged += delegate { 
+                lastKey = content.PrimaryKey;
+                if (!content.Collapsed)
+                {
+                    lastLoadedKey = lastKey;
+                    Tcontent.LoadContent(lastKey);
+                }
+            };
+            content.CollapsedChanged += delegate {
+                if (!content.Collapsed && !string.IsNullOrEmpty(lastKey))
+                {
+                    if (lastLoadedKey != lastKey)
+                    {
+                        lastLoadedKey = lastKey;
+                        Tcontent.LoadContent(lastKey);
+                    }
+                }
+            };
+
             Tcontent.SaveButtonVisibleChanged += delegate { content.SaveButtonVisible = Tcontent.SaveButtonVisible; };
             Tcontent.CancelButtonVisibleChanged += delegate { content.CancelButtonVisible = Tcontent.CancelButtonVisible; };
             content.SaveButtonClick += delegate { Tcontent.Save(); };

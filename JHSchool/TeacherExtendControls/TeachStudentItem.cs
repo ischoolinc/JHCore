@@ -21,6 +21,12 @@ namespace JHSchool.TeacherExtendControls
             _BGWorker.DoWork += new DoWorkEventHandler(_BGWorker_DoWork);
             _BGWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWorker_RunWorkerCompleted);
             _ClassRecList = new List<JHClassRecord>();
+            this.CollapsedChanged += delegate {
+                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
+                {
+                    OnPrimaryKeyChanged(System.EventArgs.Empty);
+                }
+            };
         }
 
         void _BGWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -95,8 +101,16 @@ namespace JHSchool.TeacherExtendControls
                     _ClassRecList.Add(classRec);
         }
 
+        private string _loadedPrimaryKey = "";
+
         protected override void OnPrimaryKeyChanged(System.EventArgs e)
         {
+            if (this.Collapsed)
+            {
+                return;
+            }
+            _loadedPrimaryKey = PrimaryKey;
+
             this.Loading = true;
             if (_BGWorker.IsBusy)
                 _isBGWorkBusy = true;

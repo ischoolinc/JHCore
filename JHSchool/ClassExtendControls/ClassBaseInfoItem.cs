@@ -51,6 +51,12 @@ namespace JHSchool.ClassExtendControls
             _BGWorker.DoWork += new DoWorkEventHandler(_BGWorker_DoWork);
             _BGWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(_BGWorker_RunWorkerCompleted);
             Disposed += new EventHandler(ClassBaseInfoItem_Disposed);
+            this.CollapsedChanged += delegate {
+                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
+                {
+                    OnPrimaryKeyChanged(EventArgs.Empty);
+                }
+            };
         }
 
         void ClassBaseInfoItem_Disposed(object sender, EventArgs e)
@@ -264,8 +270,16 @@ namespace JHSchool.ClassExtendControls
             }
         }
 
+        private string _loadedPrimaryKey = "";
+
         protected override void OnPrimaryKeyChanged(EventArgs e)
         {            
+            if (this.Collapsed)
+            {
+                return;
+            }
+            _loadedPrimaryKey = PrimaryKey;
+
             epClassName.Clear();
             epDisplayOrder.Clear();
             epGradeYear.Clear();

@@ -67,6 +67,12 @@ namespace JHSchool.StudentExtendControls
             JHStudent.AfterChange += new EventHandler<K12.Data.DataChangedEventArgs>(JHStudent_AfterChange);
             JHStudent.AfterDelete += new EventHandler<K12.Data.DataChangedEventArgs>(JHStudent_AfterDelete);
             Disposed += new EventHandler(BaseInfoPalmerwormItem_Disposed); 
+            this.CollapsedChanged += delegate {
+                if (!this.Collapsed && _loadedPrimaryKey != PrimaryKey)
+                {
+                    OnPrimaryKeyChanged(EventArgs.Empty);
+                }
+            };
         }
 
         void JHStudent_AfterDelete(object sender, K12.Data.DataChangedEventArgs e)
@@ -282,8 +288,16 @@ namespace JHSchool.StudentExtendControls
 
 
         
+        private string _loadedPrimaryKey = "";
+
         protected override void OnPrimaryKeyChanged(EventArgs e)
         {
+            if (this.Collapsed)
+            {
+                return;
+            }
+            _loadedPrimaryKey = PrimaryKey;
+
             _errors.Clear();
             this.Loading = true;
             if (_BGWorker.IsBusy)
