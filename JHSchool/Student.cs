@@ -75,6 +75,10 @@ namespace JHSchool
         }
 
         private bool _Initilized = false;
+        // 狀態變更後暫時保留在清單中、右側學生資料頁面正在顯示的學生，避免頁面在類別模組更新狀態標籤前就被隱藏；
+        // 改選其他學生、點選年級樹其他結點、切換篩選或重新整理時才依篩選移除
+        private List<string> _KeepKeys = new List<string>();
+        private bool _FillingFilter = false;
         //private bool _UseDefaultContent = true;
         //private List<StudentControls.DetailContent> _DetialContents = new List<K12.StudentControls.DetailContent>();
 
@@ -273,12 +277,15 @@ namespace JHSchool
                                 if (checkStudRec.Status == K12.Data.StudentRecord.StudentStatus.刪除)
                                 {
                                     if (!string.IsNullOrEmpty(checkStudRec.StudentNumber))
-                                        tmpSnumList.Add(checkStudRec.StudentNumber);
+                                        tmpSnumList.Add(checkStudRec.StudentNumber.Trim());
                                     if (!string.IsNullOrEmpty(checkStudRec.IDNumber))
-                                        tmpStudIDNumberList.Add(checkStudRec.IDNumber);
+                                        tmpStudIDNumberList.Add(checkStudRec.IDNumber.Trim().ToUpper());
                                 }
 
-                            if (tmpSnumList.Contains(studRec.StudentNumber) || tmpSnumList.Contains(studRec.IDNumber))
+                            // 身分證號原本誤用學號清單比對，重複的身分證號擋不下來；比照批次變更，去除空白並不分大小寫比對
+                            bool dupStudNumber = !string.IsNullOrEmpty(studRec.StudentNumber) && tmpSnumList.Contains(studRec.StudentNumber.Trim());
+                            bool dupIDNumber = !string.IsNullOrEmpty(studRec.IDNumber) && tmpStudIDNumberList.Contains(studRec.IDNumber.Trim().ToUpper());
+                            if (dupStudNumber || dupIDNumber)
                             {
                                 MsgBox.Show("刪除狀態有重複學號或身分證號,請先修改後再刪除!");
                                 return;
@@ -560,7 +567,12 @@ namespace JHSchool
             //測試的先註解了(dylan)
             //Student.Instance.AddDetailBulider(new JHSchool.Legacy.ContentItemBulider<CriticalSection.Dylan_Test_Item>());
 
-            Present.NavPaneContexMenu.GetChild("重新整理").Click += delegate { this.SyncAllBackground(); };
+            Present.NavPaneContexMenu.GetChild("重新整理").Click += delegate
+            {
+                // 手動重新整理時完全依篩選顯示，不再保留狀態變更的學生
+                _KeepKeys.Clear();
+                this.SyncAllBackground();
+            };
 
             Present.Picture = Properties.Resources.StudentIcon;
 
@@ -667,6 +679,31 @@ namespace JHSchool
 
             UseFilter = true;
 
+            // 其他模組(如類別模組的學生狀態標籤)透過 K12.Data 變更學生時，同步這些學生的快取，讓清單與年級樹更新
+            K12.Data.Student.AfterUpdate += delegate(object sender, K12.Data.DataChangedEventArgs e)
+            {
+                List<string> primaryKeys = new List<string>(e.PrimaryKeys);
+                Action sync = delegate
+                {
+                    KeepDisplayedInList(primaryKeys);
+                    SyncDataBackground(primaryKeys);
+                };
+                // K12.Data 的事件可能在背景執行緒引發，需回到 UI 執行緒再同步，避免跨執行緒更新清單
+                if (MotherForm.Form.InvokeRequired)
+                    MotherForm.Form.BeginInvoke(sync);
+                else
+                    sync();
+            };
+
+            // 改選其他學生、點選年級樹其他結點或取消選取時，解除不再選取的保留學生，重新依篩選顯示
+            this.SelectedListChanged += delegate
+            {
+                if (_FillingFilter || _KeepKeys.Count == 0) return;
+                List<string> selected = new List<string>(Present.SelectedSource);
+                if (_KeepKeys.RemoveAll(key => !selected.Contains(key)) > 0)
+                    FillFilter();
+            };
+
             MotherForm.AddPanel(K12.Presentation.NLDPanels.Student);
             _Initilized = true;
             FillFilter();
@@ -683,6 +720,8 @@ namespace JHSchool
             FilterMenu[name].Checked = preference.GetBoolean(name, false);
             FilterMenu[name].Click += delegate
             {
+                // 切換篩選時完全依篩選顯示，不再保留狀態變更的學生
+                _KeepKeys.Clear();
                 FillFilter();
                 preference.SetBoolean(name, FilterMenu[name].Checked);
 
@@ -904,6 +943,11 @@ namespace JHSchool
                 if (!primaryKeys.Contains(item.ID))
                     primaryKeys.Add(item.ID);
 
+            // 加入狀態變更後暫時保留、右側正在顯示的學生
+            foreach (string key in _KeepKeys)
+                if (Items[key] != null && !primaryKeys.Contains(key))
+                    primaryKeys.Add(key);
+
 
             //#region 待刪除畢業及離校
             ////// 加這判斷主要當 click button 會進來2次
@@ -991,8 +1035,41 @@ namespace JHSchool
             //}
 
             //#endregion
-            Present.SetFilteredSource(primaryKeys);
+            // 設定清單來源期間引發的選取變更不處理，避免重入
+            _FillingFilter = true;
+            try
+            {
+                Present.SetFilteredSource(primaryKeys);
+            }
+            finally
+            {
+                _FillingFilter = false;
+            }
 
+        }
+
+        /// <summary>
+        /// 狀態變更後，若右側學生資料頁面正在顯示的學生在變更名單中，將他暫時保留在清單中，
+        /// 直到改選其他學生、點選年級樹其他結點、切換篩選或重新整理。
+        /// 只保留正在顯示的學生，其他學生(例：批次變更時一起選取的學生)直接依篩選移除
+        /// </summary>
+        internal void KeepDisplayedInList(IEnumerable<string> keys)
+        {
+            string displayedKey = "";
+            foreach (DetailContent content in Present.DetailContents)
+            {
+                if (!string.IsNullOrEmpty(content.PrimaryKey))
+                {
+                    displayedKey = content.PrimaryKey;
+                    break;
+                }
+            }
+            if (displayedKey == "") return;
+
+            List<string> selected = new List<string>(Present.SelectedSource);
+            foreach (string key in keys)
+                if (key == displayedKey && selected.Contains(key) && !_KeepKeys.Contains(key))
+                    _KeepKeys.Add(key);
         }
 
 

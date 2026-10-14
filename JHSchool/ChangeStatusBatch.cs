@@ -251,7 +251,12 @@ namespace JHSchool
             if (idlist.Count > 0)
             {
                 FISCA.Presentation.MotherForm.SetStatusBarMessage("變更學生狀態成功，共 " + idlist.Count + " 位學生");
+                // 右側正在顯示的學生暫時保留在清單中，學生資料頁面不會被隱藏，狀態標籤才能完成更新
+                Student.Instance.KeepDisplayedInList(idlist);
                 Student.Instance.SyncAllBackground();
+                // 批次變更直接呼叫 DSA，不會引發 K12.Data 的 AfterUpdate，需通知類別模組重新整理學生資料上方的狀態標籤
+                if (FISCA.Features.FeatureMap.ContainsKey("學生.Tag.Reload"))
+                    FISCA.Features.Invoke("學生.Tag.Reload");
             }
             else
             {
