@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FISCA.Presentation;
 using Framework;
@@ -43,16 +44,20 @@ namespace JHSchool.StudentExtendControls
 
             List<string> selectPath = new List<string>();
             #region 記錄選取的結點的完整路徑
+            // 用去掉人數的名稱記錄，人數改變後(例：國三4(11) → 國三4(10))仍能找回原本選取的結點
             var selectNode = advTree1.SelectedNode;
             if (selectNode != null)
             {
                 while (selectNode != null)
                 {
-                    selectPath.Insert(0, selectNode.Text);
+                    selectPath.Insert(0, GetNodeName(selectNode));
                     selectNode = selectNode.Parent;
                 }
             }
             #endregion
+            // 記錄展開的結點，重建後還原，避免資料更新後樹狀全部收合
+            HashSet<string> expandedPaths = new HashSet<string>();
+            CollectExpandedPaths(advTree1.Nodes, "", expandedPaths);
             advTree1.Nodes.Clear();
             items.Clear();
 
@@ -190,6 +195,8 @@ namespace JHSchool.StudentExtendControls
 
             advTree1.Nodes.Add(rootNode);
 
+            RestoreExpandedPaths(advTree1.Nodes, "", expandedPaths);
+
             items.Add(rootNode, PrimaryKeys);
 
             if (selectPath.Count != 0)
@@ -210,7 +217,7 @@ namespace JHSchool.StudentExtendControls
                 if (item is DevComponents.AdvTree.Node)
                 {
                     var node = (DevComponents.AdvTree.Node)item;
-                    if (node.Text == selectPath[level])
+                    if (GetNodeName(node) == selectPath[level])
                     {
                         if (selectPath.Count - 1 == level)
                             return node;
@@ -226,6 +233,44 @@ namespace JHSchool.StudentExtendControls
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// 取得結點去掉結尾人數的名稱，例：「國三4(11)」→「國三4」
+        /// </summary>
+        private static string GetNodeName(DevComponents.AdvTree.Node node)
+        {
+            return Regex.Replace(node.Text, @"\(\d+\)$", "");
+        }
+
+        private void CollectExpandedPaths(DevComponents.AdvTree.NodeCollection nodeCollection, string parentPath, HashSet<string> expandedPaths)
+        {
+            foreach (var item in nodeCollection)
+            {
+                if (item is DevComponents.AdvTree.Node)
+                {
+                    var node = (DevComponents.AdvTree.Node)item;
+                    string path = parentPath + "/" + GetNodeName(node);
+                    if (node.Expanded)
+                        expandedPaths.Add(path);
+                    CollectExpandedPaths(node.Nodes, path, expandedPaths);
+                }
+            }
+        }
+
+        private void RestoreExpandedPaths(DevComponents.AdvTree.NodeCollection nodeCollection, string parentPath, HashSet<string> expandedPaths)
+        {
+            foreach (var item in nodeCollection)
+            {
+                if (item is DevComponents.AdvTree.Node)
+                {
+                    var node = (DevComponents.AdvTree.Node)item;
+                    string path = parentPath + "/" + GetNodeName(node);
+                    if (expandedPaths.Contains(path))
+                        node.Expand();
+                    RestoreExpandedPaths(node.Nodes, path, expandedPaths);
+                }
+            }
         }
 
         #endregion
